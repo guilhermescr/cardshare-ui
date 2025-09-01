@@ -1,7 +1,7 @@
-type AnimatedBackgroundProps = {
+interface AnimatedBackgroundProps {
   children: React.ReactNode;
   className?: string;
-};
+}
 
 function AnimatedBackground({
   children,

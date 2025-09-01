@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { Toaster } from '@/components/ui/sonner';
+import Favicon from '/public/images/favicon.ico';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -17,6 +18,7 @@ export const metadata: Metadata = {
   title: 'CardShare App',
   description:
     'CardShare is a modern platform for creating, sharing, and discovering digital cards. Design beautiful cards, connect with others, and explore a vibrant community.',
+  icons: [{ rel: 'icon', url: Favicon.src }],
 };
 
 export default function RootLayout({
@@ -31,7 +33,7 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         {children}
-        <Toaster />
+        <Toaster position="top-right" closeButton richColors expand />
       </body>
     </html>
   );
