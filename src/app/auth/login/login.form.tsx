@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from '@/components/ui/input';
 import { Eye, EyeOff, Loader2, Lock, Mail, Sparkles } from 'lucide-react';
@@ -17,8 +18,12 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { toast } from 'sonner';
+import { API_URL } from '@/constants/api';
+import { useAuthStore } from '@/stores/auth';
 
 export default function LoginForm() {
+  const router = useRouter();
+
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const form = useForm<LoginFormType>({
@@ -29,22 +34,46 @@ export default function LoginForm() {
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = (formData: LoginFormType) => {
+  const onSubmit = async (formData: LoginFormType) => {
     setIsLoading(true);
 
     try {
-      console.log(formData);
+      const loginDto = {
+        identifier: formData.email,
+        password: formData.password,
+      };
+      const response = await fetch(`${API_URL}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(loginDto),
+      });
+      const data = await response.json();
+
+      if (!response.ok) {
+        toast.error('Login failed', {
+          description: data.error || data.message || 'Invalid credentials.',
+        });
+        return;
+      }
+
+      localStorage.setItem('token', data.token);
+      useAuthStore.getState().setAuth(data.token, data.user);
+
       toast.success('Welcome back!', {
         description: "You've successfully logged in.",
       });
+
+      router.push('/dashboard');
 
       // toast.success('Welcome back!', {
       //   description: "You've successfully logged in as admin.",
       // });
     } catch (error) {
-      console.error(error);
+      toast.error('Login failed', {
+        description: error.message || 'Unexpected error occurred.',
+      });
     } finally {
-      setTimeout(() => setIsLoading(false), 1500);
+      setIsLoading(false);
     }
   };
 

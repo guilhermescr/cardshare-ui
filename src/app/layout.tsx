@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { Toaster } from '@/components/ui/sonner';
 import Favicon from '/public/images/favicon.ico';
+import { AuthProvider } from '@/components/providers/auth-provider';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -32,8 +33,10 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         suppressHydrationWarning
       >
-        {children}
-        <Toaster position="top-right" closeButton richColors expand />
+        <AuthProvider>
+          {children}
+          <Toaster position="top-right" closeButton richColors expand />
+        </AuthProvider>
       </body>
     </html>
   );
