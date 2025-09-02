@@ -33,10 +33,9 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         suppressHydrationWarning
       >
-        <AuthProvider>
-          {children}
-          <Toaster position="top-right" closeButton richColors expand />
-        </AuthProvider>
+        <AuthProvider />
+        {children}
+        <Toaster position="top-right" closeButton richColors expand />
       </body>
     </html>
   );

@@ -42,7 +42,7 @@ export default function NotFoundPage() {
               <Button
                 variant="outline"
                 className="w-full border-gray-200 hover:bg-gray-50"
-                onClick={() => router.push('/')}
+                onClick={() => router.push('/dashboard')}
               >
                 <Home className="mr-2 h-4 w-4" />
                 Home

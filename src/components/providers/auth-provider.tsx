@@ -1,12 +1,8 @@
 'use client';
 
-import { useRestoreAuth } from '@/hooks/useRestoreAuth';
+import { useRestoreAuth } from '@/hooks/use-restore-auth';
 
-interface AuthProviderProps {
-  children: React.ReactNode;
-}
-
-export function AuthProvider({ children }: AuthProviderProps) {
+export function AuthProvider() {
   useRestoreAuth();
-  return <>{children}</>;
+  return null;
 }
