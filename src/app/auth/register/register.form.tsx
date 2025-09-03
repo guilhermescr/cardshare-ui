@@ -17,6 +17,8 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { toast } from 'sonner';
+import { API_URL } from '@/constants/api';
+import { getErrorMessage } from '@/utils/error.utils';
 
 export default function RegisterForm() {
   const [isLoading, setIsLoading] = useState(false);
@@ -36,14 +38,37 @@ export default function RegisterForm() {
     setIsLoading(true);
 
     try {
-      console.log(formData);
+      const registerDto = {
+        username: formData.username,
+        email: formData.email,
+        password: formData.password,
+      };
+
+      const response = await fetch(`${API_URL}/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(registerDto),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        toast.error('Registration failed', {
+          description:
+            data.error || data.message || 'Unexpected error occurred.',
+        });
+        return;
+      }
+
       toast.success('Account created!', {
-        description: 'Your account has been successfully created.',
+        description: 'Please check your email to verify your account.',
       });
     } catch (error) {
-      console.error(error);
+      toast.error('Registration failed', {
+        description: getErrorMessage(error),
+      });
     } finally {
-      setTimeout(() => setIsLoading(false), 1500);
+      setIsLoading(false);
     }
   };
 

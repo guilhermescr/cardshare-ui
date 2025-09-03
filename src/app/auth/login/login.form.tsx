@@ -20,6 +20,7 @@ import {
 import { toast } from 'sonner';
 import { API_URL } from '@/constants/api';
 import { useAuthStore } from '@/stores/auth';
+import { getErrorMessage } from '@/utils/error.utils';
 
 export default function LoginForm() {
   const router = useRouter();
@@ -42,11 +43,13 @@ export default function LoginForm() {
         identifier: formData.email,
         password: formData.password,
       };
+
       const response = await fetch(`${API_URL}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(loginDto),
       });
+
       const data = await response.json();
 
       if (!response.ok) {
@@ -70,7 +73,7 @@ export default function LoginForm() {
       // });
     } catch (error) {
       toast.error('Login failed', {
-        description: error.message || 'Unexpected error occurred.',
+        description: getErrorMessage(error),
       });
     } finally {
       setIsLoading(false);
