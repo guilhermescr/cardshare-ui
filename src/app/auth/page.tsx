@@ -7,6 +7,7 @@ import { AnimatedBackground } from '@/components/ui/animated-background';
 import LoginForm from './login/login.form';
 import RegisterForm from './register/register.form';
 import { AuthHeader } from './AuthHeader';
+import { AuthFeatureCard } from './AuthFeatureCard';
 
 // interface AuthPageProps {
 //   onLogin: (role?: 'user' | 'admin') => void;
@@ -68,18 +69,18 @@ export default function AuthPage() {
           </Card>
 
           <section className="mt-8 grid grid-cols-3 gap-4 text-center">
-            <div className="bg-white/40 backdrop-blur-sm rounded-lg p-3 border border-white/20">
-              <Layers className="w-6 h-6 mx-auto mb-2 text-blue-600" />
-              <p className="text-xs text-gray-600">Create Cards</p>
-            </div>
-            <div className="bg-white/40 backdrop-blur-sm rounded-lg p-3 border border-white/20">
-              <Users className="w-6 h-6 mx-auto mb-2 text-green-600" />
-              <p className="text-xs text-gray-600">Share & Discover</p>
-            </div>
-            <div className="bg-white/40 backdrop-blur-sm rounded-lg p-3 border border-white/20">
-              <Sparkles className="w-6 h-6 mx-auto mb-2 text-purple-600" />
-              <p className="text-xs text-gray-600">Get Inspired</p>
-            </div>
+            <AuthFeatureCard
+              icon={<Layers className="text-blue-600" />}
+              text="Create Cards"
+            />
+            <AuthFeatureCard
+              icon={<Users className="text-green-600" />}
+              text="Share & Discover"
+            />
+            <AuthFeatureCard
+              icon={<Sparkles className="text-purple-600" />}
+              text="Get Inspired"
+            />
           </section>
         </section>
       </div>

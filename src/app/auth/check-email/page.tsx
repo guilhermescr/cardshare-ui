@@ -1,7 +1,8 @@
 import { AnimatedBackground } from '@/components/ui/animated-background';
 import { AuthHeader } from '../AuthHeader';
-import { CheckCircle, Clock, Mail } from 'lucide-react';
+import { CheckCircle, Clock, Mail, Shield, Zap, Sparkles } from 'lucide-react';
 import { CheckEmailActionButton } from './CheckEmailActionButton';
+import { AuthFeatureCard } from '../AuthFeatureCard';
 
 export default function CheckEmailPage() {
   return (
@@ -13,7 +14,7 @@ export default function CheckEmailPage() {
             description="We've sent you a verification link"
           />
 
-          <section className="bg-white flex flex-col justify-center items-center rounded-md shadow-xl/20 p-6">
+          <section className="bg-white flex flex-col justify-center items-center rounded-2xl shadow-xl/10 p-6">
             <span className="bg-[#D6FCEA] p-5 rounded-full shadow-green-400/50">
               <Mail className="text-green-600" size={40} />
             </span>
@@ -21,14 +22,14 @@ export default function CheckEmailPage() {
             <h2 className="text-xl font-semibold my-5">
               Verification Email Sent!
             </h2>
-            <p className="text-[#444] font-semibold">
+            <p className="text-[#444] font-medium">
               We've sent a verification email to:
             </p>
-            <span className="bg-blue-50 border border-blue-200 p-2 w-full text-center text-blue-600 font-bold rounded-md mt-2 mb-4">
+            <span className="bg-blue-50 border border-blue-200 p-2 w-full text-center text-blue-600 font-semibold rounded-md mt-2 mb-4">
               user@gmail.com
             </span>
 
-            <div className="bg-blue-50 border border-blue-200 p-3 pr-6 rounded-md flex gap-3">
+            <div className="bg-blue-50 border border-blue-200 p-3 pr-4 rounded-md flex gap-3">
               <CheckCircle className="pb-2.5" size={30} />
               <p className="text-blue-800 text-sm">
                 Click the verification link in your email to activate your
@@ -36,43 +37,43 @@ export default function CheckEmailPage() {
               </p>
             </div>
 
-            <h3 className="font-semibold my-4">What's next?</h3>
+            <h3 className="font-semibold my-6">What's next?</h3>
 
-            <ol className="space-y-4 w-full">
+            <ol className="space-y-8 w-full ml-6">
               <li className="flex gap-3 items-center">
-                <span className="bg-gradient-to-r from-blue-600 to-purple-600 py-1.5 px-3.5 rounded-full font-bold text-white">
+                <div className="flex items-center justify-center h-10 w-10 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 font-bold text-white text-lg">
                   1
-                </span>
+                </div>
 
                 <div>
-                  <h4 className="font-semibold">Check your inbox</h4>
-                  <p className="text-sm text-gray-700">
+                  <h4 className="font-medium text-sm">Check your inbox</h4>
+                  <p className="text-[13px] text-gray-700">
                     Look for an email from CardShare
                   </p>
                 </div>
               </li>
 
               <li className="flex gap-3 items-center">
-                <span className="bg-gradient-to-r from-lime-500 to-emerald-400 py-1.5 px-3.5 rounded-full font-bold text-white">
+                <div className="flex items-center justify-center h-10 w-10 rounded-full bg-gradient-to-r from-lime-500 to-emerald-400 font-bold text-white text-lg">
                   2
-                </span>
+                </div>
 
                 <div>
-                  <h4 className="font-semibold">Click the verification link</h4>
-                  <p className="text-sm text-gray-700">
+                  <h4 className="font-medium text-sm">Click the verification link</h4>
+                  <p className="text-[13px] text-gray-700">
                     This will activate your account
                   </p>
                 </div>
               </li>
 
               <li className="flex gap-3 items-center">
-                <span className="bg-gradient-to-r from-pink-600 to-red-400 py-1.5 px-3.5 rounded-full font-bold text-white">
+                <div className="flex items-center justify-center h-10 w-10 rounded-full bg-gradient-to-r from-pink-600 to-red-400 font-bold text-white text-lg">
                   3
-                </span>
+                </div>
 
                 <div>
-                  <h4 className="font-semibold">Start creating!</h4>
-                  <p className="text-sm text-gray-700">
+                  <h4 className="font-medium text-sm">Start creating!</h4>
+                  <p className="text-[13px] text-gray-700">
                     Begin your amazing card journey
                   </p>
                 </div>
@@ -80,18 +81,18 @@ export default function CheckEmailPage() {
             </ol>
 
             <div className="bg-orange-50 border border-orange-200 p-3 rounded-md w-full mt-7 mb-2">
-              <h3 className="flex gap-2 items-center font-semibold text-amber-800 mb-2.5">
+              <h3 className="flex gap-2 items-center font-medium text-amber-800 mb-2.5">
                 <Clock size={18} /> Didn't receive the email?
               </h3>
 
               <ul className="list-disc list-inside pl-0.5 space-y-1">
-                <li className="text-amber-700 font-semibold text-sm">
+                <li className="text-amber-700 font-medium text-sm">
                   Check your spam or junk folder
                 </li>
-                <li className="text-amber-700 font-semibold text-sm">
+                <li className="text-amber-700 font-medium text-sm">
                   Make sure user@gmail.com is correct
                 </li>
-                <li className="text-amber-700 font-semibold text-sm">
+                <li className="text-amber-700 font-medium text-sm">
                   Wait a few minutes for delivery
                 </li>
               </ul>
@@ -100,6 +101,21 @@ export default function CheckEmailPage() {
             {/* TO-DO: Code Resend Email Endpoint! */}
             <CheckEmailActionButton variant="resend" />
             <CheckEmailActionButton variant="back" />
+          </section>
+
+          <section className="mt-8 grid grid-cols-3 gap-4 text-center">
+            <AuthFeatureCard
+              icon={<Shield className="text-blue-600" />}
+              text="Secure"
+            />
+            <AuthFeatureCard
+              icon={<Zap className="text-green-600" />}
+              text="Fast Setup"
+            />
+            <AuthFeatureCard
+              icon={<Sparkles className="text-purple-600" />}
+              text="Amazing Cards"
+            />
           </section>
         </section>
       </div>
