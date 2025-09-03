@@ -3,6 +3,7 @@
 import { AnimatedBackground } from '@/components/ui/animated-background';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { APP_ROUTES } from '@/constants/routes';
 import { Home, ArrowLeft, Compass, LogIn } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
@@ -42,7 +43,7 @@ export default function NotFoundPage() {
               <Button
                 variant="outline"
                 className="w-full border-gray-200 hover:bg-gray-50"
-                onClick={() => router.push('/dashboard')}
+                onClick={() => router.push(APP_ROUTES.DASHBOARD)}
               >
                 <Home className="mr-2 h-4 w-4" />
                 Home
@@ -52,7 +53,7 @@ export default function NotFoundPage() {
                 <Button
                   variant="outline"
                   className="flex-1 border-gray-200 hover:bg-gray-50"
-                  onClick={() => router.push('/auth')}
+                  onClick={() => router.push(APP_ROUTES.LOGIN)}
                 >
                   <LogIn className="mr-2 h-4 w-4" />
                   Login

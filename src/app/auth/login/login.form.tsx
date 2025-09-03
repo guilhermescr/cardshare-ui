@@ -21,6 +21,7 @@ import { toast } from 'sonner';
 import { API_URL } from '@/constants/api';
 import { useAuthStore } from '@/stores/auth';
 import { getErrorMessage } from '@/utils/error.utils';
+import { APP_ROUTES } from '@/constants/routes';
 
 export default function LoginForm() {
   const router = useRouter();
@@ -66,7 +67,7 @@ export default function LoginForm() {
         description: "You've successfully logged in.",
       });
 
-      router.push('/dashboard');
+      router.push(APP_ROUTES.DASHBOARD);
 
       // toast.success('Welcome back!', {
       //   description: "You've successfully logged in as admin.",

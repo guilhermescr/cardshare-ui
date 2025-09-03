@@ -4,7 +4,7 @@ import type { UserDto } from '@/types/user';
 type AuthState = {
   token: string | null;
   user: UserDto | null;
-  setAuth: (token: string, user: UserDto) => void;
+  setAuth: (token: string | null, user: UserDto | null) => void;
   logout: () => void;
 };
 

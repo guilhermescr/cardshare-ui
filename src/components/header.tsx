@@ -4,6 +4,7 @@ import { useAuthStore } from '@/stores/auth';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { LogOut } from 'lucide-react';
+import { APP_ROUTES } from '@/constants/routes';
 
 export default function Header() {
   const { user, setAuth } = useAuthStore();
@@ -12,7 +13,7 @@ export default function Header() {
   const handleLogout = () => {
     localStorage.removeItem('token');
     setAuth(null, null);
-    router.push('/auth');
+    router.push(APP_ROUTES.LOGIN);
   };
 
   return (
