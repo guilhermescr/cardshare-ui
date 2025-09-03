@@ -6,6 +6,7 @@ import { Sparkles, Layers, Users } from 'lucide-react';
 import { AnimatedBackground } from '@/components/ui/animated-background';
 import LoginForm from './login/login.form';
 import RegisterForm from './register/register.form';
+import { AuthHeader } from './AuthHeader';
 
 // interface AuthPageProps {
 //   onLogin: (role?: 'user' | 'admin') => void;
@@ -16,17 +17,10 @@ export default function AuthPage() {
     <AnimatedBackground className="items-center">
       <div className="flex items-center justify-center p-4">
         <section className="w-full max-w-md">
-          <header className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl mb-4 shadow-lg">
-              <Layers className="w-8 h-8 text-white" />
-            </div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
-              Welcome to CardShare
-            </h1>
-            <p className="text-gray-600 mt-2">
-              Create, share, and discover amazing cards
-            </p>
-          </header>
+          <AuthHeader
+            title="Welcome to CardShare"
+            description="Create, share, and discover amazing cards"
+          />
 
           <Card className="backdrop-blur-sm bg-white/80 border-white/20 shadow-xl">
             <CardContent className="p-6">
@@ -34,13 +28,14 @@ export default function AuthPage() {
                 <TabsList className="grid w-full grid-cols-2 mb-6 bg-gray-100/50">
                   <TabsTrigger
                     value="login"
-                    className="transition duration-150 data-[state=inactive]:hover:bg-gray-200 data-[state=active]:bg-white data-[state=active]:shadow-sm"
+                    className="cursor-pointer transition duration-150 data-[state=inactive]:hover:bg-gray-200 data-[state=active]:bg-white data-[state=active]:shadow-sm"
                   >
                     Sign In
                   </TabsTrigger>
+
                   <TabsTrigger
                     value="register"
-                    className="transition duration-150 data-[state=inactive]:hover:bg-gray-200 data-[state=active]:bg-white data-[state=active]:shadow-sm"
+                    className="cursor-pointer transition duration-150 data-[state=inactive]:hover:bg-gray-200 data-[state=active]:bg-white data-[state=active]:shadow-sm"
                   >
                     Sign Up
                   </TabsTrigger>

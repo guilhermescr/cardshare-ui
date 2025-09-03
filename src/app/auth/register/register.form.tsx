@@ -19,8 +19,12 @@ import {
 import { toast } from 'sonner';
 import { API_URL } from '@/constants/api';
 import { getErrorMessage } from '@/utils/error.utils';
+import { APP_ROUTES } from '@/constants/routes';
+import { useRouter } from 'next/navigation';
 
 export default function RegisterForm() {
+  const router = useRouter();
+
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -59,6 +63,8 @@ export default function RegisterForm() {
         });
         return;
       }
+
+      router.push(APP_ROUTES.CHECK_EMAIL);
 
       toast.success('Account created!', {
         description: 'Please check your email to verify your account.',
@@ -207,7 +213,7 @@ export default function RegisterForm() {
 
         <Button
           type="submit"
-          className="w-full bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-700 hover:to-teal-700 shadow-lg"
+          className="w-full bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-700 hover:to-teal-700 shadow-lg cursor-pointer"
           disabled={isLoading}
         >
           {isLoading ? (
