@@ -46,8 +46,8 @@ export function useRestoreAuth() {
 
         if (!response.ok) throw new Error('Invalid token.');
 
-        const user = await response.json();
-        useAuthStore.getState().setAuth(token, user);
+        const data = await response.json();
+        useAuthStore.getState().setAuth(token, data.user);
       } catch (error) {
         console.error(error);
         useAuthStore.getState().logout();

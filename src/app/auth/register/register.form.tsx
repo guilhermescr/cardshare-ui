@@ -154,7 +154,7 @@ export default function RegisterForm() {
                     type="button"
                     variant="ghost"
                     size="sm"
-                    className="absolute right-0 top-0 h-full px-3 py-2 cursor-pointer hover:bg-transparent"
+                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
                     onClick={() => setShowPassword(!showPassword)}
                   >
                     {showPassword ? (
@@ -192,7 +192,7 @@ export default function RegisterForm() {
                     type="button"
                     variant="ghost"
                     size="sm"
-                    className="absolute right-0 top-0 h-full px-3 py-2 cursor-pointer hover:bg-transparent"
+                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   >
                     {showConfirmPassword ? (
@@ -210,7 +210,9 @@ export default function RegisterForm() {
 
         <Button
           type="submit"
-          className="w-full bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-700 hover:to-teal-700 shadow-lg cursor-pointer"
+          className="w-full"
+          variant="gradient"
+          gradientColor="green"
           disabled={isLoading}
         >
           {isLoading ? (

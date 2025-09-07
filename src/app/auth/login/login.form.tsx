@@ -130,7 +130,7 @@ export default function LoginForm() {
                     type="button"
                     variant="ghost"
                     size="sm"
-                    className="absolute right-0 top-0 h-full px-3 py-2 cursor-pointer hover:bg-transparent"
+                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
                     onClick={() => setShowPassword(!showPassword)}
                   >
                     {showPassword ? (
@@ -148,7 +148,9 @@ export default function LoginForm() {
 
         <Button
           type="submit"
-          className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg cursor-pointer mb-2"
+          className="w-full mb-2"
+          variant="gradient"
+          gradientColor="blue"
           disabled={isLoading}
         >
           {isLoading ? (
@@ -160,10 +162,7 @@ export default function LoginForm() {
         </Button>
 
         <div className="text-center">
-          <Button
-            variant="link"
-            className="text-sm text-gray-600 hover:text-blue-600"
-          >
+          <Button variant="link" className="text-sm text-gray-600">
             Forgot your password?
           </Button>
         </div>

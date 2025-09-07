@@ -11,7 +11,7 @@ interface CheckEmailActionButtonProps {
 
 export function CheckEmailActionButton({
   variant,
-  className,
+  className = '',
 }: CheckEmailActionButtonProps) {
   const router = useRouter();
 

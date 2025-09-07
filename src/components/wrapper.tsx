@@ -5,7 +5,7 @@ interface WrapperProps {
   children: React.ReactNode;
 }
 
-export default function Wrapper({ className, children }: WrapperProps) {
+export default function Wrapper({ className = '', children }: WrapperProps) {
   return (
     <div className={cn('max-w-[1500px] mx-auto w-full px-4', className)}>
       {children}
