@@ -1,6 +1,6 @@
 'use client';
 
-import { AnimatedBackground } from '@/components/ui/animated-background';
+import { AnimatedBackground } from '@/components/animated-background';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { APP_ROUTES } from '@/constants/routes';

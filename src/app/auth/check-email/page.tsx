@@ -1,6 +1,6 @@
 'use client';
 
-import { AnimatedBackground } from '@/components/ui/animated-background';
+import { AnimatedBackground } from '@/components/animated-background';
 import { AuthHeader } from '../AuthHeader';
 import { CheckCircle, Clock, Mail, Shield, Zap, Sparkles } from 'lucide-react';
 import { CheckEmailActionButton } from './CheckEmailActionButton';

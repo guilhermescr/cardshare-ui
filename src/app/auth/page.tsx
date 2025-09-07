@@ -3,7 +3,7 @@
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Sparkles, Layers, Users } from 'lucide-react';
-import { AnimatedBackground } from '@/components/ui/animated-background';
+import { AnimatedBackground } from '@/components/animated-background';
 import LoginForm from './login/login.form';
 import RegisterForm from './register/register.form';
 import { AuthHeader } from './AuthHeader';

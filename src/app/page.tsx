@@ -1,4 +1,4 @@
-import { AnimatedBackground } from '@/components/ui/animated-background';
+import { AnimatedBackground } from '@/components/animated-background';
 
 export default function Home() {
   return (
