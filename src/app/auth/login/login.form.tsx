@@ -11,7 +11,6 @@ import { LoginFormType, loginSchema } from './login.schema';
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -83,12 +82,12 @@ export default function LoginForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+      <form onSubmit={form.handleSubmit(onSubmit)}>
         <FormField
           control={form.control}
           name="email"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="mb-4">
               <FormLabel htmlFor="login-email" className="text-gray-700">
                 Email
               </FormLabel>
@@ -104,7 +103,6 @@ export default function LoginForm() {
                   />
                 </div>
               </FormControl>
-              <FormDescription></FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -114,7 +112,7 @@ export default function LoginForm() {
           control={form.control}
           name="password"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="mb-4">
               <FormLabel htmlFor="login-password" className="text-gray-700">
                 Password
               </FormLabel>
@@ -143,7 +141,6 @@ export default function LoginForm() {
                   </Button>
                 </div>
               </FormControl>
-              <FormDescription></FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -151,7 +148,7 @@ export default function LoginForm() {
 
         <Button
           type="submit"
-          className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg cursor-pointer"
+          className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg cursor-pointer mb-2"
           disabled={isLoading}
         >
           {isLoading ? (

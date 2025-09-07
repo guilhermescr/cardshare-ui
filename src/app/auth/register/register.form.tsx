@@ -10,7 +10,6 @@ import { RegisterFormType, registerSchema } from './register.schema';
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -64,7 +63,9 @@ export default function RegisterForm() {
         return;
       }
 
-      router.push(APP_ROUTES.CHECK_EMAIL);
+      router.push(
+        `${APP_ROUTES.CHECK_EMAIL}?email=${encodeURIComponent(registerDto.email)}`
+      );
 
       toast.success('Account created!', {
         description: 'Please check your email to verify your account.',
@@ -80,12 +81,12 @@ export default function RegisterForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+      <form onSubmit={form.handleSubmit(onSubmit)}>
         <FormField
           control={form.control}
           name="username"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="mb-4">
               <FormLabel htmlFor="register-username" className="text-gray-700">
                 Username
               </FormLabel>
@@ -101,7 +102,6 @@ export default function RegisterForm() {
                   />
                 </div>
               </FormControl>
-              <FormDescription></FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -111,7 +111,7 @@ export default function RegisterForm() {
           control={form.control}
           name="email"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="mb-4">
               <FormLabel htmlFor="register-email" className="text-gray-700">
                 Email
               </FormLabel>
@@ -127,7 +127,6 @@ export default function RegisterForm() {
                   />
                 </div>
               </FormControl>
-              <FormDescription></FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -137,7 +136,7 @@ export default function RegisterForm() {
           control={form.control}
           name="password"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="mb-4">
               <FormLabel htmlFor="login-password" className="text-gray-700">
                 Password
               </FormLabel>
@@ -166,7 +165,6 @@ export default function RegisterForm() {
                   </Button>
                 </div>
               </FormControl>
-              <FormDescription></FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -176,7 +174,7 @@ export default function RegisterForm() {
           control={form.control}
           name="confirmPassword"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="mb-4">
               <FormLabel htmlFor="confirm-password" className="text-gray-700">
                 Confirm Password
               </FormLabel>
@@ -205,7 +203,6 @@ export default function RegisterForm() {
                   </Button>
                 </div>
               </FormControl>
-              <FormDescription></FormDescription>
               <FormMessage />
             </FormItem>
           )}

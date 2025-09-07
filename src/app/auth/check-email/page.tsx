@@ -1,10 +1,30 @@
+'use client';
+
 import { AnimatedBackground } from '@/components/ui/animated-background';
 import { AuthHeader } from '../AuthHeader';
 import { CheckCircle, Clock, Mail, Shield, Zap, Sparkles } from 'lucide-react';
 import { CheckEmailActionButton } from './CheckEmailActionButton';
 import { AuthFeatureCard } from '../AuthFeatureCard';
+import { useSearchParams } from 'next/navigation';
 
 export default function CheckEmailPage() {
+  const searchParams = useSearchParams();
+  const email = searchParams.get('email');
+
+  if (!email) {
+    return (
+      <AnimatedBackground className="items-center">
+        <div className="flex flex-col items-center justify-center min-h-screen w-full max-w-sm mx-auto">
+          <h2 className="text-xl font-semibold mb-4">No email provided</h2>
+          <p className="mb-6 text-gray-600">
+            Please register or log in to continue.
+          </p>
+          <CheckEmailActionButton variant="back" className="bg-white border" />
+        </div>
+      </AnimatedBackground>
+    );
+  }
+
   return (
     <AnimatedBackground className="items-center">
       <div className="flex items-center justify-center p-4">
@@ -26,7 +46,7 @@ export default function CheckEmailPage() {
               We've sent a verification email to:
             </p>
             <span className="bg-blue-50 border border-blue-200 p-2 w-full text-center text-blue-600 font-semibold rounded-md mt-2 mb-4">
-              user@gmail.com
+              {email}
             </span>
 
             <div className="bg-blue-50 border border-blue-200 p-3 pr-4 rounded-md flex gap-3">
@@ -59,7 +79,9 @@ export default function CheckEmailPage() {
                 </div>
 
                 <div>
-                  <h4 className="font-medium text-sm">Click the verification link</h4>
+                  <h4 className="font-medium text-sm">
+                    Click the verification link
+                  </h4>
                   <p className="text-[13px] text-gray-700">
                     This will activate your account
                   </p>
@@ -90,7 +112,7 @@ export default function CheckEmailPage() {
                   Check your spam or junk folder
                 </li>
                 <li className="text-amber-700 font-medium text-sm">
-                  Make sure user@gmail.com is correct
+                  Make sure {email} is correct
                 </li>
                 <li className="text-amber-700 font-medium text-sm">
                   Wait a few minutes for delivery
