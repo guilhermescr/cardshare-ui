@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { UserDto } from '@/types/user';
+import type { UserDto } from '@/types/user.dto';
 
 type AuthState = {
   token: string | null;
