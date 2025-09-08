@@ -47,9 +47,9 @@ export default function Header() {
 
           <div className="flex items-center gap-3">
             <Logo size="small" className="rounded-md" />
-            <h1 className="text-xl font-bold">
+            <span className="text-xl font-bold">
               <GradientText>CardShare</GradientText>
-            </h1>
+            </span>
           </div>
 
           <div className="hidden md:flex relative flex-1 max-w-md mx-6">
