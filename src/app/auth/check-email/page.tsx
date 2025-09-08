@@ -3,7 +3,7 @@
 import { AnimatedBackground } from '@/components/animated-background';
 import { AuthHeader } from '../AuthHeader';
 import { CheckCircle, Clock, Mail, Shield, Zap, Sparkles } from 'lucide-react';
-import { CheckEmailActionButton } from './CheckEmailActionButton';
+import { CheckEmailActionButton } from './check-email-action-button';
 import { AuthFeatureCard } from '../AuthFeatureCard';
 import { useSearchParams } from 'next/navigation';
 
