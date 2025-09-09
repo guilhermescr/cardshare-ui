@@ -4,6 +4,7 @@ import './globals.css';
 import { Toaster } from '@/components/ui/sonner';
 import Favicon from '/public/images/favicon.ico';
 import { AuthProvider } from '@/components/providers/auth-provider';
+import { QueryProvider } from '@/components/providers/query-provider';
 
 const poppins = Poppins({
   variable: '--font-poppins',
@@ -29,9 +30,11 @@ export default function RootLayout({
         className={`${poppins.className} antialiased`}
         suppressHydrationWarning
       >
-        <AuthProvider />
-        {children}
-        <Toaster position="top-right" closeButton richColors expand />
+        <QueryProvider>
+          <AuthProvider />
+          {children}
+          <Toaster position="top-right" closeButton richColors expand />
+        </QueryProvider>
       </body>
     </html>
   );

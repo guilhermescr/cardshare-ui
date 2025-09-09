@@ -1,13 +1,40 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { Filter, Grid, List } from 'lucide-react';
-import { useState } from 'react';
+import { Grid, List } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 import CardFilters from './card-filters';
 import CardItem from '@/components/cards/card-item';
 import { CardDto } from '@/types/card.dto';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { API_URL } from '@/constants/api';
+import { useAuthStore } from '@/stores/auth';
+import CardSkeleton from '@/components/cards/card-skeleton';
 
 export default function CardGallery() {
+  const { token } = useAuthStore();
+
+  async function fetchCards({ pageParam }: { pageParam?: string }) {
+    const headers: Record<string, string> = {};
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+    const url = new URL(`${API_URL}/cards?limit=9`);
+    if (pageParam) url.searchParams.set('cursor', pageParam);
+    const response = await fetch(url.toString(), {
+      method: 'GET',
+      headers,
+    });
+    return response.json();
+  }
+
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useInfiniteQuery({
+      queryKey: ['cards'],
+      queryFn: fetchCards,
+      getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
+      initialPageParam: undefined,
+      enabled: !!token,
+    });
+
   const [activeCategory, setActiveCategory] = useState<'all' | 'my' | 'liked'>(
     'all'
   );
@@ -15,65 +42,30 @@ export default function CardGallery() {
     'none' | 'most-liked' | 'recent'
   >('none');
   const [activeView, setActiveView] = useState<'grid' | 'list'>('grid');
-  const [cards, setCards] = useState<CardDto[]>([
-    {
-      id: '1',
-      title: 'Beautiful Sunset',
-      description:
-        'A stunning sunset over the mountains captured during my recent hiking trip.',
-      ownerUsername: 'John Doe',
-      visibility: 'public',
-      likes: [
-        'user1',
-        'user2',
-        'user3',
-        'user4',
-        'user5',
-        'user6',
-        'user7',
-        'user8',
-      ],
-      favorites: ['user1', 'user4', 'user5', 'user6'],
-      createdAt: '2025-09-08T00:00:00Z',
-      updatedAt: '2025-09-08T00:00:00Z',
-    },
-    {
-      id: '2',
-      title: 'Recipe Collection',
-      description:
-        'My favorite recipes from around the world, carefully curated over years.',
-      ownerUsername: 'Jane Smith',
-      visibility: 'public',
-      likes: ['user1', 'user2'],
-      favorites: ['user1', 'user3', 'user5', 'user9'],
-      createdAt: '2025-09-07T00:00:00Z',
-      updatedAt: '2025-09-07T00:00:00Z',
-    },
-    {
-      id: '3',
-      title: 'Travel Memories',
-      description:
-        'Photos and stories from my recent trip to Japan - an unforgettable experience.',
-      ownerUsername: 'Mike Johnson',
-      visibility: 'private',
-      likes: ['user1'],
-      favorites: ['user3', 'user7', 'user10', 'user14'],
-      createdAt: '2025-09-05T00:00:00Z',
-      updatedAt: '2025-09-05T00:00:00Z',
-    },
-    {
-      id: '4',
-      title: 'Design Inspiration',
-      description:
-        'A collection of modern design patterns and color schemes for web projects.',
-      ownerUsername: 'Sarah Wilson',
-      visibility: 'public',
-      likes: ['user1', 'user2', 'user3', 'user4'],
-      favorites: ['user1', 'user4', 'user5', 'user6'],
-      createdAt: '2025-09-03T00:00:00Z',
-      updatedAt: '2025-09-03T00:00:00Z',
-    },
-  ]);
+  const cards: CardDto[] = data?.pages?.flatMap((page) => page.items) ?? [];
+
+  const loaderRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (!hasNextPage || isFetchingNextPage) return;
+    const loader = loaderRef.current;
+    if (!loader) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          fetchNextPage();
+        }
+      },
+      { rootMargin: '200px' }
+    );
+
+    observer.observe(loader);
+
+    return () => {
+      if (loader) observer.unobserve(loader);
+    };
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   return (
     <>
@@ -133,7 +125,18 @@ export default function CardGallery() {
         {cards.map((card, idx) => (
           <CardItem key={card.id} card={card} gradientIndex={idx} />
         ))}
+
+        {(isFetchingNextPage || !cards.length) &&
+          Array.from({ length: 3 }).map((_, i) => (
+            <CardSkeleton key={`skeleton-${i}`} />
+          ))}
       </section>
+
+      <div ref={loaderRef} />
+
+      {isFetchingNextPage && (
+        <div className="text-center py-4 text-gray-500">Loading more...</div>
+      )}
     </>
   );
 }
