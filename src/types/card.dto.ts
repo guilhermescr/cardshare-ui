@@ -9,3 +9,8 @@ export interface CardDto {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface CardsResponse {
+  items: CardDto[];
+  nextCursor?: string;
+}

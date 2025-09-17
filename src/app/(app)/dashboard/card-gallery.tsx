@@ -1,50 +1,60 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { Grid, List } from 'lucide-react';
+import { Grid, List, Loader2 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import CardFilters from './card-filters';
 import CardItem from '@/components/cards/card-item';
-import { CardDto } from '@/types/card.dto';
+import { CardDto, CardsResponse } from '@/types/card.dto';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { API_URL } from '@/constants/api';
 import { useAuthStore } from '@/stores/auth';
 import CardSkeleton from '@/components/cards/card-skeleton';
+import {
+  CardQueryParams,
+  fetchAllCards,
+  fetchLikedCards,
+  fetchMyCards,
+} from '@/api/card-queries';
 
 export default function CardGallery() {
   const { token } = useAuthStore();
 
-  async function fetchCards({ pageParam }: { pageParam?: string }) {
-    const headers: Record<string, string> = {};
-    if (token) headers['Authorization'] = `Bearer ${token}`;
-    const url = new URL(`${API_URL}/cards?limit=9`);
-    if (pageParam) url.searchParams.set('cursor', pageParam);
-    const response = await fetch(url.toString(), {
-      method: 'GET',
-      headers,
-    });
-    return response.json();
-  }
-
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useInfiniteQuery({
-      queryKey: ['cards'],
-      queryFn: fetchCards,
-      getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
-      initialPageParam: undefined,
-      enabled: !!token,
-    });
-
   const [activeCategory, setActiveCategory] = useState<'all' | 'my' | 'liked'>(
     'all'
   );
+
   const [activeFilter, setActiveFilter] = useState<
     'none' | 'most-liked' | 'recent'
   >('none');
   const [activeView, setActiveView] = useState<'grid' | 'list'>('grid');
-  const cards: CardDto[] = data?.pages?.flatMap((page) => page.items) ?? [];
 
   const loaderRef = useRef<HTMLDivElement | null>(null);
+
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
+    useInfiniteQuery<CardsResponse>({
+      queryKey: ['cards', activeCategory, token],
+      queryFn: async ({ pageParam }) => {
+        const params: CardQueryParams = {
+          pageParam: pageParam as string,
+          token,
+        };
+
+        switch (activeCategory) {
+          case 'my':
+            return fetchMyCards(params);
+          case 'liked':
+            return fetchLikedCards(params);
+          case 'all':
+          default:
+            return fetchAllCards(params);
+        }
+      },
+      getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
+      initialPageParam: undefined,
+      enabled: !!token,
+      retry: false,
+    });
+  const cards: CardDto[] = data?.pages?.flatMap((page) => page.items) ?? [];
 
   useEffect(() => {
     if (!hasNextPage || isFetchingNextPage) return;
@@ -70,26 +80,41 @@ export default function CardGallery() {
   return (
     <>
       <section className="flex items-center justify-between mt-10 mb-6">
-        <div className="bg-white border rounded-lg">
+        <div className="bg-white border rounded-lg flex">
           <Button
             variant={activeCategory === 'all' ? 'gradient' : 'ghost'}
             gradientColor={activeCategory === 'all' ? 'blue' : undefined}
             onClick={() => setActiveCategory('all')}
+            disabled={isFetchingNextPage}
+            className="flex items-center gap-2 px-4 py-2"
           >
+            {isLoading && activeCategory === 'all' && (
+              <Loader2 className="animate-spin w-4 h-4" />
+            )}
             All Cards
           </Button>
           <Button
             variant={activeCategory === 'my' ? 'gradient' : 'ghost'}
             gradientColor={activeCategory === 'my' ? 'blue' : undefined}
             onClick={() => setActiveCategory('my')}
+            disabled={isFetchingNextPage}
+            className="flex items-center gap-2 px-4 py-2"
           >
+            {isLoading && activeCategory === 'my' && (
+              <Loader2 className="animate-spin w-4 h-4" />
+            )}
             My Cards
           </Button>
           <Button
             variant={activeCategory === 'liked' ? 'gradient' : 'ghost'}
             gradientColor={activeCategory === 'liked' ? 'blue' : undefined}
             onClick={() => setActiveCategory('liked')}
+            disabled={isFetchingNextPage}
+            className="flex items-center gap-2 px-4 py-2"
           >
+            {isLoading && activeCategory === 'liked' && (
+              <Loader2 className="animate-spin w-4 h-4" />
+            )}
             Liked
           </Button>
         </div>
@@ -126,7 +151,7 @@ export default function CardGallery() {
           <CardItem key={card.id} card={card} gradientIndex={idx} />
         ))}
 
-        {(isFetchingNextPage || !cards.length) &&
+        {(isFetchingNextPage || isLoading) &&
           Array.from({ length: 3 }).map((_, i) => (
             <CardSkeleton key={`skeleton-${i}`} />
           ))}
