@@ -22,17 +22,16 @@ export default function CardGallery() {
   const [activeCategory, setActiveCategory] = useState<'all' | 'my' | 'liked'>(
     'all'
   );
-
-  const [activeFilter, setActiveFilter] = useState<
-    'none' | 'most-liked' | 'recent'
-  >('none');
+  const [activeFilter, setActiveFilter] = useState<'recent' | 'most-liked'>(
+    'recent'
+  );
   const [activeView, setActiveView] = useState<'grid' | 'list'>('grid');
 
   const loaderRef = useRef<HTMLDivElement | null>(null);
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useInfiniteQuery<CardsResponse>({
-      queryKey: ['cards', activeCategory, token],
+      queryKey: ['cards', activeCategory, activeFilter, token],
       queryFn: async ({ pageParam }) => {
         const params: CardQueryParams = {
           pageParam: pageParam as string,
@@ -46,7 +45,7 @@ export default function CardGallery() {
             return fetchLikedCards(params);
           case 'all':
           default:
-            return fetchAllCards(params);
+            return fetchAllCards({ ...params, sortBy: activeFilter });
         }
       },
       getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
@@ -120,7 +119,7 @@ export default function CardGallery() {
         </div>
 
         <div className="flex items-center gap-2">
-          <CardFilters />
+          <CardFilters value={activeFilter} onChange={setActiveFilter} />
 
           <div className="hidden md:block">
             <Button

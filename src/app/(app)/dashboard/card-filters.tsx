@@ -7,7 +7,12 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Clock, Filter, Heart } from 'lucide-react';
 
-export default function CardFilters() {
+type CardFiltersProps = {
+  value: 'recent' | 'most-liked';
+  onChange: (value: 'recent' | 'most-liked') => void;
+};
+
+export default function CardFilters({ value, onChange }: CardFiltersProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -17,11 +22,24 @@ export default function CardFilters() {
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align="center" className="w-52">
-        <DropdownMenuItem onClick={() => {}}>
-          <Heart className="mr-2" /> Most Liked
+        <DropdownMenuItem
+          variant={value === 'recent' ? 'gradient' : 'default'}
+          onClick={() => onChange('recent')}
+        >
+          <Clock
+            className={`mr-2 ${value === 'recent' ? 'text-white' : 'text-black'}`}
+          />{' '}
+          Recent
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => {}}>
-          <Clock className="mr-2" /> Recent
+
+        <DropdownMenuItem
+          variant={value === 'most-liked' ? 'gradient' : 'default'}
+          onClick={() => onChange('most-liked')}
+        >
+          <Heart
+            className={`mr-2 ${value === 'most-liked' ? 'text-white' : 'text-black'}`}
+          />{' '}
+          Most Liked
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

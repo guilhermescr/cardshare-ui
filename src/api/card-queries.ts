@@ -6,10 +6,17 @@ export type CardQueryParams = {
   token: string | null;
 };
 
-export function fetchAllCards({ pageParam, token }: CardQueryParams) {
+export function fetchAllCards({
+  pageParam,
+  token,
+  sortBy = 'recent',
+}: CardQueryParams & { sortBy?: 'recent' | 'most-liked' }) {
   return httpRequest<CardsResponse>('/cards', {
     token,
-    params: pageParam ? { cursor: pageParam } : undefined,
+    params: {
+      ...(pageParam ? { cursor: pageParam } : {}),
+      sortBy,
+    },
   });
 }
 
