@@ -15,6 +15,7 @@ import {
   fetchLikedCards,
   fetchMyCards,
 } from '@/api/card-queries';
+import EmptyCardsMessage from '@/components/cards/empty-cards-message';
 
 export default function CardGallery() {
   const { token } = useAuthStore();
@@ -144,18 +145,26 @@ export default function CardGallery() {
         </div>
       </section>
 
-      <section
-        className={`grid ${activeView === 'grid' ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1'} gap-6`}
-      >
-        {cards.map((card, idx) => (
-          <CardItem key={card.id} card={card} gradientIndex={idx} />
-        ))}
-
-        {(isFetchingNextPage || isLoading) &&
-          Array.from({ length: 3 }).map((_, i) => (
-            <CardSkeleton key={`skeleton-${i}`} />
+      {cards.length === 0 && !isLoading ? (
+        <EmptyCardsMessage />
+      ) : (
+        <section
+          className={`grid ${
+            activeView === 'grid'
+              ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
+              : 'grid-cols-1'
+          } gap-6`}
+        >
+          {cards.map((card, idx) => (
+            <CardItem key={card.id} card={card} gradientIndex={idx} />
           ))}
-      </section>
+
+          {(isFetchingNextPage || isLoading) &&
+            Array.from({ length: 3 }).map((_, i) => (
+              <CardSkeleton key={`skeleton-${i}`} />
+            ))}
+        </section>
+      )}
 
       <div ref={loaderRef} />
 
