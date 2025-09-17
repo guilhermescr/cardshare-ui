@@ -8,8 +8,8 @@ import {
 import { Clock, Filter, Heart } from 'lucide-react';
 
 type CardFiltersProps = {
-  value: 'recent' | 'most-liked';
-  onChange: (value: 'recent' | 'most-liked') => void;
+  value: 'latest' | 'most-liked';
+  onChange: (value: 'latest' | 'most-liked') => void;
 };
 
 export default function CardFilters({ value, onChange }: CardFiltersProps) {
@@ -23,11 +23,11 @@ export default function CardFilters({ value, onChange }: CardFiltersProps) {
 
       <DropdownMenuContent align="center" className="w-52">
         <DropdownMenuItem
-          variant={value === 'recent' ? 'gradient' : 'default'}
-          onClick={() => onChange('recent')}
+          variant={value === 'latest' ? 'gradient' : 'default'}
+          onClick={() => onChange('latest')}
         >
           <Clock
-            className={`mr-2 ${value === 'recent' ? 'text-white' : 'text-black'}`}
+            className={`mr-2 ${value === 'latest' ? 'text-white' : 'text-black'}`}
           />{' '}
           Recent
         </DropdownMenuItem>

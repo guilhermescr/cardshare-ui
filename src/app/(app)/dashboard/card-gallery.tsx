@@ -22,8 +22,8 @@ export default function CardGallery() {
   const [activeCategory, setActiveCategory] = useState<'all' | 'my' | 'liked'>(
     'all'
   );
-  const [activeFilter, setActiveFilter] = useState<'recent' | 'most-liked'>(
-    'recent'
+  const [activeFilter, setActiveFilter] = useState<'latest' | 'most-liked'>(
+    'latest'
   );
   const [activeView, setActiveView] = useState<'grid' | 'list'>('grid');
 
@@ -36,6 +36,7 @@ export default function CardGallery() {
         const params: CardQueryParams = {
           pageParam: pageParam as string,
           token,
+          sortBy: activeFilter,
         };
 
         switch (activeCategory) {
@@ -45,7 +46,7 @@ export default function CardGallery() {
             return fetchLikedCards(params);
           case 'all':
           default:
-            return fetchAllCards({ ...params, sortBy: activeFilter });
+            return fetchAllCards(params);
         }
       },
       getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,

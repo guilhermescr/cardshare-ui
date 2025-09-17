@@ -4,13 +4,14 @@ import { httpRequest } from '@/utils/http.utils';
 export type CardQueryParams = {
   pageParam?: string;
   token: string | null;
+  sortBy?: 'latest' | 'most-liked';
 };
 
 export function fetchAllCards({
   pageParam,
   token,
-  sortBy = 'recent',
-}: CardQueryParams & { sortBy?: 'recent' | 'most-liked' }) {
+  sortBy = 'latest',
+}: CardQueryParams) {
   return httpRequest<CardsResponse>('/cards', {
     token,
     params: {
@@ -20,16 +21,30 @@ export function fetchAllCards({
   });
 }
 
-export function fetchMyCards({ pageParam, token }: CardQueryParams) {
+export function fetchMyCards({
+  pageParam,
+  token,
+  sortBy = 'latest',
+}: CardQueryParams) {
   return httpRequest<CardsResponse>('/users/me/cards', {
     token,
-    params: pageParam ? { cursor: pageParam } : undefined,
+    params: {
+      ...(pageParam ? { cursor: pageParam } : {}),
+      sortBy,
+    },
   });
 }
 
-export function fetchLikedCards({ pageParam, token }: CardQueryParams) {
+export function fetchLikedCards({
+  pageParam,
+  token,
+  sortBy = 'latest',
+}: CardQueryParams) {
   return httpRequest<CardsResponse>('/users/me/liked', {
     token,
-    params: pageParam ? { cursor: pageParam } : undefined,
+    params: {
+      ...(pageParam ? { cursor: pageParam } : {}),
+      sortBy,
+    },
   });
 }
