@@ -160,7 +160,10 @@ export default function CardGallery() {
       <div ref={loaderRef} />
 
       {isFetchingNextPage && (
-        <div className="text-center py-4 text-gray-500">Loading more...</div>
+        <div className="text-center py-4 text-gray-500">
+          <Loader2 className="animate-spin inline-block w-4 h-4 mr-2" />
+          Loading more...
+        </div>
       )}
     </>
   );
