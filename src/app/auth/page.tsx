@@ -6,8 +6,8 @@ import { Sparkles, Layers, Users } from 'lucide-react';
 import { AnimatedBackground } from '@/components/animated-background';
 import LoginForm from './login/login.form';
 import RegisterForm from './register/register.form';
-import { AuthHeader } from './AuthHeader';
-import { AuthFeatureCard } from './AuthFeatureCard';
+import { AuthHeader } from './auth-header';
+import { AuthFeatureCard } from './auth-feature-card';
 
 // interface AuthPageProps {
 //   onLogin: (role?: 'user' | 'admin') => void;

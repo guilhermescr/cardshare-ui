@@ -2,7 +2,7 @@ export const APP_ROUTES = {
   LOGIN: '/auth',
   CHECK_EMAIL: '/auth/check-email',
   DASHBOARD: '/dashboard',
-  PROFILE: '/profile',
+  PROFILE: '/:username',
   SETTINGS: '/settings',
   NOTIFICATIONS: '/notifications',
 };

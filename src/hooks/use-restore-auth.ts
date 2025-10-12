@@ -21,10 +21,14 @@ export function useRestoreAuth() {
   const pathname = usePathname();
 
   useEffect(() => {
-    const isKnown = KNOWN_ROUTES.some((route) => pathname.startsWith(route));
-    const isProtected = PROTECTED_ROUTES.some((route) =>
-      pathname.startsWith(route)
-    );
+    const isDynamicProfile = /^\/[a-zA-Z0-9_-]+$/.test(pathname);
+    const isKnown =
+      KNOWN_ROUTES.some((route) => pathname.startsWith(route)) ||
+      isDynamicProfile;
+
+    const isProtected =
+      PROTECTED_ROUTES.some((route) => pathname.startsWith(route)) ||
+      isDynamicProfile;
 
     if (!isKnown || !isProtected) {
       setLoading(false);
@@ -48,8 +52,7 @@ export function useRestoreAuth() {
 
         const data = await response.json();
         useAuthStore.getState().setAuth(token, data.user);
-      } catch (error) {
-        console.error(error);
+      } catch (_error) {
         useAuthStore.getState().logout();
         localStorage.removeItem('token');
         router.push(APP_ROUTES.LOGIN);

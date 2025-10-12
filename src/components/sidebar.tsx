@@ -1,14 +1,15 @@
-import { Search, Bell, LayoutDashboard, X } from 'lucide-react';
+import { Search, Bell, LayoutDashboard, X, User } from 'lucide-react';
 import { Input } from './ui/input';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { useState } from 'react';
 import Logo from './logo';
 import GradientText from './gradient-text';
+import { SidebarView } from './header';
 
 interface SidebarProps {
-  currentView: string;
-  onNavigate: (view: string) => void;
+  currentView: SidebarView;
+  onNavigate: (view: SidebarView) => void;
   setMobileMenuOpen: (open: boolean) => void;
   notificationCount: number;
 }
@@ -20,11 +21,20 @@ export default function Sidebar({
   notificationCount,
 }: SidebarProps) {
   const [searchQuery, setSearchQuery] = useState('');
-  const navItems = [
+  const navItems: {
+    id: SidebarView;
+    label: string;
+    icon: React.ElementType;
+  }[] = [
     {
       id: 'dashboard',
       label: 'Dashboard',
       icon: LayoutDashboard,
+    },
+    {
+      id: 'profile',
+      label: 'Profile',
+      icon: User,
     },
   ];
 

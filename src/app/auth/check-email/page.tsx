@@ -1,10 +1,10 @@
 'use client';
 
 import { AnimatedBackground } from '@/components/animated-background';
-import { AuthHeader } from '../AuthHeader';
+import { AuthHeader } from '../auth-header';
 import { CheckCircle, Clock, Mail, Shield, Zap, Sparkles } from 'lucide-react';
 import { CheckEmailActionButton } from './check-email-action-button';
-import { AuthFeatureCard } from '../AuthFeatureCard';
+import { AuthFeatureCard } from '../auth-feature-card';
 import { useSearchParams } from 'next/navigation';
 
 export default function CheckEmailPage() {

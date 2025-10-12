@@ -22,9 +22,9 @@ export default function ProfileTab() {
       </div>
 
       <form className="mt-6 space-y-4">
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex flex-col flex-1">
-            <label className="font-semibold text-sm" htmlFor="full-name">
+            <label className="font-medium text-sm" htmlFor="full-name">
               Full Name
             </label>
             <input
@@ -36,7 +36,7 @@ export default function ProfileTab() {
           </div>
 
           <div className="flex flex-col flex-1">
-            <label className="font-semibold text-sm" htmlFor="email">
+            <label className="font-medium text-sm" htmlFor="email">
               Email
             </label>
             <input
@@ -49,7 +49,7 @@ export default function ProfileTab() {
         </div>
 
         <div className="flex flex-col flex-1">
-          <label className="font-semibold text-sm" htmlFor="bio">
+          <label className="font-medium text-sm" htmlFor="bio">
             Bio
           </label>
           <textarea
@@ -59,9 +59,9 @@ export default function ProfileTab() {
           ></textarea>
         </div>
 
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex flex-col flex-1">
-            <label className="font-semibold text-sm" htmlFor="location">
+            <label className="font-medium text-sm" htmlFor="location">
               Location
             </label>
             <input
@@ -73,7 +73,7 @@ export default function ProfileTab() {
           </div>
 
           <div className="flex flex-col flex-1">
-            <label className="font-semibold text-sm" htmlFor="website">
+            <label className="font-medium text-sm" htmlFor="website">
               Website
             </label>
             <input

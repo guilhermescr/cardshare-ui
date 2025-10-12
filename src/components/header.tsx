@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Bell, Home, Menu, Plus, Search } from 'lucide-react';
 import { APP_ROUTES } from '@/constants/routes';
@@ -9,21 +9,40 @@ import Logo from './logo';
 import GradientText from './gradient-text';
 import { Badge } from './ui/badge';
 import ProfileDropdown from './ui/profile-dropdown';
-import { useState } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import Sidebar from './sidebar';
+import { useAuthStore } from '@/stores/auth';
+
+export type SidebarView = 'dashboard' | 'notifications' | 'profile';
 
 export default function Header() {
   const router = useRouter();
+  const pathname = usePathname();
+  const { user } = useAuthStore();
+
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [currentView, setCurrentView] = useState('dashboard');
+  const [currentView, setCurrentView] = useState<SidebarView>('dashboard');
   const notificationCount = 3;
 
-  const viewToRoute: Record<string, string> = {
-    dashboard: APP_ROUTES.DASHBOARD,
-    notifications: APP_ROUTES.NOTIFICATIONS,
-  };
+  const viewToRoute: Record<SidebarView, string> = useMemo(
+    () => ({
+      dashboard: APP_ROUTES.DASHBOARD,
+      notifications: APP_ROUTES.NOTIFICATIONS,
+      profile: user ? `/${user.username}` : '/',
+    }),
+    [user]
+  );
 
-  const handleNavigate = (view: string) => {
+  useEffect(() => {
+    const view = Object.keys(viewToRoute).find(
+      (key) => viewToRoute[key as SidebarView] === pathname
+    ) as SidebarView | undefined;
+    if (view) {
+      setCurrentView(view);
+    }
+  }, [pathname, viewToRoute]);
+
+  const handleNavigate = (view: SidebarView) => {
     setCurrentView(view);
     setMobileMenuOpen(false);
     const route = viewToRoute[view];
