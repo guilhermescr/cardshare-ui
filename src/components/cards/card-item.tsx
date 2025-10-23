@@ -16,6 +16,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
+import { useRouter } from 'next/navigation';
+import GradientCardImage from './gradient-card-image';
 
 function CardMoreOptionsButton() {
   return (
@@ -51,15 +53,19 @@ const gradients = [
 ];
 
 export default function CardItem({ card, gradientIndex = 0 }: CardItemProps) {
+  const router = useRouter();
   const gradient = gradients[gradientIndex % gradients.length];
 
+  const handleCardClick = () => {
+    router.push(`/dashboard/${card.id}`);
+  };
+
   return (
-    <section className="bg-white shadow rounded-md p-6 cursor-pointer transition-transform ease-out duration-300 hover:scale-102 hover:shadow-lg group">
-      <div
-        className={`bg-gradient-to-br ${gradient} w-full px-8 py-14 rounded-lg`}
-      >
-        <Sparkles className="mx-auto text-white/80" size={30} />
-      </div>
+    <section
+      className="bg-white shadow rounded-md p-6 cursor-pointer transition-transform ease-out duration-300 hover:scale-102 hover:shadow-lg group"
+      onClick={handleCardClick}
+    >
+      <GradientCardImage gradient={gradient} />
 
       <div className="flex items-center justify-between">
         <h3 className="font-semibold text-lg mt-5 mb-4 group-hover:text-blue-600">
