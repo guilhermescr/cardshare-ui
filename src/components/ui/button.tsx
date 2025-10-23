@@ -26,6 +26,9 @@ const buttonVariants = cva(
         blue: 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700',
         green:
           'bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-700 hover:to-teal-700',
+        pink: 'bg-gradient-to-r from-pink-500 to-rose-500 hover:bg-gradient-to-l',
+        yellow:
+          'bg-gradient-to-r from-yellow-400 to-orange-400 hover:bg-gradient-to-l',
         none: '',
       },
       size: {
@@ -47,6 +50,18 @@ const buttonVariants = cva(
         gradientColor: 'green',
         className:
           'bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-700 hover:to-teal-700',
+      },
+      {
+        variant: 'gradient',
+        gradientColor: 'pink',
+        className:
+          'bg-gradient-to-r from-pink-500 to-rose-500 hover:bg-gradient-to-l',
+      },
+      {
+        variant: 'gradient',
+        gradientColor: 'yellow',
+        className:
+          'bg-gradient-to-r from-yellow-400 to-orange-400 hover:bg-gradient-to-l',
       },
     ],
     defaultVariants: {
