@@ -16,7 +16,11 @@ export default function DashboardPage() {
           </p>
         </div>
 
-        <Button variant="gradient" gradientColor="blue" className="mt-4 md:mt-0">
+        <Button
+          variant="gradient"
+          gradientColor="blue"
+          className="mt-4 md:mt-0"
+        >
           <Plus /> Create New Card
         </Button>
       </section>
