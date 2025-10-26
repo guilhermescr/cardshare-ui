@@ -11,14 +11,12 @@ import LikeButton from './like-button';
 import { useCardDetails } from '@/hooks/use-card-details';
 import FavoriteButton from './favorite-button';
 import CommentSection from './comments-section';
-import { httpRequest } from '@/utils/http.utils';
-import { CommentDto } from '@/types/comment.dto';
 import RelatedCards from '@/components/cards/related-cards';
 
 export default function CardDetailsPage() {
   const router = useRouter();
   const { cardId } = useParams();
-  const { token, user } = useAuthStore();
+  const { token } = useAuthStore();
 
   const { cardDetails, setCardDetails, loading, error } = useCardDetails(
     cardId as string,
@@ -45,62 +43,6 @@ export default function CardDetailsPage() {
   if (!cardDetails && !loading) {
     return <p>No card details found.</p>;
   }
-
-  const saveComment = async (newComment: string) => {
-    const createdComment = await httpRequest<CommentDto>(`/comments`, {
-      method: 'POST',
-      body: {
-        cardId: cardDetails?.id,
-        content: newComment,
-      },
-      token,
-    });
-    setCardDetails((prevCard) => {
-      if (!prevCard) return prevCard;
-      return {
-        ...prevCard,
-        comments: [createdComment, ...prevCard.comments],
-      };
-    });
-  };
-
-  const toggleLikeComment = async (commentId: string, isLiked: boolean) => {
-    await httpRequest(`/comments/${commentId}/like`, {
-      method: 'POST',
-      token,
-    });
-    setCardDetails((prevCard) => {
-      if (!prevCard) return prevCard;
-      return {
-        ...prevCard,
-        comments: prevCard.comments.map((comment) => {
-          if (comment.id === commentId && user) {
-            const updatedLikes = isLiked
-              ? [...comment.likes, user.id]
-              : comment.likes.filter((like) => like !== user.id);
-            return { ...comment, likes: updatedLikes };
-          }
-          return comment;
-        }),
-      };
-    });
-  };
-
-  const deleteComment = async (commentId: string) => {
-    await httpRequest(`/comments/${commentId}`, {
-      method: 'DELETE',
-      token,
-    });
-    setCardDetails((prevCard) => {
-      if (!prevCard) return prevCard;
-      return {
-        ...prevCard,
-        comments: prevCard.comments.filter(
-          (comment) => comment.id !== commentId
-        ),
-      };
-    });
-  };
 
   return (
     <>
