@@ -9,6 +9,7 @@ import DeleteDialog from '@/components/delete-dialog';
 import { toast } from 'sonner';
 import { useAuthStore } from '@/stores/auth';
 import { httpRequest } from '@/utils/http.utils';
+import ProfilePicture from '@/components/ui/profile-picture';
 
 interface CommentSectionProps {
   comments: CommentDto[];
@@ -157,15 +158,16 @@ export default function CommentSection({
 
             return (
               <li key={comment.id} className="flex items-start gap-3">
-                <div className="bg-gray-200 rounded-full p-5">
-                  {/* Profile Picture */}
-                </div>
+                <ProfilePicture
+                  url={comment.author.profilePicture}
+                  size="small"
+                />
 
                 <div className="flex-1">
                   <div className="bg-gray-50 rounded-md p-3.5 pt-2 w-full">
                     <div className="flex items-center justify-between gap-2 mb-1">
                       <h3 className="font-medium text-gray-800">
-                        {comment.author}
+                        {comment.author.username}
                       </h3>
 
                       {renderCommentDateTime(comment.createdAt)}
@@ -193,7 +195,7 @@ export default function CommentSection({
                       )}
                     </button>
 
-                    {comment.authorId === user?.id && (
+                    {comment.author.id === user?.id && (
                       <button
                         type="button"
                         className="cursor-pointer transition-colors duration-200 hover:text-red-500"

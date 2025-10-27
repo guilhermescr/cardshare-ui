@@ -26,6 +26,7 @@ import { httpRequest } from '@/utils/http.utils';
 import { FollowUserResponseDto, UserResponseDto } from '@/types/user.dto';
 import UploadProfilePictureButton from '@/components/ui/upload-profile-picture-button';
 import Image from 'next/image';
+import ProfilePicture from '@/components/ui/profile-picture';
 
 export default function ProfilePage() {
   const { username } = useParams();
@@ -95,21 +96,13 @@ export default function ProfilePage() {
       <section className="flex gap-8 flex-col items-center lg:flex-row lg:items-start">
         <section className="w-full lg:flex-1">
           <section className="bg-white flex flex-col items-center justify-between shadow-md rounded-lg p-6">
-            <div className="rounded-full w-30 h-30 bg-gray-200 border-3 border-white mb-4 shadow-lg relative">
-              {profilePictureUrl ? (
-                <Image
-                  src={profilePictureUrl}
-                  alt="Profile"
-                  width={120}
-                  height={120}
-                  className="rounded-full object-cover"
-                />
-              ) : (
-                isOwnProfile && (
-                  <UploadProfilePictureButton onUpload={handleUpload} />
-                )
-              )}
-            </div>
+            <ProfilePicture
+              url={profilePictureUrl}
+              size="large"
+              isOwnProfile={isOwnProfile}
+              onUpload={handleUpload}
+              className="mb-4 border-3 border-white"
+            />
 
             <h2 className="text-2xl text-gray-900 font-semibold">
               {foundUser?.fullName}

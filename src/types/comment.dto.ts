@@ -1,8 +1,9 @@
+import { AuthorDto } from './card.dto';
+
 export interface CommentDto {
   id: string;
   cardId: string;
-  authorId: string;
-  author: string;
+  author: AuthorDto;
   content: string;
   likes: string[];
   createdAt: Date;

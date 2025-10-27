@@ -44,7 +44,7 @@ export default function RelatedCards({ cardId, token }: RelatedCardsProps) {
                 <div>
                   <h3 className="text-sm font-medium">{card.title}</h3>
                   <p className="text-xs text-gray-600">
-                    by {card.ownerUsername}.
+                    by {card.author.username}.
                   </p>
                 </div>
               </Link>

@@ -12,6 +12,8 @@ import { useCardDetails } from '@/hooks/use-card-details';
 import FavoriteButton from './favorite-button';
 import CommentSection from './comments-section';
 import RelatedCards from '@/components/cards/related-cards';
+import ProfilePicture from '@/components/ui/profile-picture';
+import { formatDateToLongString } from '@/utils/date-handlers.utils';
 
 export default function CardDetailsPage() {
   const router = useRouter();
@@ -23,14 +25,7 @@ export default function CardDetailsPage() {
     token
   );
 
-  const currentDate = cardDetails?.createdAt
-    ? new Date(cardDetails.createdAt).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        timeZone: 'UTC',
-      })
-    : '';
+  const cardDate = formatDateToLongString(cardDetails?.createdAt ?? '');
 
   if (loading) {
     return <p>Loading...</p>;
@@ -60,16 +55,19 @@ export default function CardDetailsPage() {
             </h1>
 
             <div className="flex items-center gap-2 mb-10">
-              <div className="bg-gray-200 rounded-full p-4">
-                {/* Profile Picture */}
-              </div>
+              <ProfilePicture
+                url={cardDetails?.author?.profilePicture ?? ''}
+                size="small"
+              />
 
-              <p className="text-gray-600 text-sm font-medium">John Doe</p>
+              <p className="text-gray-600 text-sm font-medium">
+                {cardDetails?.author?.username}
+              </p>
 
               <span className="inline-block mx-1 text-xs">•</span>
 
               <span className="flex items-center gap-2 text-sm text-gray-600">
-                <Calendar size={16} /> {currentDate}
+                <Calendar size={16} /> {cardDate}
               </span>
             </div>
 
@@ -151,12 +149,13 @@ export default function CardDetailsPage() {
             <h2 className="font-medium text-lg mb-7">About the Author</h2>
 
             <div className="flex gap-3 items-center mb-4">
-              <div className="bg-gray-200 rounded-full p-5">
-                {/* Profile Picture */}
-              </div>
+              <ProfilePicture
+                url={cardDetails?.author?.profilePicture ?? ''}
+                size="small"
+              />
 
               <div>
-                <h3 className="font-medium">{cardDetails?.ownerUsername}</h3>
+                <h3 className="font-medium">{cardDetails?.author?.username}</h3>
                 <p className="text-sm text-gray-600">Bio here.</p>
               </div>
             </div>
@@ -164,7 +163,7 @@ export default function CardDetailsPage() {
             <Button
               variant="outline"
               className="w-full"
-              onClick={() => router.push(`/${cardDetails?.ownerUsername}`)}
+              onClick={() => router.push(`/${cardDetails?.author?.username}`)}
             >
               View Profile
             </Button>

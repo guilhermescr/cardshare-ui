@@ -80,7 +80,7 @@ export default function CardItem({ card, gradientIndex = 0 }: CardItemProps) {
 
       <div className="flex items-center gap-3 text-sm">
         <User size={16} />{' '}
-        <span className="text-gray-700">{card.ownerUsername}</span>{' '}
+        <span className="text-gray-700">{card.author.username}</span>{' '}
         <span className="text-gray-400">•</span>{' '}
         <span className="text-gray-400">2 hours ago</span>
       </div>

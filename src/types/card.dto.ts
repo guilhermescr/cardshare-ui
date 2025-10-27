@@ -1,16 +1,22 @@
 import { CommentDto } from './comment.dto';
 
+export interface AuthorDto {
+  id: string;
+  username: string;
+  profilePicture: string;
+}
+
 export interface RelatedCard {
   id: string;
   title: string;
-  ownerUsername: string;
+  author: AuthorDto;
 }
 
 export interface CardDto {
   id: string;
   title: string;
   description: string;
-  ownerUsername: string;
+  author: AuthorDto;
   visibility: 'public' | 'private' | 'unlisted';
   isLiked: boolean;
   isFavorited: boolean;

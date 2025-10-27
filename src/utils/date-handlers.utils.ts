@@ -38,3 +38,18 @@ export function formatDateTime(dateString: string | Date): {
     time: time,
   };
 }
+
+export function formatDateToLongString(dateString: string | Date): string {
+  if (!dateString) return '';
+
+  const date = new Date(dateString);
+
+  const options: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    timeZone: 'UTC',
+  };
+
+  return new Intl.DateTimeFormat('en-US', options).format(date);
+}
