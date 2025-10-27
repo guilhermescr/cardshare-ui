@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { MessageCircle, Send } from 'lucide-react';
 import { CommentDto } from '@/types/comment.dto';
-import { formatDateTime } from '@/utils/dateHandlers.utils';
+import { formatDateTime } from '@/utils/date-handlers.utils';
 import DeleteDialog from '@/components/delete-dialog';
 import { toast } from 'sonner';
 import { useAuthStore } from '@/stores/auth';

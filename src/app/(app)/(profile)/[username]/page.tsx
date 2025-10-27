@@ -24,6 +24,8 @@ import { useUserData } from '@/hooks/use-user-data';
 import { useEffect, useState } from 'react';
 import { httpRequest } from '@/utils/http.utils';
 import { FollowUserResponseDto, UserResponseDto } from '@/types/user.dto';
+import UploadProfilePictureButton from '@/components/ui/upload-profile-picture-button';
+import Image from 'next/image';
 
 export default function ProfilePage() {
   const { username } = useParams();
@@ -34,12 +36,13 @@ export default function ProfilePage() {
 
   const [isFollowing, setIsFollowing] = useState(false);
   const [isFollowLoading, setIsFollowLoading] = useState(false);
+  const [profilePictureUrl, setProfilePictureUrl] = useState<string | null>(
+    null
+  );
 
-  useEffect(() => {
-    if (foundUser?.isFollowing !== undefined) {
-      setIsFollowing(foundUser.isFollowing);
-    }
-  }, [foundUser?.isFollowing]);
+  const handleUpload = (imageUrl: string) => {
+    setProfilePictureUrl(imageUrl);
+  };
 
   const handleFollowToggle = async () => {
     if (!foundUser?.id || !token) return;
@@ -71,6 +74,13 @@ export default function ProfilePage() {
     }
   };
 
+  useEffect(() => {
+    if (foundUser) {
+      setProfilePictureUrl(foundUser.profilePicture || null);
+      setIsFollowing(foundUser.isFollowing || false);
+    }
+  }, [foundUser]);
+
   return (
     <>
       <div className="mb-8">
@@ -86,14 +96,18 @@ export default function ProfilePage() {
         <section className="w-full lg:flex-1">
           <section className="bg-white flex flex-col items-center justify-between shadow-md rounded-lg p-6">
             <div className="rounded-full w-30 h-30 bg-gray-200 border-3 border-white mb-4 shadow-lg relative">
-              {/* Profile Picture here */}
-              {isOwnProfile && (
-                <button
-                  type="button"
-                  className="bg-white shadow-lg absolute -bottom-1 -right-1 p-3 rounded-full cursor-pointer hover:bg-gray-100 transition"
-                >
-                  <Camera size={16} />
-                </button>
+              {profilePictureUrl ? (
+                <Image
+                  src={profilePictureUrl}
+                  alt="Profile"
+                  width={120}
+                  height={120}
+                  className="rounded-full object-cover"
+                />
+              ) : (
+                isOwnProfile && (
+                  <UploadProfilePictureButton onUpload={handleUpload} />
+                )
               )}
             </div>
 

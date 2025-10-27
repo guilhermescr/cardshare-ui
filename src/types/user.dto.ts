@@ -5,6 +5,7 @@ export interface UserDto {
   fullName: string;
   username: string;
   email: string;
+  profilePicture: string;
   bio: string;
   isFollowing: boolean;
   following: string[];
