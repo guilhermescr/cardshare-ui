@@ -100,8 +100,9 @@ export default function ProfilePage() {
               url={profilePictureUrl}
               size="large"
               isOwnProfile={isOwnProfile}
-              onUpload={handleUpload}
               className="mb-4 border-3 border-white"
+              onUpload={handleUpload}
+              onRemove={() => setProfilePictureUrl(null)}
             />
 
             <h2 className="text-2xl text-gray-900 font-semibold">
