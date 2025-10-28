@@ -100,7 +100,7 @@ export default function ProfilePage() {
               url={profilePictureUrl}
               size="large"
               isOwnProfile={isOwnProfile}
-              className="mb-4 border-3 border-white"
+              className="mb-4 border-3 border-white shadow-lg"
               onUpload={handleUpload}
               onRemove={() => setProfilePictureUrl(null)}
             />

@@ -173,29 +173,47 @@ export default function ProfilePicture({
 }: ProfilePictureProps) {
   const dimension = sizeMap[size];
 
+  if (!url) {
+    return (
+      <div
+        className={`flex items-center justify-center rounded-full bg-[#E7E7E7] relative ${className}`}
+        style={{
+          width: dimension,
+          height: dimension,
+        }}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          className="text-[#B3B3B3]"
+          style={{ width: dimension / 2, height: dimension / 2 }}
+        >
+          <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+        </svg>
+        {isOwnProfile && onUpload && (
+          <UploadProfilePictureButton onUpload={onUpload} />
+        )}
+      </div>
+    );
+  }
+
   return (
     <div
       className={`rounded-full bg-gray-200 shadow-lg relative ${className}`}
       style={{ width: dimension, height: dimension }}
     >
-      {url ? (
-        <>
-          <Image
-            src={url}
-            alt="Profile Picture"
-            width={dimension}
-            height={dimension}
-            className="rounded-full object-cover"
-            priority
-          />
+      <Image
+        src={url}
+        alt="Profile Picture"
+        width={dimension}
+        height={dimension}
+        className="rounded-full object-cover"
+        priority
+      />
 
-          {isOwnProfile && onUpload && (
-            <MoreOptionsButton onUpload={onUpload} onRemove={onRemove} />
-          )}
-        </>
-      ) : (
-        isOwnProfile &&
-        onUpload && <UploadProfilePictureButton onUpload={onUpload} />
+      {isOwnProfile && onUpload && (
+        <MoreOptionsButton onUpload={onUpload} onRemove={onRemove} />
       )}
     </div>
   );
