@@ -38,6 +38,7 @@ export default function ProfilePicture({
           width={dimension}
           height={dimension}
           className="rounded-full object-cover"
+          priority
         />
       ) : (
         isOwnProfile &&
