@@ -6,6 +6,7 @@ import ImageCropDialog from './image-crop-dialog';
 import { toast } from 'sonner';
 import { API_URL } from '@/constants/api';
 import { useAuthStore } from '@/stores/auth';
+import { handleCropComplete } from '@/utils/upload.utils';
 
 interface UploadProfilePictureButtonProps {
   onUpload: (imageUrl: string) => void;
@@ -40,32 +41,10 @@ export default function UploadProfilePictureButton({
     }
   };
 
-  const handleCropComplete = async (croppedImage: File) => {
-    setIsUploading(true);
-    try {
-      const formData = new FormData();
-      formData.append('file', croppedImage);
-
-      const response = await fetch(`${API_URL}/upload/profile-picture`, {
-        method: 'POST',
-        body: formData,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to upload profile picture');
-      }
-
-      const result = await response.json();
-      toast.success('Profile picture updated successfully!');
-
-      onUpload(result.url);
-    } catch (error) {
-      console.error('Error uploading profile picture:', error);
-      toast.error('Failed to upload profile picture. Please try again.');
-    } finally {
+  const handleCropCompleteWrapper = async (croppedImage: File) => {
+    if (token) {
+      setIsUploading(true);
+      await handleCropComplete(croppedImage, token, onUpload);
       setIsUploading(false);
       setIsCropDialogOpen(false);
       setImageSrc(null);
@@ -105,7 +84,7 @@ export default function UploadProfilePictureButton({
           isOpen={isCropDialogOpen}
           onClose={handleCloseDialog}
           imageSrc={imageSrc}
-          onCropComplete={handleCropComplete}
+          onCropComplete={handleCropCompleteWrapper}
         />
       )}
     </>
