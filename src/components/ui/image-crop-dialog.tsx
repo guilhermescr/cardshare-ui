@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Cropper, { Area } from 'react-easy-crop';
 import {
   Dialog,
@@ -27,9 +27,19 @@ export default function ImageCropDialog({
   onCropComplete,
 }: ImageCropDialogProps) {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
-  const [zoom, setZoom] = useState(1); // Add zoom state
+  const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
   const [isCropping, setIsCropping] = useState(false);
+  const [showCropper, setShowCropper] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      const timeout = setTimeout(() => setShowCropper(true), 300);
+      return () => clearTimeout(timeout);
+    } else {
+      setShowCropper(false);
+    }
+  }, [isOpen]);
 
   const handleCropComplete = async () => {
     if (!croppedAreaPixels) return;
@@ -59,17 +69,19 @@ export default function ImageCropDialog({
         </DialogHeader>
 
         <div className="relative w-full h-64 bg-gray-200">
-          <Cropper
-            image={imageSrc}
-            crop={crop}
-            zoom={zoom}
-            aspect={1}
-            onCropChange={setCrop}
-            onZoomChange={setZoom}
-            onCropComplete={(_, croppedAreaPixels) =>
-              setCroppedAreaPixels(croppedAreaPixels)
-            }
-          />
+          {showCropper && (
+            <Cropper
+              image={imageSrc}
+              crop={crop}
+              zoom={zoom}
+              aspect={1}
+              onCropChange={setCrop}
+              onZoomChange={setZoom}
+              onCropComplete={(_, croppedAreaPixels) =>
+                setCroppedAreaPixels(croppedAreaPixels)
+              }
+            />
+          )}
         </div>
 
         <div className="flex items-center justify-between mt-4">
