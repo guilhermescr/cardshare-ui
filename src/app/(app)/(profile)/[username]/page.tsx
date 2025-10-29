@@ -4,7 +4,6 @@ import GradientText from '@/components/gradient-text';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   Calendar,
-  Camera,
   Flag,
   Loader2,
   MapPin,
@@ -24,8 +23,6 @@ import { useUserData } from '@/hooks/use-user-data';
 import { useEffect, useState } from 'react';
 import { httpRequest } from '@/utils/http.utils';
 import { FollowUserResponseDto, UserResponseDto } from '@/types/user.dto';
-import UploadProfilePictureButton from '@/components/ui/upload-profile-picture-button';
-import Image from 'next/image';
 import ProfilePicture from '@/components/ui/profile-picture';
 
 export default function ProfilePage() {

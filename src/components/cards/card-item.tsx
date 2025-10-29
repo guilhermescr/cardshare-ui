@@ -4,11 +4,10 @@ import {
   Heart,
   MessageCircle,
   Share2,
-  Sparkles,
   User,
 } from 'lucide-react';
 import { Button } from '../ui/button';
-import { CardDto } from '@/types/card.dto';
+import { CardDetailsDto, CardDto } from '@/types/card.dto';
 import { capitalizeFirstLetter } from '@/utils/string.utils';
 import {
   DropdownMenu,
@@ -18,6 +17,11 @@ import {
 } from '../ui/dropdown-menu';
 import { useRouter } from 'next/navigation';
 import GradientCardImage from './gradient-card-image';
+import { toast } from 'sonner';
+import { shareCard } from '@/utils/share.utils';
+import { useState } from 'react';
+import { httpRequest } from '@/utils/http.utils';
+import { useAuthStore } from '@/stores/auth';
 
 function CardMoreOptionsButton() {
   return (
@@ -43,6 +47,7 @@ function CardMoreOptionsButton() {
 interface CardItemProps {
   card: CardDto;
   gradientIndex?: number;
+  onLikeToggle?: (updatedCard: CardDto) => void;
 }
 
 const gradients = [
@@ -52,12 +57,52 @@ const gradients = [
   'from-purple-500 to-pink-400',
 ];
 
-export default function CardItem({ card, gradientIndex = 0 }: CardItemProps) {
+export default function CardItem({
+  card,
+  gradientIndex = 0,
+  onLikeToggle,
+}: CardItemProps) {
   const router = useRouter();
   const gradient = gradients[gradientIndex % gradients.length];
 
+  const { token } = useAuthStore();
+
+  const [isLiking, setIsLiking] = useState(false);
+
   const handleCardClick = () => {
     router.push(`/dashboard/${card.id}`);
+  };
+
+  const handleCardLike = async () => {
+    try {
+      setIsLiking(true);
+
+      const updatedCard = await httpRequest<CardDetailsDto>(
+        `/cards/${card.id}/like`,
+        {
+          method: 'POST',
+          token,
+        }
+      );
+
+      if (onLikeToggle) {
+        onLikeToggle(updatedCard);
+      }
+    } catch (error) {
+      console.error('Error toggling like status:', error);
+      toast.error('Failed to update like status.');
+    } finally {
+      setIsLiking(false);
+    }
+  };
+
+  const handleCardShare = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    shareCard(
+      card.title,
+      card.description,
+      `${window.location.origin}/dashboard/${card.id}`
+    );
   };
 
   return (
@@ -103,7 +148,11 @@ export default function CardItem({ card, gradientIndex = 0 }: CardItemProps) {
         </div>
 
         <span
-          className={`${card.visibility === 'public' ? 'bg-gradient-to-r from-green-500 to-teal-500 text-white' : 'bg-gray-100 text-black'} py-1 px-3 rounded-xl font-medium`}
+          className={`${
+            card.visibility === 'public'
+              ? 'bg-gradient-to-r from-green-500 to-teal-500 text-white'
+              : 'bg-gray-100 text-black'
+          } py-1 px-3 rounded-xl font-medium`}
         >
           {capitalizeFirstLetter(card.visibility)}
         </span>
@@ -112,7 +161,14 @@ export default function CardItem({ card, gradientIndex = 0 }: CardItemProps) {
       <div className="flex items-center justify-between mt-6">
         <Button
           variant="ghost"
-          className="hover:bg-red-100 hover:text-red-600 duration-300"
+          className={`hover:bg-red-100 duration-300 ${
+            card.isLiked ? 'text-red-600' : 'text-gray-600'
+          }`}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleCardLike();
+          }}
+          disabled={isLiking}
         >
           <Heart /> {card.likes.length}
         </Button>
@@ -120,6 +176,7 @@ export default function CardItem({ card, gradientIndex = 0 }: CardItemProps) {
         <Button
           variant="ghost"
           className="hover:bg-blue-100 hover:text-blue-600 duration-300"
+          onClick={handleCardShare}
         >
           <Share2 /> Share
         </Button>

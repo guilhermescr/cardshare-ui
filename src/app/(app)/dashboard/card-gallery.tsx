@@ -27,6 +27,7 @@ export default function CardGallery() {
     'latest'
   );
   const [activeView, setActiveView] = useState<'grid' | 'list'>('grid');
+  const [cards, setCards] = useState<CardDto[]>([]);
 
   const loaderRef = useRef<HTMLDivElement | null>(null);
 
@@ -55,7 +56,23 @@ export default function CardGallery() {
       enabled: !!token,
       retry: false,
     });
-  const cards: CardDto[] = data?.pages?.flatMap((page) => page.items) ?? [];
+
+  useEffect(() => {
+    if (data) {
+      const allCards = data.pages.flatMap((page) => page.items);
+      setCards(allCards);
+    }
+  }, [data]);
+
+  const handleLikeToggle = (updatedCard: CardDto) => {
+    setCards((prevCards) =>
+      prevCards.map((card) =>
+        card.id === updatedCard.id
+          ? { ...card, likes: updatedCard.likes, isLiked: updatedCard.isLiked }
+          : card
+      )
+    );
+  };
 
   useEffect(() => {
     if (!hasNextPage || isFetchingNextPage) return;
@@ -156,7 +173,12 @@ export default function CardGallery() {
           } gap-6`}
         >
           {cards.map((card, idx) => (
-            <CardItem key={card.id} card={card} gradientIndex={idx} />
+            <CardItem
+              key={card.id}
+              card={card}
+              gradientIndex={idx}
+              onLikeToggle={handleLikeToggle}
+            />
           ))}
 
           {(isFetchingNextPage || isLoading) &&
