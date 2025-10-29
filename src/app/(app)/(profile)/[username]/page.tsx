@@ -24,6 +24,7 @@ import { useEffect, useState } from 'react';
 import { httpRequest } from '@/utils/http.utils';
 import { FollowUserResponseDto, UserResponseDto } from '@/types/user.dto';
 import ProfilePicture from '@/components/ui/profile-picture';
+import { shareProfile } from '@/utils/share.utils';
 
 export default function ProfilePage() {
   const { username } = useParams();
@@ -143,6 +144,15 @@ export default function ProfilePage() {
                 <button
                   type="button"
                   className="cursor-pointer border rounded-md py-2.5 px-3.5 transition-all duration-300 hover:bg-gray-50"
+                  onClick={() => {
+                    if (foundUser) {
+                      shareProfile(
+                        foundUser.username,
+                        foundUser.bio,
+                        `${window.location.origin}/${foundUser.username}`
+                      );
+                    }
+                  }}
                 >
                   <Share2 size={16} />
                 </button>

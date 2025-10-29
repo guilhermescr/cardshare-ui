@@ -14,6 +14,7 @@ import CommentSection from './comments-section';
 import RelatedCards from '@/components/cards/related-cards';
 import ProfilePicture from '@/components/ui/profile-picture';
 import { formatDateToLongString } from '@/utils/date-handlers.utils';
+import { shareCard } from '@/utils/share.utils';
 
 export default function CardDetailsPage() {
   const router = useRouter();
@@ -116,7 +117,18 @@ export default function CardDetailsPage() {
                   setCard={setCardDetails}
                 />
 
-                <Button variant="outline">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    if (cardDetails) {
+                      shareCard(
+                        cardDetails.title,
+                        cardDetails.description,
+                        `${window.location.origin}/dashboard/${cardDetails.id}`
+                      );
+                    }
+                  }}
+                >
                   <Share2 className="mr-2" /> Share
                 </Button>
 
