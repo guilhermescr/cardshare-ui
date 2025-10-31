@@ -102,7 +102,7 @@ export default function Header() {
               Dashboard
             </Button>
 
-            <Button onClick={() => router.push(APP_ROUTES.DASHBOARD)}>
+            <Button onClick={() => router.push(APP_ROUTES.CREATE_CARD)}>
               <Plus className="mr-2" />
               Create
             </Button>

@@ -1,7 +1,7 @@
 import GradientText from '@/components/gradient-text';
-import { Button } from '@/components/ui/button';
 import { Eye, Grid, Heart, MessageCircle, Plus } from 'lucide-react';
 import CardGallery from './card-gallery';
+import { LinkButton } from '@/components/ui/link-button';
 
 export default function DashboardPage() {
   return (
@@ -16,13 +16,14 @@ export default function DashboardPage() {
           </p>
         </div>
 
-        <Button
+        <LinkButton
           variant="gradient"
           gradientColor="blue"
           className="mt-4 md:mt-0"
+          href="/new"
         >
           <Plus /> Create New Card
-        </Button>
+        </LinkButton>
       </section>
 
       <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 items-center justify-between">
