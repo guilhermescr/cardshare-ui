@@ -52,7 +52,7 @@ export default function Header() {
   };
 
   return (
-    <div className="border-2 w-full shadow-xs">
+    <div className="border-b-2 w-full shadow-xs sticky top-0 bg-white/85 z-10 backdrop-blur-md">
       <Wrapper>
         <header className="w-full py-3 flex items-center justify-between">
           {mobileMenuOpen && (

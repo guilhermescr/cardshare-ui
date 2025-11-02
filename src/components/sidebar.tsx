@@ -39,7 +39,7 @@ export default function Sidebar({
   ];
 
   return (
-    <div className="md:hidden fixed inset-0 bg-white backdrop-blur-md border-t border-gray-200/50 z-1">
+    <div className="md:hidden fixed inset-0 h-screen bg-white z-50">
       <div className="px-6 py-4 space-y-3">
         <header className="flex items-center justify-between">
           <div className="flex items-center gap-3">
