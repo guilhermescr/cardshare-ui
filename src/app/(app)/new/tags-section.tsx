@@ -31,16 +31,20 @@ export default function TagsSection({ tags, setTags }: TagsSectionProps) {
   };
 
   return (
-    <div>
-      <h3 className="text-sm font-medium mb-1">Tags</h3>
+    <section>
+      <label className="text-sm font-medium mb-1" htmlFor="tags">
+        Tags
+      </label>
 
       <div className="flex items-center gap-2">
         <input
-          className="bg-gray-50 border rounded-md flex-1 py-2 px-2.5 text-gray-600 text-sm focus:outline-none focus:border-black"
+          className="bg-gray-50 border rounded-md flex-1 py-2 px-2.5 w-full text-gray-600 text-sm focus:outline-none focus:border-black"
           type="text"
+          id="tags"
           placeholder="Add a tag..."
           value={newTag}
           onChange={(e) => setNewTag(e.target.value)}
+          maxLength={50}
         />
 
         <Button variant="gradient" gradientColor="blue" onClick={handleNewTag}>
@@ -53,7 +57,7 @@ export default function TagsSection({ tags, setTags }: TagsSectionProps) {
           {tags.map((tag, index) => (
             <span
               key={index}
-              className="rounded-md py-1 px-2 text-xs bg-gradient-to-r from-blue-100 to-purple-100 text-blue-800 flex items-center gap-1 hover:opacity-85 transition-opacity"
+              className="rounded-md py-1 px-2 text-xs bg-gradient-to-r from-blue-100 to-purple-100 text-blue-800 flex items-center gap-1 hover:opacity-85 transition-opacity break-all"
             >
               #{tag}{' '}
               <button
@@ -67,6 +71,6 @@ export default function TagsSection({ tags, setTags }: TagsSectionProps) {
           ))}
         </div>
       )}
-    </div>
+    </section>
   );
 }

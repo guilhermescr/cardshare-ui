@@ -1,4 +1,6 @@
 import { Globe, Link, Lock, LucideIcon } from 'lucide-react';
+import { UseFormSetValue, UseFormWatch } from 'react-hook-form';
+import { CreateCardFormType } from './create-card.schema';
 
 function RadioInput({
   id,
@@ -21,7 +23,7 @@ function RadioInput({
     <li className="flex items-center gap-3">
       <div className="relative flex items-center justify-center">
         <input
-          className="appearance-none shrink-0 w-4 h-4 border border-gray-300 rounded-full peer"
+          className="appearance-none shrink-0 w-4 h-4 border border-gray-300 rounded-full peer cursor-pointer"
           type="radio"
           name={name}
           id={id}
@@ -29,7 +31,7 @@ function RadioInput({
           onChange={onChange}
         />
         <div
-          className="absolute w-2 h-2 rounded-full bg-black opacity-0 transition-opacity peer-checked:opacity-100"
+          className="cursor-pointer absolute w-2 h-2 rounded-full bg-black opacity-0 transition-opacity peer-checked:opacity-100"
           onClick={onChange}
         />
       </div>
@@ -45,16 +47,18 @@ function RadioInput({
 }
 
 interface VisibilitySettingsProps {
-  selectedVisibility: string;
-  setSelectedVisibility: (visibility: string) => void;
+  watch: UseFormWatch<CreateCardFormType>;
+  setValue: UseFormSetValue<CreateCardFormType>;
 }
 
 export default function VisibilitySettings({
-  selectedVisibility,
-  setSelectedVisibility,
+  watch,
+  setValue,
 }: VisibilitySettingsProps) {
+  const selectedVisibility = watch('selectedVisibility');
+
   return (
-    <div className="bg-white p-5 shadow-md rounded-lg">
+    <section className="bg-white p-6 shadow-md rounded-lg">
       <h2 className="flex items-center gap-2 font-semibold text-lg mb-7">
         <Globe size={22} /> Visibility Settings
       </h2>
@@ -67,7 +71,7 @@ export default function VisibilitySettings({
           label="Public"
           description="Anyone can discover this card"
           checked={selectedVisibility === 'public'}
-          onChange={() => setSelectedVisibility('public')}
+          onChange={() => setValue('selectedVisibility', 'public')}
         />
 
         <RadioInput
@@ -77,7 +81,7 @@ export default function VisibilitySettings({
           label="Unlisted"
           description="Only people with the link can access"
           checked={selectedVisibility === 'unlisted'}
-          onChange={() => setSelectedVisibility('unlisted')}
+          onChange={() => setValue('selectedVisibility', 'unlisted')}
         />
 
         <RadioInput
@@ -87,9 +91,9 @@ export default function VisibilitySettings({
           label="Private"
           description="Only you can see this card"
           checked={selectedVisibility === 'private'}
-          onChange={() => setSelectedVisibility('private')}
+          onChange={() => setValue('selectedVisibility', 'private')}
         />
       </ul>
-    </div>
+    </section>
   );
 }

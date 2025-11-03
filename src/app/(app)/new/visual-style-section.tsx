@@ -14,7 +14,7 @@ export default function VisualStyleSection({
   setSelectedGradient,
 }: VisualStyleProps) {
   return (
-    <div className="mb-4">
+    <section>
       <h3 className="text-sm font-medium flex items-center gap-2 mb-4">
         <Palette size={20} /> Visual Style
       </h3>
@@ -31,6 +31,6 @@ export default function VisualStyleSection({
           />
         ))}
       </div>
-    </div>
+    </section>
   );
 }
