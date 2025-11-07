@@ -106,7 +106,7 @@ export default function CardDetailsPage() {
               </span>
             </div>
 
-            <div className="mt-6 flex flex-col gap-4 items-end md:flex-row md:items-center justify-between">
+            <div className="mt-6 flex flex-col gap-4 items-start md:flex-row md:items-center justify-between">
               {cardDetails?.category && (
                 <p className="text-sm text-gray-700">
                   <span className="font-semibold">Category:</span>{' '}
@@ -114,7 +114,7 @@ export default function CardDetailsPage() {
                 </p>
               )}
 
-              <div className="flex items-center gap-4">
+              <div className="flex flex-wrap items-center gap-4">
                 <LikeButton
                   token={token}
                   card={cardDetails}

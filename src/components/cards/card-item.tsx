@@ -117,7 +117,7 @@ export default function CardItem({ card, onLikeToggle }: CardItemProps) {
         <span className="text-gray-400">2 hours ago</span>
       </div>
 
-      <div className="text-xs flex items-center gap-2 my-4">
+      <div className="text-xs flex flex-wrap items-center gap-2 my-4">
         <span className="bg-gray-100 rounded-lg py-1 px-2">#nature</span>
         <span className="bg-gray-100 rounded-lg py-1 px-2">#sunset</span>
         <span className="bg-gray-100 rounded-lg py-1 px-2">#photography</span>
