@@ -23,6 +23,7 @@ import { useAuthStore } from '@/stores/auth';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import ErrorMessage from '@/components/error-message';
 
 export default function CreateCardPage() {
   const router = useRouter();
@@ -153,13 +154,18 @@ export default function CreateCardPage() {
             <Controller
               name="title"
               control={control}
-              render={({ field }) => (
-                <input
-                  {...field}
-                  className="bg-gray-50 border rounded-md w-full py-2 px-2.5 text-gray-600 text-sm focus:outline-none focus:border-black"
-                  type="text"
-                  placeholder="Enter a title..."
-                />
+              render={({ field, fieldState }) => (
+                <>
+                  <input
+                    {...field}
+                    className={`bg-gray-50 border rounded-md w-full py-2 px-2.5 text-gray-600 text-sm focus:outline-none focus:border-black ${
+                      fieldState.error ? 'border-red-500' : 'border-gray-300'
+                    }`}
+                    type="text"
+                    placeholder="Enter a title..."
+                  />
+                  <ErrorMessage error={fieldState.error} />
+                </>
               )}
             />
           </section>
@@ -169,12 +175,17 @@ export default function CreateCardPage() {
             <Controller
               name="description"
               control={control}
-              render={({ field }) => (
-                <textarea
-                  {...field}
-                  className="bg-gray-50 border rounded-md w-full py-2 px-2.5 text-gray-600 text-sm focus:outline-none focus:border-black"
-                  placeholder="Describe your card in detail..."
-                ></textarea>
+              render={({ field, fieldState }) => (
+                <>
+                  <textarea
+                    {...field}
+                    className={`bg-gray-50 border rounded-md w-full py-2 px-2.5 text-gray-600 text-sm focus:outline-none focus:border-black ${
+                      fieldState.error ? 'border-red-500' : 'border-gray-300'
+                    }`}
+                    placeholder="Describe your card in detail..."
+                  ></textarea>
+                  <ErrorMessage error={fieldState.error} />
+                </>
               )}
             />
           </section>
@@ -184,29 +195,34 @@ export default function CreateCardPage() {
             <Controller
               name="category"
               control={control}
-              render={({ field }) => (
-                <div className="relative">
-                  <select
-                    {...field}
-                    className="bg-gray-50 border rounded-md w-full py-2 px-2.5 text-gray-600 text-sm focus:outline-none focus:border-black appearance-none"
-                  >
-                    <option value="" disabled>
-                      Select a category...
-                    </option>
-                    <option value="photography">📸 Photography</option>
-                    <option value="art-design">🎨 Art & Design</option>
-                    <option value="technology">💻 Technology</option>
-                    <option value="travel">✈️ Travel</option>
-                    <option value="music">🎵 Music</option>
-                    <option value="education">📚 Education</option>
-                    <option value="food-recipes">🍔 Food & Recipes</option>
-                    <option value="other">✨ Other</option>
-                  </select>
-                  <ChevronDown
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none"
-                    size={18}
-                  />
-                </div>
+              render={({ field, fieldState }) => (
+                <>
+                  <div className="relative">
+                    <select
+                      {...field}
+                      className={`bg-gray-50 border rounded-md w-full py-2 px-2.5 text-gray-600 text-sm focus:outline-none focus:border-black appearance-none ${
+                        fieldState.error ? 'border-red-500' : 'border-gray-300'
+                      }`}
+                    >
+                      <option value="" disabled>
+                        Select a category...
+                      </option>
+                      <option value="photography">📸 Photography</option>
+                      <option value="art-design">🎨 Art & Design</option>
+                      <option value="technology">💻 Technology</option>
+                      <option value="travel">✈️ Travel</option>
+                      <option value="music">🎵 Music</option>
+                      <option value="education">📚 Education</option>
+                      <option value="food-recipes">🍔 Food & Recipes</option>
+                      <option value="other">✨ Other</option>
+                    </select>
+                    <ChevronDown
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none"
+                      size={18}
+                    />
+                  </div>
+                  <ErrorMessage error={fieldState.error} />
+                </>
               )}
             />
           </section>
