@@ -46,7 +46,7 @@ export default function LikeButton({ token, card, setCard }: LikeButtonProps) {
       disabled={loading}
     >
       {loading ? (
-        <Loader2 className="mr-2" />
+        <Loader2 className="mr-2 animate-spin" />
       ) : card.isLiked ? (
         <Heart className="mr-2 fill-current" />
       ) : (

@@ -51,7 +51,7 @@ export default function FavoriteButton({
     >
       {loading ? (
         <>
-          <Loader2 className="mr-2" /> Updating...
+          <Loader2 className="mr-2 animate-spin" /> Updating...
         </>
       ) : card.isFavorited ? (
         <>
