@@ -172,7 +172,7 @@ export default function CardGallery() {
               : 'grid-cols-1'
           } gap-6`}
         >
-          {cards.map((card, idx) => (
+          {cards.map((card) => (
             <CardItem
               key={card.id}
               card={card}

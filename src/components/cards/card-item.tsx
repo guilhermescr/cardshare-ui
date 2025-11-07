@@ -106,7 +106,7 @@ export default function CardItem({ card, onLikeToggle }: CardItemProps) {
 
         <CardMoreOptionsButton />
       </div>
-      <p className="text-gray-600 text-sm line-clamp-2 pr-6 mb-8">
+      <p className="text-gray-600 text-sm line-clamp-1 pr-6 mb-8">
         {card.description}
       </p>
 
