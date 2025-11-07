@@ -13,6 +13,7 @@ export default function MediaSection({ watch, setValue }: MediaSectionProps) {
   const fileUploadRef = useRef<HTMLInputElement>(null);
 
   const mediaFiles = watch('mediaFiles') || [];
+  const MAX_FILES_TO_UPLOAD = 10;
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -62,7 +63,9 @@ export default function MediaSection({ watch, setValue }: MediaSectionProps) {
         <p className="text-gray-600">
           Drag and drop media files, or click to browse
         </p>
-        <span className="text-gray-500 text-sm">Supports image and videos</span>
+        <span className="text-gray-500 text-sm">
+          Supports image and videos (max {MAX_FILES_TO_UPLOAD} files)
+        </span>
       </button>
 
       {mediaFiles.length > 0 && (
