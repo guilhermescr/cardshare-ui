@@ -20,10 +20,7 @@ export default function RelatedCards({ cardId, token }: RelatedCardsProps) {
 
       {relatedCards.length === 0 ? (
         <div>
-          <GradientCardImage
-            gradient="from-gray-300 to-gray-400"
-            size="small"
-          />
+          <GradientCardImage gradient="ash" size="small" />
           <p className="mt-4 text-sm text-gray-600">No related cards found.</p>
         </div>
       ) : (
@@ -35,10 +32,7 @@ export default function RelatedCards({ cardId, token }: RelatedCardsProps) {
                 className="flex items-start gap-3"
               >
                 <div>
-                  <GradientCardImage
-                    gradient="from-orange-500 to-pink-500"
-                    size="tiny"
-                  />
+                  <GradientCardImage gradient="sunrise" size="tiny" />
                 </div>
 
                 <div>

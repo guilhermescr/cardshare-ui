@@ -15,6 +15,8 @@ import RelatedCards from '@/components/cards/related-cards';
 import ProfilePicture from '@/components/ui/profile-picture';
 import { formatDateToLongString } from '@/utils/date-handlers.utils';
 import { shareCard } from '@/utils/share.utils';
+import { capitalizeFirstLetter } from '@/utils/string.utils';
+import { CardGradient } from '@/constants/card-gradients';
 
 export default function CardDetailsPage() {
   const router = useRouter();
@@ -73,15 +75,12 @@ export default function CardDetailsPage() {
             </div>
 
             <GradientCardImage
-              gradient="from-orange-500 to-pink-500"
+              gradient={cardDetails?.gradient ?? 'aurora'}
               size="large"
             />
 
-            <p className="text-gray-700 leading-relaxed my-6">
-              A stunning sunset over the mountains captured during my recent
-              hiking trip. The golden hour lighting created this magical
-              atmosphere that I just had to share with everyone. This moment
-              reminded me why I love photography and nature so much.
+            <p className="text-gray-700 leading-relaxed my-6 whitespace-pre-wrap">
+              {cardDetails?.description}
             </p>
 
             <div className="flex flex-wrap items-center gap-2">
@@ -103,12 +102,12 @@ export default function CardDetailsPage() {
             </div>
 
             <div className="mt-6 flex flex-col gap-4 items-end md:flex-row md:items-center justify-between">
-              <div className="flex items-center gap-5">
-                <span className="flex items-center gap-1.5">
-                  <Eye size={16} />
-                  <span className="text-sm text-gray-700">156 Views</span>
-                </span>
-              </div>
+              {cardDetails?.category && (
+                <p className="text-sm text-gray-700">
+                  <span className="font-semibold">Category:</span>{' '}
+                  {capitalizeFirstLetter(cardDetails.category)}
+                </p>
+              )}
 
               <div className="flex items-center gap-4">
                 <LikeButton

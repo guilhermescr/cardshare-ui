@@ -46,24 +46,11 @@ function CardMoreOptionsButton() {
 
 interface CardItemProps {
   card: CardDto;
-  gradientIndex?: number;
   onLikeToggle?: (updatedCard: CardDto) => void;
 }
 
-const gradients = [
-  'from-orange-500 to-pink-500',
-  'from-green-400 to-teal-500',
-  'from-blue-500 to-purple-400',
-  'from-purple-500 to-pink-400',
-];
-
-export default function CardItem({
-  card,
-  gradientIndex = 0,
-  onLikeToggle,
-}: CardItemProps) {
+export default function CardItem({ card, onLikeToggle }: CardItemProps) {
   const router = useRouter();
-  const gradient = gradients[gradientIndex % gradients.length];
 
   const { token } = useAuthStore();
 
@@ -110,7 +97,7 @@ export default function CardItem({
       className="bg-white shadow rounded-md p-6 cursor-pointer transition-transform ease-out duration-300 hover:scale-102 hover:shadow-lg group"
       onClick={handleCardClick}
     >
-      <GradientCardImage gradient={gradient} />
+      <GradientCardImage gradient={card.gradient} />
 
       <div className="flex items-center justify-between">
         <h3 className="font-semibold text-lg mt-5 mb-4 group-hover:text-blue-600">

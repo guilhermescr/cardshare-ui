@@ -35,6 +35,17 @@ export const CARD_GRADIENTS = [
     value: 'from-cyan-400 to-blue-500',
     preview: 'bg-gradient-to-br from-cyan-400 to-blue-500',
   },
+  {
+    id: 'ash',
+    name: 'Ash',
+    value: 'from-gray-400 to-gray-600',
+    preview: 'bg-gradient-to-br from-gray-400 to-gray-600',
+  },
 ] as const;
 
 export type CardGradient = (typeof CARD_GRADIENTS)[number]['id'];
+
+export function getGradientValueById(id: CardGradient): string {
+  const gradient = CARD_GRADIENTS.find((grad) => grad.id === id);
+  return gradient ? gradient.value : '';
+}

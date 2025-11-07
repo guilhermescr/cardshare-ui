@@ -23,7 +23,7 @@ export default function VisualStyleSection({
         {CARD_GRADIENTS.map((gradient) => (
           <GradientCardImage
             key={gradient.id}
-            gradient={gradient.value}
+            gradient={gradient.id}
             size="horizontal"
             selected={selectedGradient === gradient.id}
             selectable

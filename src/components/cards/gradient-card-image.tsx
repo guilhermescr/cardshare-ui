@@ -1,7 +1,8 @@
+import { CardGradient, getGradientValueById } from '@/constants/card-gradients';
 import { Sparkles } from 'lucide-react';
 
 interface GradientCardImageProps {
-  gradient: string;
+  gradient: CardGradient;
   size?: 'tiny' | 'small' | 'large' | 'horizontal';
   selected?: boolean;
   selectable?: boolean;
@@ -23,7 +24,7 @@ enum ImageContainerSize {
 }
 
 export default function GradientCardImage({
-  gradient,
+  gradient = 'aurora',
   size = 'small',
   selected = false,
   selectable = false,
@@ -31,7 +32,7 @@ export default function GradientCardImage({
 }: GradientCardImageProps) {
   return (
     <div
-      className={`bg-gradient-to-br flex items-center justify-center ${gradient} w-full ${ImageContainerSize[size]} px-8 rounded-lg ${
+      className={`bg-gradient-to-br flex items-center justify-center ${getGradientValueById(gradient)} w-full ${ImageContainerSize[size]} px-8 rounded-lg ${
         selected ? 'ring-2 ring-offset-2 ring-blue-500 scale-102' : ''
       } ${
         selectable ? 'cursor-pointer hover:scale-105 transition-transform' : ''

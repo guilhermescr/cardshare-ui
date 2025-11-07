@@ -176,7 +176,6 @@ export default function CardGallery() {
             <CardItem
               key={card.id}
               card={card}
-              gradientIndex={idx}
               onLikeToggle={handleLikeToggle}
             />
           ))}

@@ -1,3 +1,4 @@
+import { CardGradient } from '@/constants/card-gradients';
 import { CommentDto } from './comment.dto';
 
 export interface AuthorDto {
@@ -16,12 +17,18 @@ export interface CardDto {
   id: string;
   title: string;
   description: string;
-  author: AuthorDto;
+  mediaUrls: string[];
   visibility: 'public' | 'private' | 'unlisted';
+  author: AuthorDto;
   isLiked: boolean;
   isFavorited: boolean;
   likes: string[];
   favorites: string[];
+  tags: string[];
+  category: string;
+  gradient: CardGradient;
+  allowComments: boolean;
+  allowDownloads: boolean;
   createdAt: string;
   updatedAt: string;
 }
