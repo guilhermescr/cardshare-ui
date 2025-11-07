@@ -17,6 +17,7 @@ import { formatDateToLongString } from '@/utils/date-handlers.utils';
 import { shareCard } from '@/utils/share.utils';
 import { capitalizeFirstLetter } from '@/utils/string.utils';
 import { CardGradient } from '@/constants/card-gradients';
+import Carousel from '@/components/ui/carousel';
 
 export default function CardDetailsPage() {
   const router = useRouter();
@@ -74,10 +75,14 @@ export default function CardDetailsPage() {
               </span>
             </div>
 
-            <GradientCardImage
-              gradient={cardDetails?.gradient ?? 'aurora'}
-              size="large"
-            />
+            {cardDetails?.mediaUrls?.length ? (
+              <Carousel mediaUrls={cardDetails.mediaUrls} />
+            ) : (
+              <GradientCardImage
+                gradient={cardDetails?.gradient ?? 'aurora'}
+                size="large"
+              />
+            )}
 
             <p className="text-gray-700 leading-relaxed my-6 whitespace-pre-wrap">
               {cardDetails?.description}
