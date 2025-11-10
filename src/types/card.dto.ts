@@ -41,3 +41,13 @@ export interface CardsResponse {
 export interface CardDetailsDto extends CardDto {
   comments: CommentDto[];
 }
+
+export interface GeneratedCardResponse {
+  title: string;
+  description: string;
+  category: string;
+  gradient: CardGradient;
+  visibility: 'public' | 'private' | 'unlisted';
+  allowComments: boolean;
+  tags: string[];
+}

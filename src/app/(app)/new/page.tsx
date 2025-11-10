@@ -24,6 +24,8 @@ import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import ErrorMessage from '@/components/error-message';
+import { GeneratedCardResponse } from '@/types/card.dto';
+import { httpRequest } from '@/utils/http.utils';
 
 export default function CreateCardPage() {
   const router = useRouter();
@@ -45,7 +47,42 @@ export default function CreateCardPage() {
       resolver: zodResolver(createCardSchema),
     });
 
+  const [isGenerating, setIsGenerating] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+
+  const handleGenerateCard = async () => {
+    if (!token) {
+      toast.error('You must be logged in to generate a card.');
+      return;
+    }
+
+    try {
+      setIsGenerating(true);
+
+      const generatedCard = await httpRequest<GeneratedCardResponse>(
+        '/cards/generate',
+        {
+          method: 'POST',
+          token,
+        }
+      );
+
+      setValue('title', generatedCard.title);
+      setValue('description', generatedCard.description);
+      setValue('category', generatedCard.category);
+      setValue('selectedGradient', generatedCard.gradient);
+      setValue('selectedVisibility', generatedCard.visibility);
+      setValue('allowComments', generatedCard.allowComments);
+      setValue('tags', generatedCard.tags);
+
+      toast.success('Card generated successfully!');
+    } catch (error) {
+      console.error('Error generating card:', error);
+      toast.error('Failed to generate card.');
+    } finally {
+      setIsGenerating(false);
+    }
+  };
 
   const onSubmit = async (data: CreateCardFormType) => {
     if (!token) {
@@ -121,6 +158,45 @@ export default function CreateCardPage() {
           <Button variant="outline">
             <Eye className="mr-2" /> Preview
           </Button>
+
+          <Button
+            variant="outline"
+            onClick={handleGenerateCard}
+            disabled={isGenerating}
+          >
+            {isGenerating ? (
+              <Loader2 className="mr-2 animate-spin" />
+            ) : (
+              <svg
+                fill="currentColor"
+                fillRule="evenodd"
+                height="1em"
+                viewBox="0 0 24 24"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <defs>
+                  <linearGradient
+                    id="blueGradient"
+                    x1="0%"
+                    y1="0%"
+                    x2="100%"
+                    y2="100%"
+                  >
+                    <stop offset="20%" stopColor="#4f46e5" />
+                    <stop offset="80%" stopColor="#3b82f6" />
+                  </linearGradient>
+                </defs>
+                <title>Gemini</title>
+                <path
+                  d="M20.616 10.835a14.147 14.147 0 01-4.45-3.001 14.111 14.111 0 01-3.678-6.452.503.503 0 00-.975 0 14.134 14.134 0 01-3.679 6.452 14.155 14.155 0 01-4.45 3.001c-.65.28-1.318.505-2.002.678a.502.502 0 000 .975c.684.172 1.35.397 2.002.677a14.147 14.147 0 014.45 3.001 14.112 14.112 0 013.679 6.453.502.502 0 00.975 0c.172-.685.397-1.351.677-2.003a14.145 14.145 0 013.001-4.45 14.113 14.113 0 016.453-3.678.503.503 0 000-.975 13.245 13.245 0 01-2.003-.678z"
+                  fill="url(#blueGradient)"
+                ></path>
+              </svg>
+            )}
+            Generate Card
+          </Button>
+
           <Button
             variant="gradient"
             gradientColor="blue"
