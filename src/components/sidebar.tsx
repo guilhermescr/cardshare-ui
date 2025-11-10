@@ -1,4 +1,4 @@
-import { Search, Bell, LayoutDashboard, X, User } from 'lucide-react';
+import { Search, Bell, LayoutDashboard, X, User, Plus } from 'lucide-react';
 import { Input } from './ui/input';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
@@ -32,6 +32,11 @@ export default function Sidebar({
       icon: LayoutDashboard,
     },
     {
+      id: 'new',
+      label: 'Create',
+      icon: Plus,
+    },
+    {
       id: 'profile',
       label: 'Profile',
       icon: User,
@@ -50,7 +55,7 @@ export default function Sidebar({
           </div>
 
           <Button onClick={() => setMobileMenuOpen(false)} variant="ghost">
-            <X />
+            <X className="!h-5 !w-5" />
           </Button>
         </header>
 

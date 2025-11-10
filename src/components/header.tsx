@@ -13,7 +13,7 @@ import { useState, useEffect, useMemo } from 'react';
 import Sidebar from './sidebar';
 import { useAuthStore } from '@/stores/auth';
 
-export type SidebarView = 'dashboard' | 'notifications' | 'profile';
+export type SidebarView = 'dashboard' | 'new' | 'notifications' | 'profile';
 
 export default function Header() {
   const router = useRouter();
@@ -27,6 +27,7 @@ export default function Header() {
   const viewToRoute: Record<SidebarView, string> = useMemo(
     () => ({
       dashboard: APP_ROUTES.DASHBOARD,
+      new: APP_ROUTES.CREATE_CARD,
       notifications: APP_ROUTES.NOTIFICATIONS,
       profile: user ? `/${user.username}` : '/',
     }),
@@ -91,8 +92,8 @@ export default function Header() {
           <div className="hidden md:flex items-center gap-4">
             <Button
               className="hidden lg:inline-flex"
-              variant="gradient"
-              gradientColor="blue"
+              variant={currentView === 'dashboard' ? 'gradient' : 'default'}
+              gradientColor={currentView === 'dashboard' ? 'blue' : undefined}
               onClick={() => {
                 setCurrentView('dashboard');
                 router.push(APP_ROUTES.DASHBOARD);
@@ -102,7 +103,11 @@ export default function Header() {
               Dashboard
             </Button>
 
-            <Button onClick={() => router.push(APP_ROUTES.CREATE_CARD)}>
+            <Button
+              variant={currentView === 'new' ? 'gradient' : 'default'}
+              gradientColor={currentView === 'new' ? 'blue' : undefined}
+              onClick={() => router.push(APP_ROUTES.CREATE_CARD)}
+            >
               <Plus className="mr-2" />
               Create
             </Button>
@@ -128,16 +133,14 @@ export default function Header() {
             </div>
           </div>
 
-          <div className="md:hidden">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="hover:bg-gray-100/80"
-            >
-              <Menu className="h-5 w-5" />
-            </Button>
-          </div>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="md:hidden hover:bg-gray-100/80"
+          >
+            <Menu className="!h-5 !w-5" />
+          </Button>
         </header>
       </Wrapper>
     </div>
