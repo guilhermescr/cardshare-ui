@@ -30,6 +30,13 @@ export default function TagsSection({ tags, setTags }: TagsSectionProps) {
     setTags(updatedTags);
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleNewTag();
+    }
+  };
+
   return (
     <section>
       <label className="text-sm font-medium mb-1" htmlFor="tags">
@@ -44,6 +51,7 @@ export default function TagsSection({ tags, setTags }: TagsSectionProps) {
           placeholder="Add a tag..."
           value={newTag}
           onChange={(e) => setNewTag(e.target.value)}
+          onKeyDown={handleKeyDown}
           maxLength={50}
         />
 
