@@ -75,7 +75,9 @@ export default function CreateCardPage() {
       setValue('allowComments', generatedCard.allowComments);
       setValue('tags', generatedCard.tags);
 
-      toast.success('Card generated successfully!');
+      toast.success(
+        'Card generated! Review and customize it before publishing.'
+      );
     } catch (error) {
       console.error('Error generating card:', error);
       toast.error('Failed to generate card.');
