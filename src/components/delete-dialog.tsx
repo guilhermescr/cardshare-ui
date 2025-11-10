@@ -50,7 +50,7 @@ export default function DeleteDialog({
 
           <button
             type="button"
-            className="cursor-pointer bg-destructive flex items-center justify-center gap-3.5 text-sm font-medium text-white rounded-md px-4 py-2 h-full hover:bg-red-800 transition active:scale-95"
+            className="cursor-pointer bg-destructive flex items-center justify-center gap-3.5 text-sm font-medium text-white rounded-md px-4 py-2 h-full hover:bg-red-800 transition active:scale-95 disabled:opacity-90 disabled:cursor-not-allowed"
             onClick={onDelete}
             disabled={isDeleting}
           >

@@ -177,6 +177,11 @@ export default function CardGallery() {
               key={card.id}
               card={card}
               onLikeToggle={handleLikeToggle}
+              onDelete={() => {
+                setCards((prevCards) =>
+                  prevCards.filter((c) => c.id !== card.id)
+                );
+              }}
             />
           ))}
 

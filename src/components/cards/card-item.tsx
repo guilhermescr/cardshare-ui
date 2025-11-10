@@ -22,10 +22,47 @@ import { shareCard } from '@/utils/share.utils';
 import { useState } from 'react';
 import { httpRequest } from '@/utils/http.utils';
 import { useAuthStore } from '@/stores/auth';
+import DeleteDialog from '../delete-dialog';
 
-function CardMoreOptionsButton() {
+interface CardMoreOptionsButtonProps {
+  cardId: string;
+  onEdit: () => void;
+  onDelete: () => void;
+}
+
+function CardMoreOptionsButton({
+  cardId,
+  onEdit,
+  onDelete,
+}: CardMoreOptionsButtonProps) {
+  const { token } = useAuthStore();
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const deleteCard = async () => {
+    try {
+      setIsDeleting(true);
+      await httpRequest(`/cards/${cardId}`, {
+        method: 'DELETE',
+        token,
+      });
+
+      toast.success('Card deleted successfully.');
+      onDelete();
+    } catch (error) {
+      console.error('Error deleting card:', error);
+      toast.error('Failed to delete the card.');
+    } finally {
+      setIsDeleting(false);
+      setShowDeleteConfirm(false);
+    }
+  };
+
   return (
-    <div className="invisible group-hover:visible">
+    <div
+      className="invisible group-hover:visible"
+      onClick={(e) => e.stopPropagation()}
+    >
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" size="sm">
@@ -34,22 +71,40 @@ function CardMoreOptionsButton() {
         </DropdownMenuTrigger>
 
         <DropdownMenuContent align="center" className="w-40">
-          <DropdownMenuItem onClick={() => {}}>Edit</DropdownMenuItem>
-          <DropdownMenuItem className="text-destructive" onClick={() => {}}>
+          <DropdownMenuItem onClick={onEdit}>Edit</DropdownMenuItem>
+          <DropdownMenuItem
+            className="text-destructive"
+            onClick={() => setShowDeleteConfirm(true)}
+            disabled={isDeleting}
+          >
             Delete
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+
+      <DeleteDialog
+        isOpen={showDeleteConfirm}
+        onOpenChange={setShowDeleteConfirm}
+        onDelete={deleteCard}
+        isDeleting={isDeleting}
+        title="Delete Card?"
+        description="Are you sure you want to delete this card? This action cannot be undone. All comments, likes, and associated data will be permanently removed."
+      />
     </div>
   );
 }
 
 interface CardItemProps {
   card: CardDto;
+  onDelete: () => void;
   onLikeToggle?: (updatedCard: CardDto) => void;
 }
 
-export default function CardItem({ card, onLikeToggle }: CardItemProps) {
+export default function CardItem({
+  card,
+  onLikeToggle,
+  onDelete,
+}: CardItemProps) {
   const router = useRouter();
 
   const { token } = useAuthStore();
@@ -104,7 +159,11 @@ export default function CardItem({ card, onLikeToggle }: CardItemProps) {
           {card.title}
         </h3>
 
-        <CardMoreOptionsButton />
+        <CardMoreOptionsButton
+          cardId={card.id}
+          onEdit={handleCardClick}
+          onDelete={onDelete}
+        />
       </div>
       <p className="text-gray-600 text-sm line-clamp-1 pr-6 mb-8">
         {card.description}

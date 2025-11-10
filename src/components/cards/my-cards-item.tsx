@@ -3,24 +3,42 @@
 import { useState } from 'react';
 import { Eye, Globe, Heart, MessageCircle, Trash2 } from 'lucide-react';
 import DeleteDialog from '@/components/delete-dialog';
+import { toast } from 'sonner';
+import { httpRequest } from '@/utils/http.utils';
+import { useAuthStore } from '@/stores/auth';
 
 interface MyCardsItemProps {
   isOwnProfile: boolean;
+  cardId: string;
+  onDelete: () => void;
 }
 
 export default function MyCardsItem({
   isOwnProfile = false,
+  cardId,
+  onDelete,
 }: MyCardsItemProps) {
+  const { token } = useAuthStore();
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
   const deleteCard = async () => {
-    setIsDeleting(true);
+    try {
+      setIsDeleting(true);
+      await httpRequest(`/cards/${cardId}`, {
+        method: 'DELETE',
+        token,
+      });
 
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
-    setIsDeleting(false);
-    setShowDeleteConfirm(false);
+      toast.success('Card deleted successfully.');
+      onDelete();
+    } catch (error) {
+      console.error('Error deleting card:', error);
+      toast.error('Failed to delete the card.');
+    } finally {
+      setIsDeleting(false);
+      setShowDeleteConfirm(false);
+    }
   };
 
   return (
