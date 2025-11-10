@@ -8,7 +8,6 @@ import {
   Loader2,
   MapPin,
   Share2,
-  TrendingUp,
   UserMinus,
   UserPlus,
 } from 'lucide-react';
@@ -198,31 +197,6 @@ export default function ProfilePage() {
               <Calendar size={18} /> Joined March 2023
             </p>
           </section>
-
-          {isOwnProfile && (
-            <section className="rounded-md border border-blue-200 bg-blue-50 py-6 px-5 my-6">
-              <h2 className="flex items-center gap-2 font-semibold text-lg mb-6">
-                <TrendingUp className="text-blue-600" /> This Month
-              </h2>
-
-              <div className="space-y-3 text-[15px]">
-                <p className="flex items-center justify-between">
-                  <span className="text-gray-700">New Views</span>
-                  <span className="text-blue-600 font-semibold">+1.2k</span>
-                </p>
-
-                <p className="flex items-center justify-between">
-                  <span className="text-gray-700">New Likes</span>
-                  <span className="text-red-600 font-semibold">+89</span>
-                </p>
-
-                <p className="flex items-center justify-between">
-                  <span className="text-gray-700">New Followers</span>
-                  <span className="text-green-600 font-semibold">+12</span>
-                </p>
-              </div>
-            </section>
-          )}
         </section>
 
         <section className="w-full lg:flex-3">
