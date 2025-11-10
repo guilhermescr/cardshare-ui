@@ -1,5 +1,5 @@
 import { ImageIcon, Upload, X } from 'lucide-react';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { UseFormSetValue, UseFormWatch } from 'react-hook-form';
 import { CreateCardFormType } from './create-card.schema';
 import { toast } from 'sonner';
@@ -11,28 +11,47 @@ interface MediaSectionProps {
 
 export default function MediaSection({ watch, setValue }: MediaSectionProps) {
   const fileUploadRef = useRef<HTMLInputElement>(null);
+  const [isDragging, setIsDragging] = useState(false);
 
   const mediaFiles = watch('mediaFiles') || [];
   const MAX_FILES_TO_UPLOAD = 10;
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const filesArray = Array.from(e.target.files);
+  const handleInputFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return;
+    const filesArray = Array.from(e.target.files);
+    addFiles(filesArray);
+    e.target.value = '';
+  };
 
-      if (mediaFiles.length + filesArray.length > 10) {
-        toast.error('You can only upload up to 10 files.');
-        return;
-      }
+  const handleDrop = (e: React.DragEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
+    if (!e.dataTransfer?.files) return;
+    const filesArray = Array.from(e.dataTransfer.files);
+    addFiles(filesArray);
+  };
 
-      setValue('mediaFiles', [...mediaFiles, ...filesArray]);
-      e.target.value = '';
+  const addFiles = (filesArray: File[]) => {
+    if (mediaFiles.length + filesArray.length > MAX_FILES_TO_UPLOAD) {
+      toast.error(`You can only upload up to ${MAX_FILES_TO_UPLOAD} files.`);
+      return;
     }
+    setValue('mediaFiles', [...mediaFiles, ...filesArray]);
   };
 
   const handleDeleteFile = (index: number) => {
     const updatedFiles = mediaFiles.filter((_, i) => i !== index);
     setValue('mediaFiles', updatedFiles);
     toast.success('File removed successfully.');
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = () => {
+    setIsDragging(false);
   };
 
   return (
@@ -49,14 +68,22 @@ export default function MediaSection({ watch, setValue }: MediaSectionProps) {
         name="file-upload"
         accept=".jpg,.jpeg,.png,.webp,.avif,.gif,.mp4"
         multiple
-        onChange={handleFileChange}
+        onChange={handleInputFileChange}
         className="hidden"
       />
 
       <button
-        className="cursor-pointer flex flex-col gap-2 items-center justify-center border-2 border-dashed rounded-md h-50 px-4 w-full transition-all hover:border-blue-400"
+        className={`cursor-pointer flex flex-col gap-2 items-center justify-center border-2 ${
+          isDragging
+            ? 'border-blue-400 bg-blue-50'
+            : 'border-dashed hover:border-blue-400'
+        } rounded-md h-50 px-4 w-full transition-all`}
         type="button"
         onClick={() => fileUploadRef?.current?.click()}
+        onDragOver={handleDragOver}
+        onDragEnter={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
       >
         <Upload className="text-gray-400 mb-2" size={50} />
 
@@ -81,7 +108,9 @@ export default function MediaSection({ watch, setValue }: MediaSectionProps) {
                 className="group relative flex flex-col gap-1.5 items-center justify-center border-2 border-gray-200 bg-gray-50 rounded-md p-4"
               >
                 <ImageIcon className="text-gray-400" size={30} />
-                <p className="text-sm text-gray-600 text-center">{file.name}</p>
+                <p className="text-sm text-gray-600 text-center break-all">
+                  {file.name}
+                </p>
 
                 <button
                   type="button"
