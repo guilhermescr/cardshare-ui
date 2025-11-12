@@ -176,11 +176,18 @@ export default function CardItem({
         <span className="text-gray-400">2 hours ago</span>
       </div>
 
-      <div className="text-xs flex flex-wrap items-center gap-2 my-4">
-        <span className="bg-gray-100 rounded-lg py-1 px-2">#nature</span>
-        <span className="bg-gray-100 rounded-lg py-1 px-2">#sunset</span>
-        <span className="bg-gray-100 rounded-lg py-1 px-2">#photography</span>
-      </div>
+      {card.tags.length > 0 && (
+        <div className="text-xs flex flex-wrap items-center gap-2 my-4">
+          {card.tags.map((tag) => (
+            <span
+              key={`${card.id}-${tag}`}
+              className="bg-gray-100 rounded-lg py-1 px-2"
+            >
+              #{tag}
+            </span>
+          ))}
+        </div>
+      )}
 
       <div className="flex gap-4 items-center justify-between text-xs">
         <div className="flex items-center gap-4 text-gray-600">

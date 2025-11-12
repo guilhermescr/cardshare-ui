@@ -88,23 +88,18 @@ export default function CardDetailsPage() {
               {cardDetails?.description}
             </p>
 
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="bg-gradient-to-r from-blue-100 to-purple-100 text-blue-800 hover:from-blue-200 hover:to-purple-200 transition-all text-xs py-1 px-2 rounded-md">
-                #nature
-              </span>
-              <span className="bg-gradient-to-r from-blue-100 to-purple-100 text-blue-800 hover:from-blue-200 hover:to-purple-200 transition-all text-xs py-1 px-2 rounded-md">
-                #sunset
-              </span>
-              <span className="bg-gradient-to-r from-blue-100 to-purple-100 text-blue-800 hover:from-blue-200 hover:to-purple-200 transition-all text-xs py-1 px-2 rounded-md">
-                #photography
-              </span>
-              <span className="bg-gradient-to-r from-blue-100 to-purple-100 text-blue-800 hover:from-blue-200 hover:to-purple-200 transition-all text-xs py-1 px-2 rounded-md">
-                #hiking
-              </span>
-              <span className="bg-gradient-to-r from-blue-100 to-purple-100 text-blue-800 hover:from-blue-200 hover:to-purple-200 transition-all text-xs py-1 px-2 rounded-md">
-                #mountains
-              </span>
-            </div>
+            {cardDetails && cardDetails?.tags?.length > 0 && (
+              <div className="flex flex-wrap items-center gap-2">
+                {cardDetails.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="bg-gradient-to-r from-blue-100 to-purple-100 text-blue-800 hover:from-blue-200 hover:to-purple-200 transition-all text-xs py-1 px-2 rounded-md"
+                  >
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+            )}
 
             <div className="mt-6 flex flex-col gap-4 items-start md:flex-row md:items-center justify-between">
               {cardDetails?.category && (
