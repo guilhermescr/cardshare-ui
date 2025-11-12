@@ -58,7 +58,7 @@ export default function RelatedCards({ cardId, token }: RelatedCardsProps) {
                 className="flex items-start gap-3"
               >
                 <div>
-                  <GradientCardImage gradient="sunrise" size="tiny" />
+                  <GradientCardImage gradient={card.gradient} size="tiny" />
                 </div>
 
                 <div>

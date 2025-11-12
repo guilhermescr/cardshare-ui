@@ -11,6 +11,7 @@ export interface RelatedCard {
   id: string;
   title: string;
   author: AuthorDto;
+  gradient: CardGradient;
 }
 
 export interface CardDto {
