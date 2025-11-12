@@ -99,16 +99,17 @@ export default function CreateCardPage() {
     formData.append('description', data.description);
     formData.append('category', data.category);
     formData.append('visibility', data.selectedVisibility);
-    formData.append('tags', JSON.stringify(data.tags));
     formData.append('gradient', data.selectedGradient);
     formData.append('allowComments', String(data.allowComments));
     formData.append('allowDownloads', String(data.allowDownloads));
 
-    if (data.mediaFiles && data.mediaFiles.length > 0) {
-      data.mediaFiles.forEach((file) => {
-        formData.append('files', file);
-      });
-    }
+    data.tags?.forEach((tag, index) => {
+      formData.append(`tags[${index}]`, tag);
+    });
+
+    data.mediaFiles?.forEach((file) => {
+      formData.append('files', file);
+    });
 
     try {
       const base = process.env.NEXT_PUBLIC_API_URL!;
