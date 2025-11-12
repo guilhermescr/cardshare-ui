@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Plus, X } from 'lucide-react';
+import { toast } from 'sonner';
 
 interface TagsSectionProps {
   tags: string[];
@@ -11,6 +12,7 @@ interface TagsSectionProps {
 
 export default function TagsSection({ tags, setTags }: TagsSectionProps) {
   const [newTag, setNewTag] = useState('');
+  const MAX_TAGS = 10;
 
   const handleNewTag = () => {
     if (!newTag) return;
@@ -20,8 +22,12 @@ export default function TagsSection({ tags, setTags }: TagsSectionProps) {
       return;
     }
 
-    setTags([...tags, newTag]);
-    setNewTag('');
+    if (tags.length < MAX_TAGS) {
+      setTags([...tags, newTag]);
+      setNewTag('');
+    } else {
+      toast.error(`You can add up to ${MAX_TAGS} tags only.`);
+    }
   };
 
   const handleDeleteTag = (index: number) => {
