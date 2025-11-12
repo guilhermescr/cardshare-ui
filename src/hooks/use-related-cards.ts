@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { httpRequest } from '@/utils/http.utils';
-import { RelatedCard } from '@/types/card.dto';
+import { CardsResponse, RelatedCard } from '@/types/card.dto';
 
 export function useRelatedCards(cardId: string, token: string | null) {
   const [relatedCards, setRelatedCards] = useState<RelatedCard[]>([]);
@@ -11,14 +11,14 @@ export function useRelatedCards(cardId: string, token: string | null) {
     const fetchRelatedCards = async () => {
       try {
         setLoading(true);
-        const data = await httpRequest<RelatedCard[]>(
+        const data = await httpRequest<CardsResponse>(
           `/cards/${cardId}/related`,
           {
             method: 'GET',
             token,
           }
         );
-        setRelatedCards(data);
+        setRelatedCards(data.items);
       } catch (err) {
         setError('Failed to fetch related cards.');
       } finally {
