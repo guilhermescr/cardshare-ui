@@ -11,6 +11,16 @@ import { useAuthStore } from '@/stores/auth';
 import { httpRequest } from '@/utils/http.utils';
 import ProfilePicture from '@/components/ui/profile-picture';
 
+export function CommentSectionSkeleton() {
+  return (
+    <div className="space-y-4">
+      <div className="h-6 bg-gray-200 rounded w-1/3 animate-pulse"></div>
+      <div className="h-4 bg-gray-200 rounded w-full animate-pulse"></div>
+      <div className="h-4 bg-gray-200 rounded w-2/3 animate-pulse"></div>
+    </div>
+  );
+}
+
 interface CommentSectionProps {
   comments: CommentDto[];
   cardId?: string;

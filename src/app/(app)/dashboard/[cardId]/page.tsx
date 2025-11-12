@@ -1,23 +1,26 @@
 'use client';
 
+import { lazy, Suspense } from 'react';
 import GradientCardImage from '@/components/cards/gradient-card-image';
 import GradientText from '@/components/gradient-text';
 import { Button } from '@/components/ui/button';
 import { useAuthStore } from '@/stores/auth';
-import { Calendar, Eye, MoveLeft, Share2 } from 'lucide-react';
+import { Calendar, MoveLeft, Share2 } from 'lucide-react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import LikeButton from './like-button';
 import { useCardDetails } from '@/hooks/use-card-details';
 import FavoriteButton from './favorite-button';
-import CommentSection from './comments-section';
-import RelatedCards from '@/components/cards/related-cards';
 import ProfilePicture from '@/components/ui/profile-picture';
 import { formatDateToLongString } from '@/utils/date-handlers.utils';
 import { shareCard } from '@/utils/share.utils';
 import { capitalizeFirstLetter } from '@/utils/string.utils';
-import { CardGradient } from '@/constants/card-gradients';
-import Carousel from '@/components/ui/carousel';
+import { RelatedCardsSkeleton } from '@/components/cards/related-cards';
+import { CommentSectionSkeleton } from './comments-section';
+
+const CommentSection = lazy(() => import('./comments-section'));
+const RelatedCards = lazy(() => import('@/components/cards/related-cards'));
+const Carousel = lazy(() => import('@/components/ui/carousel'));
 
 export default function CardDetailsPage() {
   const router = useRouter();
@@ -32,7 +35,32 @@ export default function CardDetailsPage() {
   const cardDate = formatDateToLongString(cardDetails?.createdAt ?? '');
 
   if (loading) {
-    return <p>Loading...</p>;
+    return (
+      <section className="flex flex-col gap-6 lg:flex-row">
+        <section className="flex-3 space-y-6">
+          <div className="p-6 bg-white shadow-md rounded-lg animate-pulse">
+            <div className="h-8 bg-gray-200 rounded w-1/2 mb-4"></div>
+            <div className="h-6 bg-gray-200 rounded w-1/3 mb-6"></div>
+            <div className="h-64 bg-gray-200 rounded-lg mb-6"></div>
+            <div className="h-4 bg-gray-200 rounded w-full mb-4"></div>
+            <div className="h-4 bg-gray-200 rounded w-2/3 mb-4"></div>
+            <div className="h-4 bg-gray-200 rounded w-1/3 mb-4"></div>
+          </div>
+
+          <CommentSectionSkeleton />
+        </section>
+
+        <aside className="flex-1 space-y-6">
+          <div className="bg-white p-5 shadow-md rounded-lg animate-pulse">
+            <div className="h-6 bg-gray-200 rounded w-1/3 mb-4"></div>
+            <div className="h-4 bg-gray-200 rounded w-full mb-4"></div>
+            <div className="h-4 bg-gray-200 rounded w-2/3 mb-4"></div>
+          </div>
+
+          <RelatedCardsSkeleton />
+        </aside>
+      </section>
+    );
   }
 
   if (error) {
@@ -76,7 +104,13 @@ export default function CardDetailsPage() {
             </div>
 
             {cardDetails?.mediaUrls?.length ? (
-              <Carousel mediaUrls={cardDetails.mediaUrls} />
+              <Suspense
+                fallback={
+                  <div className="h-64 bg-gray-200 rounded-lg animate-pulse"></div>
+                }
+              >
+                <Carousel mediaUrls={cardDetails.mediaUrls} />
+              </Suspense>
             ) : (
               <GradientCardImage
                 gradient={cardDetails?.gradient ?? 'aurora'}
@@ -140,19 +174,21 @@ export default function CardDetailsPage() {
             </div>
           </section>
 
-          <CommentSection
-            comments={cardDetails?.comments ?? []}
-            cardId={cardDetails?.id}
-            updateComments={(updateComments) =>
-              setCardDetails((prevCard) => {
-                if (!prevCard) return prevCard;
-                return {
-                  ...prevCard,
-                  comments: updateComments,
-                };
-              })
-            }
-          />
+          <Suspense fallback={<CommentSectionSkeleton />}>
+            <CommentSection
+              comments={cardDetails?.comments ?? []}
+              cardId={cardDetails?.id}
+              updateComments={(updateComments) =>
+                setCardDetails((prevCard) => {
+                  if (!prevCard) return prevCard;
+                  return {
+                    ...prevCard,
+                    comments: updateComments,
+                  };
+                })
+              }
+            />
+          </Suspense>
         </section>
 
         <aside className="flex-1 space-y-6">
@@ -180,7 +216,9 @@ export default function CardDetailsPage() {
             </Button>
           </div>
 
-          <RelatedCards cardId={cardDetails?.id ?? ''} token={token} />
+          <Suspense fallback={<RelatedCardsSkeleton />}>
+            <RelatedCards cardId={cardDetails?.id ?? ''} token={token} />
+          </Suspense>
         </aside>
       </section>
     </>

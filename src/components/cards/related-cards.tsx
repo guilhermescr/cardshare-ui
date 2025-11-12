@@ -2,6 +2,16 @@ import Link from 'next/link';
 import GradientCardImage from '@/components/cards/gradient-card-image';
 import { useRelatedCards } from '@/hooks/use-related-cards';
 
+export function RelatedCardsSkeleton() {
+  return (
+    <div className="space-y-4">
+      <div className="h-32 bg-gray-200 rounded-lg animate-pulse"></div>
+      <div className="h-32 bg-gray-200 rounded-lg animate-pulse"></div>
+      <div className="h-32 bg-gray-200 rounded-lg animate-pulse"></div>
+    </div>
+  );
+}
+
 interface RelatedCardsProps {
   cardId: string;
   token: string | null;
