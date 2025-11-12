@@ -20,9 +20,22 @@ interface RelatedCardsProps {
 export default function RelatedCards({ cardId, token }: RelatedCardsProps) {
   const {
     relatedCards,
-    // loading: relatedLoading,
-    // error: relatedError,
+    loading: relatedLoading,
+    error: relatedError,
   } = useRelatedCards(cardId, token);
+
+  if (relatedLoading) {
+    return <RelatedCardsSkeleton />;
+  }
+
+  if (relatedError) {
+    return (
+      <div className="bg-white p-5 shadow-md rounded-lg">
+        <h2 className="font-medium text-lg mb-7">Related Cards</h2>
+        <p className="text-sm text-red-500">Failed to load related cards.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-white p-5 shadow-md rounded-lg">
@@ -36,7 +49,10 @@ export default function RelatedCards({ cardId, token }: RelatedCardsProps) {
       ) : (
         <ul className="space-y-4">
           {relatedCards.map((card) => (
-            <li key={card.id} className="flex items-start gap-3">
+            <li
+              key={card.id}
+              className="flex items-start gap-3 hover:underline"
+            >
               <Link
                 href={`/dashboard/${card.id}`}
                 className="flex items-start gap-3"
