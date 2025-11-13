@@ -1,6 +1,6 @@
 'use client';
 
-import { MoveLeft } from 'lucide-react';
+import { Check, MoveLeft, Settings } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import GradientText from '@/components/gradient-text';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -81,6 +81,15 @@ export default function NotificationsPage() {
     }
   };
 
+  const readNotification = (id: number) => {
+    setNotifications((prev) =>
+      prev.map((n) => (n.id === id ? { ...n, isRead: true } : n))
+    );
+    setFilteredNotifications((prev) =>
+      prev.map((n) => (n.id === id ? { ...n, isRead: true } : n))
+    );
+  };
+
   return (
     <>
       <header className="flex gap-4 flex-col md:flex-row md:items-center justify-between">
@@ -102,21 +111,20 @@ export default function NotificationsPage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-2">
+        <div className="flex items-center gap-2">
           <Button
             variant="outline"
-            className="w-full"
             onClick={() =>
               setNotifications((prev) =>
                 prev.map((n) => ({ ...n, isRead: true }))
               )
             }
           >
-            Mark all as read
+            <Check className="mr-2" /> Mark all as read
           </Button>
 
-          <Button variant="outline" className="w-full">
-            Settings
+          <Button variant="outline">
+            <Settings className="mr-2" /> Settings
           </Button>
         </div>
       </header>
@@ -159,6 +167,7 @@ export default function NotificationsPage() {
               <NotificationItem
                 key={notification.id}
                 notification={notification}
+                readNotification={readNotification}
               />
             ))}
           </div>
@@ -170,6 +179,7 @@ export default function NotificationsPage() {
               <NotificationItem
                 key={notification.id}
                 notification={notification}
+                readNotification={readNotification}
               />
             ))}
           </div>
@@ -181,6 +191,7 @@ export default function NotificationsPage() {
               <NotificationItem
                 key={notification.id}
                 notification={notification}
+                readNotification={readNotification}
               />
             ))}
           </div>
@@ -192,6 +203,7 @@ export default function NotificationsPage() {
               <NotificationItem
                 key={notification.id}
                 notification={notification}
+                readNotification={readNotification}
               />
             ))}
           </div>

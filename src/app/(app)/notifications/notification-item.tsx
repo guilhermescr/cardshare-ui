@@ -10,14 +10,21 @@ const notificationIcons: Record<string, JSX.Element> = {
 
 interface NotificationItemProps {
   notification: NotificationDto;
+  readNotification: (id: number) => void;
 }
 
 export default function NotificationItem({
   notification,
+  readNotification,
 }: NotificationItemProps) {
   return (
     <div
-      className={`p-4 border rounded-md flex items-center gap-4 ${notification.isRead ? 'bg-gray-50' : 'bg-blue-50 border-blue-200'}`}
+      className={`p-4 border rounded-md flex items-center gap-4 ${notification.isRead ? 'bg-gray-50' : 'bg-blue-50 border-blue-200 cursor-pointer'} hover:brightness-99`}
+      onClick={() => {
+        if (!notification.isRead) {
+          readNotification(notification.id);
+        }
+      }}
     >
       <div>{notificationIcons[notification.type]}</div>
 
@@ -26,7 +33,7 @@ export default function NotificationItem({
         <p className="text-sm text-gray-600">{notification.content}</p>
       </div>
 
-      <div className="text-xs text-gray-500 whitespace-nowrap">
+      <div className="text-xs text-gray-500 whitespace-nowrap mb-auto">
         {notification.timestamp}
       </div>
     </div>
