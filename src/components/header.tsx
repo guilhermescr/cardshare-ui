@@ -114,6 +114,12 @@ export default function Header() {
 
             <div className="relative">
               <Button
+                variant={
+                  currentView === 'notifications' ? 'gradient' : 'default'
+                }
+                gradientColor={
+                  currentView === 'notifications' ? 'blue' : undefined
+                }
                 onClick={() => {
                   setCurrentView('notifications');
                   router.push(APP_ROUTES.NOTIFICATIONS);
