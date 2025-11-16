@@ -58,7 +58,6 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({
   }, [token]);
 
   const addNotification = (notification: NotificationDto) => {
-    console.log('New notification received:', notification);
     setNotifications((prev) => [notification, ...prev]);
   };
 
@@ -108,12 +107,12 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({
     });
 
     socket.on('remove-notification', (data) => {
-      const { notificationId } = data;
+      const { notificationIds } = data;
 
-      if (notificationId) {
-        setNotifications((prevNotifications) =>
-          prevNotifications.filter(
-            (notification) => notification.id !== notificationId
+      if (notificationIds.length) {
+        setNotifications((prev) =>
+          prev.filter(
+            (notification) => !notificationIds.includes(notification.id)
           )
         );
       }
