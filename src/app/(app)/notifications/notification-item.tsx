@@ -8,6 +8,7 @@ import { formatDateTime } from '@/utils/date-handlers.utils';
 import ProfilePicture from '@/components/ui/profile-picture';
 import { useRouter } from 'next/navigation';
 import { twMerge } from 'tailwind-merge';
+import Link from 'next/link';
 
 export function NotificationItemSkeleton() {
   return (
@@ -78,7 +79,18 @@ export default function NotificationItem({
         </div>
 
         <p className="text-sm text-gray-600">
-          {notification.sender?.username} {notification.message}
+          {notification.sender?.username && (
+            <Link
+              href={`/${notification.sender?.username}`}
+              className="font-medium hover:underline"
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+            >
+              {notification.sender?.username}
+            </Link>
+          )}{' '}
+          {notification.message}
         </p>
       </div>
 
