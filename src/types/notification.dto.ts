@@ -1,8 +1,17 @@
+import { NotificationType } from '@/enums/notification.enum';
+
 export interface NotificationDto {
-  id: number;
-  type: string; // e.g., 'like', 'comment', 'follow'
-  title: string;
-  content: string;
-  timestamp: string;
-  isRead: boolean;
+  id: string;
+  type: NotificationType;
+  message: string;
+  sender: {
+    id: string;
+    username?: string;
+    profilePicture?: string;
+  };
+  recipient: string;
+  cardId?: string;
+  commentId?: string;
+  read: boolean;
+  createdAt: string;
 }

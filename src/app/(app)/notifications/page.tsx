@@ -4,91 +4,55 @@ import { Check, MoveLeft, Settings } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import GradientText from '@/components/gradient-text';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useState } from 'react';
-import NotificationItem from './notification-item';
-import { NotificationDto } from '@/types/notification.dto';
 import Link from 'next/link';
-
-const mockNotifications: NotificationDto[] = [
-  {
-    id: 1,
-    type: 'like',
-    title: 'New like on your card',
-    content: 'Alice Johnson liked your card "Beautiful Sunset"',
-    timestamp: '2 minutes ago',
-    isRead: false,
-  },
-  {
-    id: 2,
-    type: 'comment',
-    title: 'New comment',
-    content: 'Bob Wilson commented on "Mountain Adventure": "Amazing shot!"',
-    timestamp: '1 hour ago',
-    isRead: false,
-  },
-  {
-    id: 3,
-    type: 'follow',
-    title: 'New follower',
-    content: 'Carol Davis started following you',
-    timestamp: '3 hours ago',
-    isRead: true,
-  },
-  {
-    id: 4,
-    type: 'like',
-    title: 'New like on your card',
-    content: 'David Smith liked your card "Ocean Breeze"',
-    timestamp: '5 hours ago',
-    isRead: true,
-  },
-  {
-    id: 5,
-    type: 'comment',
-    title: 'New comment',
-    content: 'Emily Clark commented on "Sunset Bliss": "Stunning view!"',
-    timestamp: '1 day ago',
-    isRead: false,
-  },
-];
+import { useNotification } from '@/contexts/notification.context';
+import NotificationItem, {
+  NotificationItemSkeleton,
+} from './notification-item';
+import { NotificationType } from '@/enums/notification.enum';
+import { useState } from 'react';
 
 export default function NotificationsPage() {
-  const [notifications, setNotifications] =
-    useState<NotificationDto[]>(mockNotifications);
-  const [filteredNotifications, setFilteredNotifications] =
-    useState<NotificationDto[]>(notifications);
+  const { isSearching, notifications, markAllAsRead } = useNotification();
+  const [isMarkingAll, setIsMarkingAll] = useState(false);
 
   const filterNotifications = (filter: string) => {
     switch (filter) {
       case 'all':
-        setFilteredNotifications(notifications);
-        break;
+        return notifications;
       case 'unread':
-        setFilteredNotifications(notifications.filter((n) => !n.isRead));
-        break;
+        return notifications.filter((n) => !n.read);
       case 'likes':
-        setFilteredNotifications(
-          notifications.filter((n) => n.type === 'like')
+        return notifications.filter(
+          (n) =>
+            n.type === NotificationType.CardLike ||
+            n.type === NotificationType.CommentLike
         );
-        break;
       case 'comments':
-        setFilteredNotifications(
-          notifications.filter((n) => n.type === 'comment')
-        );
-        break;
+        return notifications.filter((n) => n.type === NotificationType.Comment);
       default:
-        setFilteredNotifications(notifications);
+        return notifications;
     }
   };
 
-  const readNotification = (id: number) => {
-    setNotifications((prev) =>
-      prev.map((n) => (n.id === id ? { ...n, isRead: true } : n))
-    );
-    setFilteredNotifications((prev) =>
-      prev.map((n) => (n.id === id ? { ...n, isRead: true } : n))
-    );
-  };
+  const tabs = [
+    { value: 'all', label: `All (${notifications.length})`, filter: 'all' },
+    {
+      value: 'unread',
+      label: `Unread (${notifications.filter((n) => !n.read).length})`,
+      filter: 'unread',
+    },
+    {
+      value: 'likes',
+      label: 'Likes',
+      filter: 'likes',
+    },
+    {
+      value: 'comments',
+      label: 'Comments',
+      filter: 'comments',
+    },
+  ];
 
   return (
     <>
@@ -105,23 +69,25 @@ export default function NotificationsPage() {
               <GradientText>Notifications</GradientText>
             </h1>
             <p className="text-gray-700">
-              {notifications.filter((n) => !n.isRead).length} unread
-              notifications
+              {notifications.filter((n) => !n.read).length} unread notifications
             </p>
           </div>
         </div>
 
         <div className="flex items-center gap-2">
-          <Button
-            variant="outline"
-            onClick={() =>
-              setNotifications((prev) =>
-                prev.map((n) => ({ ...n, isRead: true }))
-              )
-            }
-          >
-            <Check className="mr-2" /> Mark all as read
-          </Button>
+          {notifications.some((n) => !n.read) && (
+            <Button
+              variant="outline"
+              onClick={async () => {
+                setIsMarkingAll(true);
+                await markAllAsRead();
+                setIsMarkingAll(false);
+              }}
+              disabled={isMarkingAll}
+            >
+              <Check className="mr-2" /> Mark all as read
+            </Button>
+          )}
 
           <Button variant="outline">
             <Settings className="mr-2" /> Settings
@@ -131,83 +97,33 @@ export default function NotificationsPage() {
 
       <Tabs defaultValue="all" className="w-full mt-6">
         <TabsList className="w-full bg-white rounded-lg shadow-sm">
-          <TabsTrigger
-            value="all"
-            className="cursor-pointer transition duration-150 data-[state=inactive]:hover:bg-gray-200 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-600 data-[state=active]:to-purple-600 data-[state=active]:text-white data-[state=active]:shadow-sm"
-            onClick={() => filterNotifications('all')}
-          >
-            All ({notifications.length})
-          </TabsTrigger>
-          <TabsTrigger
-            value="unread"
-            className="cursor-pointer transition duration-150 data-[state=inactive]:hover:bg-gray-200 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-600 data-[state=active]:to-purple-600 data-[state=active]:text-white data-[state=active]:shadow-sm"
-            onClick={() => filterNotifications('unread')}
-          >
-            Unread ({notifications.filter((n) => !n.isRead).length})
-          </TabsTrigger>
-          <TabsTrigger
-            value="likes"
-            className="cursor-pointer transition duration-150 data-[state=inactive]:hover:bg-gray-200 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-600 data-[state=active]:to-purple-600 data-[state=active]:text-white data-[state=active]:shadow-sm"
-            onClick={() => filterNotifications('likes')}
-          >
-            Likes
-          </TabsTrigger>
-          <TabsTrigger
-            value="comments"
-            className="cursor-pointer transition duration-150 data-[state=inactive]:hover:bg-gray-200 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-600 data-[state=active]:to-purple-600 data-[state=active]:text-white data-[state=active]:shadow-sm"
-            onClick={() => filterNotifications('comments')}
-          >
-            Comments
-          </TabsTrigger>
+          {tabs.map((tab) => (
+            <TabsTrigger
+              key={tab.value}
+              value={tab.value}
+              className="cursor-pointer transition duration-150 data-[state=inactive]:hover:bg-gray-200 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-600 data-[state=active]:to-purple-600 data-[state=active]:text-white data-[state=active]:shadow-sm"
+            >
+              {tab.label}
+            </TabsTrigger>
+          ))}
         </TabsList>
 
-        <TabsContent value="all">
-          <div className="space-y-4">
-            {filteredNotifications.map((notification) => (
-              <NotificationItem
-                key={notification.id}
-                notification={notification}
-                readNotification={readNotification}
-              />
-            ))}
-          </div>
-        </TabsContent>
-
-        <TabsContent value="unread">
-          <div className="space-y-4">
-            {filteredNotifications.map((notification) => (
-              <NotificationItem
-                key={notification.id}
-                notification={notification}
-                readNotification={readNotification}
-              />
-            ))}
-          </div>
-        </TabsContent>
-
-        <TabsContent value="likes">
-          <div className="space-y-4">
-            {filteredNotifications.map((notification) => (
-              <NotificationItem
-                key={notification.id}
-                notification={notification}
-                readNotification={readNotification}
-              />
-            ))}
-          </div>
-        </TabsContent>
-
-        <TabsContent value="comments">
-          <div className="space-y-4">
-            {filteredNotifications.map((notification) => (
-              <NotificationItem
-                key={notification.id}
-                notification={notification}
-                readNotification={readNotification}
-              />
-            ))}
-          </div>
-        </TabsContent>
+        {tabs.map((tab) => (
+          <TabsContent key={tab.value} value={tab.value}>
+            <div className="space-y-4">
+              {isSearching
+                ? Array.from({ length: 4 }).map((_, index) => (
+                    <NotificationItemSkeleton key={index} />
+                  ))
+                : filterNotifications(tab.filter).map((notification) => (
+                    <NotificationItem
+                      key={notification.id}
+                      notification={notification}
+                    />
+                  ))}
+            </div>
+          </TabsContent>
+        ))}
       </Tabs>
     </>
   );

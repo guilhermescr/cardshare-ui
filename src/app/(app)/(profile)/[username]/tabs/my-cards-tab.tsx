@@ -1,15 +1,18 @@
 import { Sparkles } from 'lucide-react';
 import MyCardsItem from '@/components/cards/my-cards-item';
-import { useAuthStore } from '@/stores/auth';
 import { CardDto } from '@/types/card.dto';
 import { useState } from 'react';
+import { UserDto } from '@/types/user.dto';
 
 interface MyCardsTabProps {
   isOwnProfile: boolean;
+  user: UserDto | null;
 }
 
-export default function MyCardsTab({ isOwnProfile = false }: MyCardsTabProps) {
-  const { user } = useAuthStore();
+export default function MyCardsTab({
+  isOwnProfile = false,
+  user,
+}: MyCardsTabProps) {
   const [cards, setCards] = useState<CardDto[]>([]);
 
   const handleDelete = (cardId: string) => {

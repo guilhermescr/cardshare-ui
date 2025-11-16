@@ -12,6 +12,7 @@ import ProfileDropdown from './ui/profile-dropdown';
 import { useState, useEffect, useMemo } from 'react';
 import Sidebar from './sidebar';
 import { useAuthStore } from '@/stores/auth';
+import { useNotification } from '@/contexts/notification.context';
 
 export type SidebarView = 'dashboard' | 'new' | 'notifications' | 'profile';
 
@@ -19,10 +20,11 @@ export default function Header() {
   const router = useRouter();
   const pathname = usePathname();
   const { user } = useAuthStore();
+  const { notifications } = useNotification();
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [currentView, setCurrentView] = useState<SidebarView>('dashboard');
-  const notificationCount = 3;
+  const notificationCount = notifications.filter((n) => !n.read).length;
 
   const viewToRoute: Record<SidebarView, string> = useMemo(
     () => ({

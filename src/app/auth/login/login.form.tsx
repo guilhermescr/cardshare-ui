@@ -60,6 +60,7 @@ export default function LoginForm() {
       }
 
       localStorage.setItem('token', data.token);
+      localStorage.setItem('userId', data.user.id);
       useAuthStore.getState().setAuth(data.token, data.user);
 
       toast.success('Welcome back!', {

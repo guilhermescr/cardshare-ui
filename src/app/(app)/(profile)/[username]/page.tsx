@@ -252,7 +252,7 @@ export default function ProfilePage() {
             </TabsContent>
 
             <TabsContent value="my-cards" className="space-y-4">
-              <MyCardsTab isOwnProfile={isOwnProfile} />
+              <MyCardsTab isOwnProfile={isOwnProfile} user={foundUser} />
             </TabsContent>
 
             <TabsContent value="settings" className="space-y-4">

@@ -23,26 +23,29 @@ import { useState } from 'react';
 import { httpRequest } from '@/utils/http.utils';
 import { useAuthStore } from '@/stores/auth';
 import DeleteDialog from '../delete-dialog';
+import { useIsOwnProfile } from '@/hooks/use-is-own-profile';
+import ProfilePicture from '../ui/profile-picture';
 
 interface CardMoreOptionsButtonProps {
-  cardId: string;
+  card: CardDto;
   onEdit: () => void;
   onDelete: () => void;
 }
 
 function CardMoreOptionsButton({
-  cardId,
+  card,
   onEdit,
   onDelete,
 }: CardMoreOptionsButtonProps) {
   const { token } = useAuthStore();
+
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
   const deleteCard = async () => {
     try {
       setIsDeleting(true);
-      await httpRequest(`/cards/${cardId}`, {
+      await httpRequest(`/cards/${card.id}`, {
         method: 'DELETE',
         token,
       });
@@ -106,10 +109,11 @@ export default function CardItem({
   onDelete,
 }: CardItemProps) {
   const router = useRouter();
-
   const { token } = useAuthStore();
+  const isOwnProfile = useIsOwnProfile(card.author.username);
 
   const [isLiking, setIsLiking] = useState(false);
+  const MAX_TAGS_TO_SHOW = 5;
 
   const handleCardClick = () => {
     router.push(`/dashboard/${card.id}`);
@@ -149,7 +153,7 @@ export default function CardItem({
 
   return (
     <section
-      className="bg-white shadow rounded-md p-6 cursor-pointer transition-transform ease-out duration-300 hover:scale-102 hover:shadow-lg group"
+      className="bg-white shadow rounded-md p-6 flex flex-col cursor-pointer transition-transform ease-out duration-300 hover:scale-102 hover:shadow-lg group"
       onClick={handleCardClick}
     >
       <GradientCardImage gradient={card.gradient} />
@@ -159,18 +163,24 @@ export default function CardItem({
           {card.title}
         </h3>
 
-        <CardMoreOptionsButton
-          cardId={card.id}
-          onEdit={handleCardClick}
-          onDelete={onDelete}
-        />
+        {isOwnProfile && (
+          <CardMoreOptionsButton
+            card={card}
+            onEdit={handleCardClick}
+            onDelete={onDelete}
+          />
+        )}
       </div>
       <p className="text-gray-600 text-sm line-clamp-1 pr-6 mb-8">
         {card.description}
       </p>
 
-      <div className="flex items-center gap-3 text-sm">
-        <User size={16} />{' '}
+      <div className="flex items-center gap-2 text-sm">
+        {card.author.profilePicture ? (
+          <ProfilePicture url={card.author.profilePicture} size="tiny" />
+        ) : (
+          <User size={16} />
+        )}{' '}
         <span className="text-gray-700">{card.author.username}</span>{' '}
         <span className="text-gray-400">•</span>{' '}
         <span className="text-gray-400">2 hours ago</span>
@@ -178,18 +188,25 @@ export default function CardItem({
 
       {card.tags.length > 0 && (
         <div className="text-xs flex flex-wrap items-center gap-2 my-4">
-          {card.tags.map((tag) => (
-            <span
-              key={`${card.id}-${tag}`}
-              className="bg-gray-100 rounded-lg py-1 px-2"
-            >
-              #{tag}
+          {card.tags
+            .map((tag) => (
+              <span
+                key={`${card.id}-${tag}`}
+                className="bg-gray-100 rounded-lg py-1 px-2"
+              >
+                #{tag}
+              </span>
+            ))
+            .slice(0, MAX_TAGS_TO_SHOW)}
+          {card.tags.length > MAX_TAGS_TO_SHOW && (
+            <span className="text-gray-500">
+              +{card.tags.length - MAX_TAGS_TO_SHOW} more
             </span>
-          ))}
+          )}
         </div>
       )}
 
-      <div className="flex gap-4 items-center justify-between text-xs">
+      <div className="flex gap-4 items-center justify-between text-xs mb-6">
         <div className="flex items-center gap-4 text-gray-600">
           <span className="flex items-center gap-1">
             <Eye size={16} /> 156
@@ -211,7 +228,7 @@ export default function CardItem({
         </span>
       </div>
 
-      <div className="flex items-center justify-between mt-6">
+      <div className="flex items-center justify-between mt-auto">
         <Button
           variant="ghost"
           className={`hover:bg-red-100 duration-300 ${

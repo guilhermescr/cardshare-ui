@@ -17,6 +17,7 @@ import DeleteDialog from '../delete-dialog';
 import { useRef, useState } from 'react';
 import ImageCropDialog from './image-crop-dialog';
 import { handleCropComplete } from '@/utils/upload.utils';
+import { twMerge } from 'tailwind-merge';
 
 interface MoreOptionsButtonProps {
   onUpload?: (imageUrl: string) => void;
@@ -150,14 +151,16 @@ const MoreOptionsButton = ({ onUpload, onRemove }: MoreOptionsButtonProps) => {
 
 interface ProfilePictureProps {
   url: string | null;
-  size?: 'small' | 'medium' | 'large';
+  size?: 'tiny' | 'small' | 'medium' | 'large';
   isOwnProfile?: boolean;
   className?: string;
   onUpload?: (imageUrl: string) => void;
   onRemove?: () => void;
+  onClick?: () => void;
 }
 
 const sizeMap = {
+  tiny: 30,
   small: 40,
   medium: 80,
   large: 120,
@@ -170,13 +173,17 @@ export default function ProfilePicture({
   className = '',
   onUpload,
   onRemove,
+  onClick,
 }: ProfilePictureProps) {
   const dimension = sizeMap[size];
 
   if (!url) {
     return (
       <div
-        className={`flex items-center justify-center rounded-full bg-[#E7E7E7] relative ${className}`}
+        className={twMerge(
+          'flex items-center justify-center rounded-full bg-[#E7E7E7] relative',
+          className
+        )}
         style={{
           width: dimension,
           height: dimension,
@@ -200,8 +207,13 @@ export default function ProfilePicture({
 
   return (
     <div
-      className={`rounded-full bg-gray-200 shadow-lg relative ${className}`}
+      className={twMerge(
+        'rounded-full bg-gray-200 shadow-lg relative',
+        className,
+        onClick && 'cursor-pointer'
+      )}
       style={{ width: dimension, height: dimension }}
+      onClick={onClick}
     >
       <Image
         src={url}

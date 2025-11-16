@@ -10,6 +10,7 @@ import { LogOut, User } from 'lucide-react';
 import { useAuthStore } from '@/stores/auth';
 import { useRouter } from 'next/navigation';
 import { APP_ROUTES } from '@/constants/routes';
+import ProfilePicture from './profile-picture';
 
 export default function ProfileDropdown() {
   const { user, setAuth } = useAuthStore();
@@ -17,6 +18,7 @@ export default function ProfileDropdown() {
 
   const onLogout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('userId');
     setAuth(null, null);
     router.push(APP_ROUTES.LOGIN);
   };
@@ -25,7 +27,15 @@ export default function ProfileDropdown() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="sm">
-          <User />
+          {user.profilePicture ? (
+            <ProfilePicture
+              url={user.profilePicture}
+              size="tiny"
+              className="mr-1"
+            />
+          ) : (
+            <User />
+          )}
           {user.username}
         </Button>
       </DropdownMenuTrigger>

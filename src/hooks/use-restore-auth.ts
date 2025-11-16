@@ -55,6 +55,7 @@ export function useRestoreAuth() {
       } catch (_error) {
         useAuthStore.getState().logout();
         localStorage.removeItem('token');
+        localStorage.removeItem('userId');
         router.push(APP_ROUTES.LOGIN);
       } finally {
         setLoading(false);
