@@ -181,6 +181,7 @@ export default function CardDetailsPage() {
 
           <Suspense fallback={<CommentSectionSkeleton />}>
             <CommentSection
+              allowComments={cardDetails?.allowComments}
               comments={cardDetails?.comments ?? []}
               cardId={cardDetails?.id}
               updateComments={(updateComments) =>

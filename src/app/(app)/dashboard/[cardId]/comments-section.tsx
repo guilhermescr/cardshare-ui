@@ -22,12 +22,14 @@ export function CommentSectionSkeleton() {
 }
 
 interface CommentSectionProps {
+  allowComments?: boolean;
   comments: CommentDto[];
   cardId?: string;
   updateComments: (updatedComments: CommentDto[]) => void;
 }
 
 export default function CommentSection({
+  allowComments = true,
   comments,
   cardId,
   updateComments,
@@ -120,119 +122,136 @@ export default function CommentSection({
 
   return (
     <section className="p-6 bg-white shadow-md rounded-lg">
-      <h2 className="flex items-center gap-2 font-medium">
-        <MessageCircle size={18} /> Comments ({comments.length})
-      </h2>
-
-      <div className="flex items-start gap-3 my-6">
-        <div className="rounded-full py-2.5 px-2 flex items-center justify-center text-sm bg-gradient-to-br from-blue-100 to-purple-100">
-          You
-        </div>
-
-        <div className="flex flex-col gap-3 w-full">
-          <textarea
-            className="border border-gray-300 rounded-md p-2 text-sm focus:outline-none focus:border-gray-500"
-            name="comment"
-            id="comment"
-            value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
-            disabled={isSaving}
-          ></textarea>
-
-          <Button
-            className="w-max"
-            variant="gradient"
-            gradientColor="blue"
-            onClick={saveComment}
-            disabled={isSaving || !newComment.trim()}
-          >
-            <Send className="mr-2" />
-            {isSaving ? 'Posting...' : 'Post Comment'}
-          </Button>
-        </div>
-      </div>
-
-      <hr />
-
-      {comments.length === 0 ? (
-        <div className="pt-5 text-center">
-          <p className="text-lg font-medium text-gray-700">No comments yet</p>
+      {!allowComments ? (
+        <div className="text-center">
+          <p className="text-lg font-medium text-gray-700">
+            Comments are disabled for this card.
+          </p>
           <p className="text-sm text-gray-500">
-            Be the first to share your thoughts!
+            Enable comments to allow users to share their thoughts.
           </p>
         </div>
       ) : (
-        <ul className="pt-5 pr-2.5 space-y-5 max-h-96 overflow-y-auto">
-          {comments.map((comment) => {
-            const isLiked = user && comment.likes.includes(user.id);
+        <>
+          <h2 className="flex items-center gap-2 font-medium">
+            <MessageCircle size={18} /> Comments ({comments.length})
+          </h2>
 
-            return (
-              <li key={comment.id} className="flex items-start gap-3">
-                <ProfilePicture
-                  url={comment.author.profilePicture}
-                  size="small"
-                />
+          <div className="flex items-start gap-3 my-6">
+            <div className="rounded-full py-2.5 px-2 flex items-center justify-center text-sm bg-gradient-to-br from-blue-100 to-purple-100">
+              You
+            </div>
 
-                <div className="flex-1">
-                  <div className="bg-gray-50 rounded-md p-3.5 pt-2 w-full">
-                    <div className="flex items-center justify-between gap-2 mb-1">
-                      <h3 className="font-medium text-gray-800">
-                        {comment.author.username}
-                      </h3>
+            <div className="flex flex-col gap-3 w-full">
+              <textarea
+                className="border border-gray-300 rounded-md p-2 text-sm focus:outline-none focus:border-gray-500"
+                name="comment"
+                id="comment"
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
+                disabled={isSaving}
+              ></textarea>
 
-                      {renderCommentDateTime(comment.createdAt)}
+              <Button
+                className="w-max"
+                variant="gradient"
+                gradientColor="blue"
+                onClick={saveComment}
+                disabled={isSaving || !newComment.trim()}
+              >
+                <Send className="mr-2" />
+                {isSaving ? 'Posting...' : 'Post Comment'}
+              </Button>
+            </div>
+          </div>
+
+          <hr />
+
+          {comments.length === 0 ? (
+            <div className="pt-5 text-center">
+              <p className="text-lg font-medium text-gray-700">
+                No comments yet
+              </p>
+              <p className="text-sm text-gray-500">
+                Be the first to share your thoughts!
+              </p>
+            </div>
+          ) : (
+            <ul className="pt-5 pr-2.5 space-y-5 max-h-96 overflow-y-auto">
+              {comments.map((comment) => {
+                const isLiked = user && comment.likes.includes(user.id);
+
+                return (
+                  <li key={comment.id} className="flex items-start gap-3">
+                    <ProfilePicture
+                      url={comment.author.profilePicture}
+                      size="small"
+                    />
+
+                    <div className="flex-1">
+                      <div className="bg-gray-50 rounded-md p-3.5 pt-2 w-full">
+                        <div className="flex items-center justify-between gap-2 mb-1">
+                          <h3 className="font-medium text-gray-800">
+                            {comment.author.username}
+                          </h3>
+
+                          {renderCommentDateTime(comment.createdAt)}
+                        </div>
+
+                        <p className="text-gray-700 text-sm whitespace-pre-wrap break-all">
+                          {comment.content}
+                        </p>
+                      </div>
+
+                      <div className="ml-2 mt-1 flex items-center gap-3 text-sm text-gray-500">
+                        <button
+                          type="button"
+                          className={`cursor-pointer transition-colors duration-200 ${
+                            isLiked
+                              ? 'text-blue-500 hover:text-blue-400'
+                              : 'hover:text-blue-500'
+                          }`}
+                          onClick={() =>
+                            toggleLikeComment(comment.id, !isLiked)
+                          }
+                          disabled={isLiking}
+                        >
+                          {isLiked ? 'Liked' : 'Like'}
+                          {comment.likes.length > 0 && (
+                            <> ({comment.likes.length})</>
+                          )}
+                        </button>
+
+                        {comment.author.id === user?.id && (
+                          <button
+                            type="button"
+                            className="cursor-pointer transition-colors duration-200 hover:text-red-500"
+                            onClick={() => {
+                              setCommentToDelete(comment.id);
+                              setShowDeleteDialog(true);
+                            }}
+                            disabled={isDeleting}
+                          >
+                            Delete
+                          </button>
+                        )}
+                      </div>
                     </div>
+                  </li>
+                );
+              })}
 
-                    <p className="text-gray-700 text-sm whitespace-pre-wrap break-all">
-                      {comment.content}
-                    </p>
-                  </div>
-
-                  <div className="ml-2 mt-1 flex items-center gap-3 text-sm text-gray-500">
-                    <button
-                      type="button"
-                      className={`cursor-pointer transition-colors duration-200 ${
-                        isLiked
-                          ? 'text-blue-500 hover:text-blue-400'
-                          : 'hover:text-blue-500'
-                      }`}
-                      onClick={() => toggleLikeComment(comment.id, !isLiked)}
-                      disabled={isLiking}
-                    >
-                      {isLiked ? 'Liked' : 'Like'}
-                      {comment.likes.length > 0 && (
-                        <> ({comment.likes.length})</>
-                      )}
-                    </button>
-
-                    {comment.author.id === user?.id && (
-                      <button
-                        type="button"
-                        className="cursor-pointer transition-colors duration-200 hover:text-red-500"
-                        onClick={() => {
-                          setCommentToDelete(comment.id);
-                          setShowDeleteDialog(true);
-                        }}
-                        disabled={isDeleting}
-                      >
-                        Delete
-                      </button>
-                    )}
-                  </div>
-                </div>
-              </li>
-            );
-          })}
-
-          <DeleteDialog
-            isOpen={showDeleteDialog}
-            onOpenChange={setShowDeleteDialog}
-            onDelete={deleteComment}
-            isDeleting={isDeleting}
-            title="Delete Comment?"
-            description="Are you sure you want to delete this comment? This action cannot be undone."
-          />
-        </ul>
+              <DeleteDialog
+                isOpen={showDeleteDialog}
+                onOpenChange={setShowDeleteDialog}
+                onDelete={deleteComment}
+                isDeleting={isDeleting}
+                title="Delete Comment?"
+                description="Are you sure you want to delete this comment? This action cannot be undone."
+              />
+            </ul>
+          )}
+        </>
       )}
     </section>
   );
