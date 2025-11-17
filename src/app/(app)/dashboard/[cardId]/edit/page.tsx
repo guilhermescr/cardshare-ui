@@ -1,42 +1,40 @@
 'use client';
 
-import { useForm, Controller } from 'react-hook-form';
-import GradientText from '@/components/gradient-text';
-import { Button } from '@/components/ui/button';
-import {
-  ChevronDown,
-  Eye,
-  Loader2,
-  MoveLeft,
-  Save,
-  Sparkles,
-} from 'lucide-react';
-import Link from 'next/link';
-import VisibilitySettings from './visibility-settings';
-import TagsSection from './tags-section';
-import VisualStyleSection from './visual-style-section';
-import MediaSection from './media-section';
-import PublishingOptions from './publishing-options';
+import { useParams, useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { CreateCardFormType, createCardSchema } from './create-card.schema';
-import { useAuthStore } from '@/stores/auth';
 import { toast } from 'sonner';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import ErrorMessage from '@/components/error-message';
-import { GeneratedCardResponse } from '@/types/card.dto';
+import {
+  CreateCardFormType,
+  createCardSchema,
+} from '@/app/(app)/new/create-card.schema';
+import { Button } from '@/components/ui/button';
+import MediaSection from '@/app/(app)/new/media-section';
+import PublishingOptions from '@/app/(app)/new/publishing-options';
+import TagsSection from '@/app/(app)/new/tags-section';
+import VisibilitySettings from '@/app/(app)/new/visibility-settings';
+import VisualStyleSection from '@/app/(app)/new/visual-style-section';
+import { useAuthStore } from '@/stores/auth';
+import { useCardDetails } from '@/hooks/use-card-details';
 import { httpRequest } from '@/utils/http.utils';
+import { useEffect, useState } from 'react';
 import TitleInput from '@/components/cards/form/title-input';
 import DescriptionInput from '@/components/cards/form/description-input';
 import CategorySelect from '@/components/cards/form/category-select';
 import CardFormHeader from '@/components/cards/form/header';
 import CardPreview from '@/components/cards/form/card-preview';
 
-export default function CreateCardPage() {
+export default function EditCardPage() {
   const router = useRouter();
+  const { cardId } = useParams();
   const { token } = useAuthStore();
 
-  const { control, handleSubmit, watch, setValue } =
+  const { cardDetails, setCardDetails, loading, error } = useCardDetails(
+    cardId as string,
+    token
+  );
+
+  const { control, handleSubmit, watch, setValue, reset } =
     useForm<CreateCardFormType>({
       defaultValues: {
         title: '',
@@ -52,8 +50,6 @@ export default function CreateCardPage() {
       resolver: zodResolver(createCardSchema),
     });
 
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
   const [showCardPreview, setShowCardPreview] = useState(false);
 
   const cardPreviewData = {
@@ -65,54 +61,30 @@ export default function CreateCardPage() {
     mediaFiles: watch('mediaFiles'),
   };
 
-  const handleGenerateCard = async () => {
-    if (!token) {
-      toast.error('You must be logged in to generate a card.');
-      return;
+  useEffect(() => {
+    if (cardDetails) {
+      reset({
+        title: cardDetails.title,
+        description: cardDetails.description,
+        category: cardDetails.category,
+        mediaFiles: cardDetails.mediaUrls.map((url) => ({
+          type: url.endsWith('.mp4') ? 'video' : 'image',
+          media: url,
+        })),
+        selectedGradient: cardDetails.gradient,
+        tags: cardDetails.tags || [],
+        selectedVisibility: cardDetails.visibility,
+        allowComments: cardDetails.allowComments,
+        allowDownloads: cardDetails.allowDownloads,
+      });
     }
-
-    try {
-      setIsGenerating(true);
-
-      const generatedCard = await httpRequest<GeneratedCardResponse>(
-        '/cards/generate',
-        {
-          method: 'POST',
-          token,
-        }
-      );
-
-      setValue('title', generatedCard.title);
-      setValue('description', generatedCard.description);
-      setValue('category', generatedCard.category);
-      setValue('selectedGradient', generatedCard.gradient);
-      setValue('selectedVisibility', generatedCard.visibility);
-      setValue('allowComments', generatedCard.allowComments);
-      setValue(
-        'tags',
-        generatedCard.tags.map((tag) =>
-          tag.startsWith('#') ? tag.slice(1) : tag
-        )
-      );
-
-      toast.success(
-        'Card generated! Review and customize it before publishing.'
-      );
-    } catch (error) {
-      console.error('Error generating card:', error);
-      toast.error('Failed to generate card.');
-    } finally {
-      setIsGenerating(false);
-    }
-  };
+  }, [cardDetails, reset]);
 
   const onSubmit = async (data: CreateCardFormType) => {
     if (!token) {
-      toast.error('You must be logged in to create a card.');
+      toast.error('You must be logged in to edit a card.');
       return;
     }
-
-    setIsSaving(true);
 
     const formData = new FormData();
     formData.append('title', data.title);
@@ -132,61 +104,47 @@ export default function CreateCardPage() {
     });
 
     try {
-      const base = process.env.NEXT_PUBLIC_API_URL!;
-      const url = new URL('/cards', base);
-      const response = await fetch(url.toString(), {
-        method: 'POST',
+      await httpRequest(`/cards/${cardId}`, {
+        method: 'PUT',
         headers: {
           Authorization: `Bearer ${token}`,
         },
         body: formData,
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to create card');
-      }
-
-      const createdCard = await response.json();
-
-      toast.success('Card created successfully!');
-      router.push(`/dashboard/${createdCard.id}`);
+      toast.success('Card updated successfully!');
+      router.push(`/dashboard/${cardId}`);
     } catch (error) {
-      console.error('Error creating card:', error);
-    } finally {
-      setIsSaving(false);
+      console.error('Error updating card:', error);
+      toast.error('Failed to update card.');
     }
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <CardFormHeader
-        title="Create New Card"
-        backLink="/dashboard"
+        title="Edit Card"
+        backLink={`/dashboard/${cardId}`}
         onSubmit={handleSubmit(onSubmit)}
-        isSaving={isSaving}
+        isSaving={false}
         onPreviewToggle={() => setShowCardPreview(!showCardPreview)}
-        onGenerate={handleGenerateCard}
-        isGenerating={isGenerating}
-        showGenerateButton
         isPreviewing={showCardPreview}
       />
 
       <section className="flex flex-col gap-6 lg:flex-row">
         <section className="flex-2 p-6 bg-white shadow-md rounded-lg space-y-4">
-          {showCardPreview ? (
+          {showCardPreview && cardDetails ? (
             <CardPreview card={cardPreviewData} />
           ) : (
             <>
-              <div className="mb-6">
-                <h2 className="flex items-center gap-2 font-medium">
-                  <Sparkles size={20} /> Card Details
-                </h2>
-
-                <p className="text-gray-500 text-sm mt-2">
-                  Fill in the information for your card
-                </p>
-              </div>
-
               <TitleInput control={control} />
 
               <DescriptionInput control={control} />

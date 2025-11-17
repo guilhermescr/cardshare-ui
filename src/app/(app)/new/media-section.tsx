@@ -32,11 +32,17 @@ export default function MediaSection({ watch, setValue }: MediaSectionProps) {
   };
 
   const addFiles = (filesArray: File[]) => {
-    if (mediaFiles.length + filesArray.length > MAX_FILES_TO_UPLOAD) {
+    const newMediaFiles = filesArray.map((file) => ({
+      type: file.type.startsWith('video') ? 'video' : 'image',
+      media: URL.createObjectURL(file),
+    }));
+
+    if (mediaFiles.length + newMediaFiles.length > MAX_FILES_TO_UPLOAD) {
       toast.error(`You can only upload up to ${MAX_FILES_TO_UPLOAD} files.`);
       return;
     }
-    setValue('mediaFiles', [...mediaFiles, ...filesArray]);
+
+    setValue('mediaFiles', [...mediaFiles, ...newMediaFiles]);
   };
 
   const handleDeleteFile = (index: number) => {
@@ -102,25 +108,29 @@ export default function MediaSection({ watch, setValue }: MediaSectionProps) {
           </h4>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-            {mediaFiles.map((file, index) => (
-              <div
-                key={index}
-                className="group relative flex flex-col gap-1.5 items-center justify-center border-2 border-gray-200 bg-gray-50 rounded-md p-4"
-              >
-                <ImageIcon className="text-gray-400" size={30} />
-                <p className="text-sm text-gray-600 text-center break-all">
-                  {file.name}
-                </p>
+            {mediaFiles.map((file, index) => {
+              const fileName = file.media.split('/').pop();
 
-                <button
-                  type="button"
-                  className="cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity absolute -top-2.5 -right-2.5 bg-destructive rounded-full p-1 text-white hover:brightness-90"
-                  onClick={() => handleDeleteFile(index)}
+              return (
+                <div
+                  key={index}
+                  className="group relative flex flex-col gap-1.5 items-center justify-center border-2 border-gray-200 bg-gray-50 rounded-md p-4"
                 >
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
-            ))}
+                  <ImageIcon className="text-gray-400" size={30} />
+                  <p className="text-sm text-gray-600 text-center break-all">
+                    {fileName}
+                  </p>
+
+                  <button
+                    type="button"
+                    className="cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity absolute -top-2.5 -right-2.5 bg-destructive rounded-full p-1 text-white hover:brightness-90"
+                    onClick={() => handleDeleteFile(index)}
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              );
+            })}
           </div>
         </>
       )}

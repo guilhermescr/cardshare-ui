@@ -28,7 +28,7 @@ import ProfilePicture from '../ui/profile-picture';
 
 interface CardMoreOptionsButtonProps {
   card: CardDto;
-  onEdit: () => void;
+  onEdit: (e: React.MouseEvent) => void;
   onDelete: () => void;
 }
 
@@ -119,6 +119,11 @@ export default function CardItem({
     router.push(`/dashboard/${card.id}`);
   };
 
+  const handleEditClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    router.push(`/dashboard/${card.id}/edit`);
+  };
+
   const handleCardLike = async () => {
     try {
       setIsLiking(true);
@@ -166,7 +171,7 @@ export default function CardItem({
         {isOwnProfile && (
           <CardMoreOptionsButton
             card={card}
-            onEdit={handleCardClick}
+            onEdit={handleEditClick}
             onDelete={onDelete}
           />
         )}

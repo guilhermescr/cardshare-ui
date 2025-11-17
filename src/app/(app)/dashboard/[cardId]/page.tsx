@@ -109,7 +109,12 @@ export default function CardDetailsPage() {
                   <div className="h-64 bg-gray-200 rounded-lg animate-pulse"></div>
                 }
               >
-                <Carousel mediaUrls={cardDetails.mediaUrls} />
+                <Carousel
+                  mediaFiles={cardDetails.mediaUrls.map((url) => ({
+                    type: url.endsWith('.mp4') ? 'video' : 'image',
+                    media: url,
+                  }))}
+                />
               </Suspense>
             ) : (
               <GradientCardImage

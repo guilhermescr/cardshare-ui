@@ -7,10 +7,15 @@ import { toast } from 'sonner';
 
 interface TagsSectionProps {
   tags: string[];
-  setTags: (tags: string[]) => void;
+  setTags?: (tags: string[]) => void;
+  hideActions?: boolean;
 }
 
-export default function TagsSection({ tags, setTags }: TagsSectionProps) {
+export default function TagsSection({
+  tags,
+  setTags,
+  hideActions = false,
+}: TagsSectionProps) {
   const [newTag, setNewTag] = useState('');
   const MAX_TAGS = 10;
 
@@ -23,7 +28,9 @@ export default function TagsSection({ tags, setTags }: TagsSectionProps) {
     }
 
     if (tags.length < MAX_TAGS) {
-      setTags([...tags, newTag]);
+      if (setTags) {
+        setTags([...tags, newTag]);
+      }
       setNewTag('');
     } else {
       toast.error(`You can add up to ${MAX_TAGS} tags only.`);
@@ -33,7 +40,9 @@ export default function TagsSection({ tags, setTags }: TagsSectionProps) {
   const handleDeleteTag = (index: number) => {
     const updatedTags = [...tags];
     updatedTags.splice(index, 1);
-    setTags(updatedTags);
+    if (setTags) {
+      setTags(updatedTags);
+    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -45,26 +54,34 @@ export default function TagsSection({ tags, setTags }: TagsSectionProps) {
 
   return (
     <section>
-      <label className="text-sm font-medium mb-1" htmlFor="tags">
-        Tags
-      </label>
+      {!hideActions && (
+        <>
+          <label className="text-sm font-medium mb-1" htmlFor="tags">
+            Tags
+          </label>
 
-      <div className="flex items-center gap-2">
-        <input
-          className="bg-gray-50 border rounded-md flex-1 py-2 px-2.5 w-full text-gray-600 text-sm focus:outline-none focus:border-black"
-          type="text"
-          id="tags"
-          placeholder="Add a tag..."
-          value={newTag}
-          onChange={(e) => setNewTag(e.target.value)}
-          onKeyDown={handleKeyDown}
-          maxLength={50}
-        />
+          <div className="flex items-center gap-2">
+            <input
+              className="bg-gray-50 border rounded-md flex-1 py-2 px-2.5 w-full text-gray-600 text-sm focus:outline-none focus:border-black"
+              type="text"
+              id="tags"
+              placeholder="Add a tag..."
+              value={newTag}
+              onChange={(e) => setNewTag(e.target.value)}
+              onKeyDown={handleKeyDown}
+              maxLength={50}
+            />
 
-        <Button variant="gradient" gradientColor="blue" onClick={handleNewTag}>
-          <Plus />
-        </Button>
-      </div>
+            <Button
+              variant="gradient"
+              gradientColor="blue"
+              onClick={handleNewTag}
+            >
+              <Plus />
+            </Button>
+          </div>
+        </>
+      )}
 
       {tags.length > 0 && (
         <div className="mt-4 flex flex-wrap gap-2">
@@ -74,13 +91,15 @@ export default function TagsSection({ tags, setTags }: TagsSectionProps) {
               className="rounded-md py-1 px-2 text-xs bg-gradient-to-r from-blue-100 to-purple-100 text-blue-800 flex items-center gap-1 hover:opacity-85 transition-opacity break-all"
             >
               #{tag}{' '}
-              <button
-                type="button"
-                className="cursor-pointer"
-                onClick={() => handleDeleteTag(index)}
-              >
-                <X size={12} />
-              </button>
+              {!hideActions && (
+                <button
+                  type="button"
+                  className="cursor-pointer"
+                  onClick={() => handleDeleteTag(index)}
+                >
+                  <X size={12} />
+                </button>
+              )}
             </span>
           ))}
         </div>
