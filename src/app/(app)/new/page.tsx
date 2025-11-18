@@ -141,7 +141,11 @@ export default function CreateCardPage() {
       }
 
       if (!response.ok) {
-        throw new Error('Failed to create card');
+        const errorText = await response.text();
+        if (errorText.includes('File too large')) {
+          throw new Error('File too large');
+        }
+        throw new Error('Failed to update card');
       }
 
       const createdCard = await response.json();
@@ -149,7 +153,14 @@ export default function CreateCardPage() {
       toast.success('Card created successfully!');
       router.push(`/dashboard/${createdCard.id}`);
     } catch (error) {
-      console.error('Error creating card:', error);
+      console.error('Error updating card:', error);
+      if (error instanceof Error && error.message === 'File too large') {
+        toast.error(
+          'One or more files are too large. Please upload smaller files.'
+        );
+      } else {
+        toast.error('Failed to update card.');
+      }
     } finally {
       setIsSaving(false);
     }

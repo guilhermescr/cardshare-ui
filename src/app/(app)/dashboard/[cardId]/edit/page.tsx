@@ -122,6 +122,10 @@ export default function EditCardPage() {
       });
 
       if (!response.ok) {
+        const errorText = await response.text();
+        if (errorText.includes('File too large')) {
+          throw new Error('File too large');
+        }
         throw new Error('Failed to update card');
       }
 
@@ -129,7 +133,13 @@ export default function EditCardPage() {
       router.push(`/dashboard/${cardId}`);
     } catch (error) {
       console.error('Error updating card:', error);
-      toast.error('Failed to update card.');
+      if (error instanceof Error && error.message === 'File too large') {
+        toast.error(
+          'One or more files are too large. Please upload smaller files.'
+        );
+      } else {
+        toast.error('Failed to update card.');
+      }
     } finally {
       setIsSaving(false);
     }
