@@ -211,7 +211,7 @@ export default function CardItem({
         </div>
       )}
 
-      <div className="flex gap-4 items-center justify-between text-xs mb-6">
+      <div className="flex gap-4 items-center justify-between text-xs mt-auto mb-6">
         <div className="flex items-center gap-4 text-gray-600">
           <span className="flex items-center gap-1">
             <Eye size={16} /> 156
@@ -233,7 +233,7 @@ export default function CardItem({
         </span>
       </div>
 
-      <div className="flex items-center justify-between mt-auto">
+      <div className="flex items-center justify-between">
         <Button
           variant="ghost"
           className={`hover:bg-red-100 duration-300 ${
