@@ -95,14 +95,10 @@ export default function NotificationsPage() {
         </div>
       </header>
 
-      <Tabs defaultValue="all" className="w-full mt-6">
-        <TabsList className="w-full bg-white rounded-lg shadow-sm">
+      <Tabs defaultValue="all" className="mt-6">
+        <TabsList>
           {tabs.map((tab) => (
-            <TabsTrigger
-              key={tab.value}
-              value={tab.value}
-              className="cursor-pointer transition duration-150 data-[state=inactive]:hover:bg-gray-200 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-600 data-[state=active]:to-purple-600 data-[state=active]:text-white data-[state=active]:shadow-sm"
-            >
+            <TabsTrigger key={tab.value} value={tab.value}>
               {tab.label}
             </TabsTrigger>
           ))}
@@ -110,18 +106,16 @@ export default function NotificationsPage() {
 
         {tabs.map((tab) => (
           <TabsContent key={tab.value} value={tab.value}>
-            <div className="space-y-4">
-              {isSearching
-                ? Array.from({ length: 4 }).map((_, index) => (
-                    <NotificationItemSkeleton key={index} />
-                  ))
-                : filterNotifications(tab.filter).map((notification) => (
-                    <NotificationItem
-                      key={notification.id}
-                      notification={notification}
-                    />
-                  ))}
-            </div>
+            {isSearching
+              ? Array.from({ length: 4 }).map((_, index) => (
+                  <NotificationItemSkeleton key={index} />
+                ))
+              : filterNotifications(tab.filter).map((notification) => (
+                  <NotificationItem
+                    key={notification.id}
+                    notification={notification}
+                  />
+                ))}
           </TabsContent>
         ))}
       </Tabs>

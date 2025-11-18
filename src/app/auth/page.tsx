@@ -25,28 +25,18 @@ export default function AuthPage() {
 
           <Card className="backdrop-blur-sm bg-white/80 border-white/20 shadow-xl">
             <CardContent className="p-6">
-              <Tabs defaultValue="login" className="w-full">
-                <TabsList className="grid w-full grid-cols-2 mb-6 bg-gray-100/50">
-                  <TabsTrigger
-                    value="login"
-                    className="cursor-pointer transition duration-150 data-[state=inactive]:hover:bg-gray-200 data-[state=active]:bg-white data-[state=active]:shadow-sm"
-                  >
-                    Sign In
-                  </TabsTrigger>
+              <Tabs defaultValue="login">
+                <TabsList className="grid grid-cols-2 mb-6">
+                  <TabsTrigger value="login">Sign In</TabsTrigger>
 
-                  <TabsTrigger
-                    value="register"
-                    className="cursor-pointer transition duration-150 data-[state=inactive]:hover:bg-gray-200 data-[state=active]:bg-white data-[state=active]:shadow-sm"
-                  >
-                    Sign Up
-                  </TabsTrigger>
+                  <TabsTrigger value="register">Sign Up</TabsTrigger>
                 </TabsList>
 
-                <TabsContent value="login" className="space-y-4">
+                <TabsContent value="login">
                   <LoginForm />
                 </TabsContent>
 
-                <TabsContent value="register" className="space-y-4">
+                <TabsContent value="register">
                   <RegisterForm />
                 </TabsContent>
               </Tabs>

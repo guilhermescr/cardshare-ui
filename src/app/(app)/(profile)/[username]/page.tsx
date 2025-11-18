@@ -200,66 +200,38 @@ export default function ProfilePage() {
         </section>
 
         <section className="w-full lg:flex-3">
-          <Tabs
-            defaultValue={isOwnProfile ? 'profile' : 'my-cards'}
-            className="w-full"
-          >
+          <Tabs defaultValue={isOwnProfile ? 'profile' : 'my-cards'}>
             <TabsList
-              className={`grid w-full bg-gray-100/50 ${isOwnProfile ? 'grid-cols-4' : 'grid-cols-1'}`}
+              className={`grid ${isOwnProfile ? 'grid-cols-4' : 'grid-cols-1'}`}
             >
               {isOwnProfile ? (
                 <>
-                  <TabsTrigger
-                    value="profile"
-                    className="cursor-pointer transition duration-150 data-[state=inactive]:hover:bg-gray-200 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-600 data-[state=active]:to-purple-600 data-[state=active]:text-white data-[state=active]:shadow-sm"
-                  >
-                    Profile
-                  </TabsTrigger>
+                  <TabsTrigger value="profile">Profile</TabsTrigger>
 
-                  <TabsTrigger
-                    value="my-cards"
-                    className="cursor-pointer transition duration-150 data-[state=inactive]:hover:bg-gray-200 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-600 data-[state=active]:to-purple-600 data-[state=active]:text-white data-[state=active]:shadow-sm"
-                  >
-                    My Cards
-                  </TabsTrigger>
+                  <TabsTrigger value="my-cards">My Cards</TabsTrigger>
 
-                  <TabsTrigger
-                    value="settings"
-                    className="cursor-pointer transition duration-150 data-[state=inactive]:hover:bg-gray-200 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-600 data-[state=active]:to-purple-600 data-[state=active]:text-white data-[state=active]:shadow-sm"
-                  >
-                    Settings
-                  </TabsTrigger>
+                  <TabsTrigger value="settings">Settings</TabsTrigger>
 
-                  <TabsTrigger
-                    value="security"
-                    className="cursor-pointer transition duration-150 data-[state=inactive]:hover:bg-gray-200 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-600 data-[state=active]:to-purple-600 data-[state=active]:text-white data-[state=active]:shadow-sm"
-                  >
-                    Security
-                  </TabsTrigger>
+                  <TabsTrigger value="security">Security</TabsTrigger>
                 </>
               ) : (
-                <TabsTrigger
-                  value="my-cards"
-                  className="cursor-pointer transition duration-150 data-[state=inactive]:hover:bg-gray-200 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-600 data-[state=active]:to-purple-600 data-[state=active]:text-white data-[state=active]:shadow-sm"
-                >
-                  Public Cards (3)
-                </TabsTrigger>
+                <TabsTrigger value="my-cards">Public Cards (3)</TabsTrigger>
               )}
             </TabsList>
 
-            <TabsContent value="profile" className="space-y-4">
+            <TabsContent value="profile">
               <ProfileTab />
             </TabsContent>
 
-            <TabsContent value="my-cards" className="space-y-4">
+            <TabsContent value="my-cards">
               <MyCardsTab isOwnProfile={isOwnProfile} user={foundUser} />
             </TabsContent>
 
-            <TabsContent value="settings" className="space-y-4">
+            <TabsContent value="settings">
               <SettingsTab />
             </TabsContent>
 
-            <TabsContent value="security" className="space-y-4">
+            <TabsContent value="security">
               <SecurityTab />
             </TabsContent>
           </Tabs>
