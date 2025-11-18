@@ -1,6 +1,6 @@
 import { Globe, Link, Lock, LucideIcon } from 'lucide-react';
 import { UseFormSetValue, UseFormWatch } from 'react-hook-form';
-import { CreateCardFormType } from './create-card.schema';
+import { CardFormType } from '../../../components/cards/form/card-form.schema';
 
 function RadioInput({
   id,
@@ -47,8 +47,8 @@ function RadioInput({
 }
 
 interface VisibilitySettingsProps {
-  watch: UseFormWatch<CreateCardFormType>;
-  setValue: UseFormSetValue<CreateCardFormType>;
+  watch: UseFormWatch<CardFormType>;
+  setValue: UseFormSetValue<CardFormType>;
 }
 
 export default function VisibilitySettings({

@@ -1,12 +1,12 @@
 import { ImageIcon, Upload, X } from 'lucide-react';
 import { useRef, useState } from 'react';
 import { UseFormSetValue, UseFormWatch } from 'react-hook-form';
-import { CreateCardFormType } from './create-card.schema';
+import { CardFormType } from '../../../components/cards/form/card-form.schema';
 import { toast } from 'sonner';
 
 interface MediaSectionProps {
-  watch: UseFormWatch<CreateCardFormType>;
-  setValue: UseFormSetValue<CreateCardFormType>;
+  watch: UseFormWatch<CardFormType>;
+  setValue: UseFormSetValue<CardFormType>;
 }
 
 export default function MediaSection({ watch, setValue }: MediaSectionProps) {

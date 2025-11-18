@@ -18,7 +18,10 @@ import VisualStyleSection from './visual-style-section';
 import MediaSection from './media-section';
 import PublishingOptions from './publishing-options';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { CreateCardFormType, createCardSchema } from './create-card.schema';
+import {
+  CardFormType,
+  cardFormSchema,
+} from '../../../components/cards/form/card-form.schema';
 import { useAuthStore } from '@/stores/auth';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
@@ -36,21 +39,20 @@ export default function CreateCardPage() {
   const router = useRouter();
   const { token } = useAuthStore();
 
-  const { control, handleSubmit, watch, setValue } =
-    useForm<CreateCardFormType>({
-      defaultValues: {
-        title: '',
-        description: '',
-        category: '',
-        mediaFiles: [],
-        selectedGradient: 'aurora',
-        tags: [],
-        selectedVisibility: 'public',
-        allowComments: true,
-        allowDownloads: false,
-      },
-      resolver: zodResolver(createCardSchema),
-    });
+  const { control, handleSubmit, watch, setValue } = useForm<CardFormType>({
+    defaultValues: {
+      title: '',
+      description: '',
+      category: '',
+      mediaFiles: [],
+      selectedGradient: 'aurora',
+      tags: [],
+      selectedVisibility: 'public',
+      allowComments: true,
+      allowDownloads: false,
+    },
+    resolver: zodResolver(cardFormSchema),
+  });
 
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -106,7 +108,7 @@ export default function CreateCardPage() {
     }
   };
 
-  const onSubmit = async (data: CreateCardFormType) => {
+  const onSubmit = async (data: CardFormType) => {
     if (!token) {
       toast.error('You must be logged in to create a card.');
       return;

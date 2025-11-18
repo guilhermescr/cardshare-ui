@@ -1,10 +1,10 @@
 import { Control, Controller } from 'react-hook-form';
 import { ChevronDown } from 'lucide-react';
 import ErrorMessage from '@/components/error-message';
-import { CreateCardFormType } from '@/app/(app)/new/create-card.schema';
+import { CardFormType } from '@/components/cards/form/card-form.schema';
 
 interface CategorySelectProps {
-  control: Control<CreateCardFormType>;
+  control: Control<CardFormType>;
 }
 
 export default function CategorySelect({ control }: CategorySelectProps) {

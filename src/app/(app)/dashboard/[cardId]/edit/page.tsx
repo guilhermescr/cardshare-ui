@@ -5,9 +5,9 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 import {
-  CreateCardFormType,
-  createCardSchema,
-} from '@/app/(app)/new/create-card.schema';
+  CardFormType,
+  cardFormSchema,
+} from '@/components/cards/form/card-form.schema';
 import { Button } from '@/components/ui/button';
 import MediaSection from '@/app/(app)/new/media-section';
 import PublishingOptions from '@/app/(app)/new/publishing-options';
@@ -35,7 +35,7 @@ export default function EditCardPage() {
   );
 
   const { control, handleSubmit, watch, setValue, reset } =
-    useForm<CreateCardFormType>({
+    useForm<CardFormType>({
       defaultValues: {
         title: '',
         description: '',
@@ -47,7 +47,7 @@ export default function EditCardPage() {
         allowComments: true,
         allowDownloads: false,
       },
-      resolver: zodResolver(createCardSchema),
+      resolver: zodResolver(cardFormSchema),
     });
 
   const [showCardPreview, setShowCardPreview] = useState(false);
@@ -80,7 +80,7 @@ export default function EditCardPage() {
     }
   }, [cardDetails, reset]);
 
-  const onSubmit = async (data: CreateCardFormType) => {
+  const onSubmit = async (data: CardFormType) => {
     if (!token) {
       toast.error('You must be logged in to edit a card.');
       return;

@@ -1,9 +1,9 @@
 import { Control, Controller } from 'react-hook-form';
 import ErrorMessage from '@/components/error-message';
-import { CreateCardFormType } from '@/app/(app)/new/create-card.schema';
+import { CardFormType } from '@/components/cards/form/card-form.schema';
 
 interface DescriptionInputProps {
-  control: Control<CreateCardFormType>;
+  control: Control<CardFormType>;
 }
 
 export default function DescriptionInput({ control }: DescriptionInputProps) {

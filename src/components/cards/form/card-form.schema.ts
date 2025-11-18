@@ -10,7 +10,7 @@ const gradientEnum = z.enum(
   ]
 );
 
-export const createCardSchema = z.object({
+export const cardFormSchema = z.object({
   title: z.string().min(1, 'Title is required.'),
   description: z.string().min(1, 'Description is required.'),
   category: z.string().min(1, 'Category is required.'),
@@ -25,4 +25,4 @@ export const createCardSchema = z.object({
   allowDownloads: z.boolean().optional(),
 });
 
-export type CreateCardFormType = z.infer<typeof createCardSchema>;
+export type CardFormType = z.infer<typeof cardFormSchema>;

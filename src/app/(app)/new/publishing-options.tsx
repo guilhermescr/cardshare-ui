@@ -1,16 +1,16 @@
 import { Switch } from '@/components/ui/switch';
 import { UseFormSetValue, UseFormWatch } from 'react-hook-form';
-import { CreateCardFormType } from './create-card.schema';
+import { CardFormType } from '../../../components/cards/form/card-form.schema';
 
 interface PublishingOptionsProps {
-  watch: UseFormWatch<CreateCardFormType>;
-  setValue: UseFormSetValue<CreateCardFormType>;
+  watch: UseFormWatch<CardFormType>;
+  setValue: UseFormSetValue<CardFormType>;
 }
 
 interface PublishingOptionProps extends PublishingOptionsProps {
   label: string;
   description: string;
-  fieldName: keyof CreateCardFormType;
+  fieldName: keyof CardFormType;
 }
 
 function PublishingOption({

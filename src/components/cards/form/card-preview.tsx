@@ -1,6 +1,6 @@
 'use client';
 
-import { CreateCardFormType } from '@/app/(app)/new/create-card.schema';
+import { CardFormType } from '@/components/cards/form/card-form.schema';
 import TagsSection from '@/app/(app)/new/tags-section';
 import GradientCardImage from '@/components/cards/gradient-card-image';
 import GradientText from '@/components/gradient-text';
@@ -8,7 +8,7 @@ import Carousel from '@/components/ui/carousel';
 import { capitalizeFirstLetter } from '@/utils/string.utils';
 
 interface CardPreviewProps {
-  card: Partial<CreateCardFormType>;
+  card: Partial<CardFormType>;
 }
 
 export default function CardPreview({ card }: CardPreviewProps) {
