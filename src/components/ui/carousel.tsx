@@ -56,20 +56,24 @@ export default function Carousel({
 
       {mediaFiles.length > 1 && (
         <>
-          <button
-            type="button"
-            onClick={handlePrevious}
-            className="cursor-pointer absolute top-1/2 left-3 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-md hover:bg-gray-200"
-          >
-            <ArrowLeft size={18} />
-          </button>
-          <button
-            type="button"
-            onClick={handleNext}
-            className="cursor-pointer absolute top-1/2 right-3 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-md hover:bg-gray-200"
-          >
-            <ArrowRight size={18} />
-          </button>
+          <div className="absolute top-1/2 left-4 transform -translate-y-1/2 -translate-x-full">
+            <button
+              type="button"
+              onClick={handlePrevious}
+              className="cursor-pointer bg-white border border-gray-300 p-2 rounded-full shadow-md hover:bg-gray-200"
+            >
+              <ArrowLeft size={18} />
+            </button>
+          </div>
+          <div className="absolute top-1/2 right-4 transform -translate-y-1/2 translate-x-full">
+            <button
+              type="button"
+              onClick={handleNext}
+              className="cursor-pointer bg-white border border-gray-300 p-2 rounded-full shadow-md hover:bg-gray-200"
+            >
+              <ArrowRight size={18} />
+            </button>
+          </div>
         </>
       )}
     </section>
