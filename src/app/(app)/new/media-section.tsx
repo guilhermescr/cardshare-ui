@@ -36,6 +36,7 @@ export default function MediaSection({
 
   const mediaFiles = watch('mediaFiles') || [];
   const MAX_FILES_TO_UPLOAD = 10;
+  const MAX_FILE_SIZE_MB = 10;
 
   const handleInputFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
@@ -53,11 +54,20 @@ export default function MediaSection({
   };
 
   const addFiles = (filesArray: File[]) => {
-    const newMediaFiles = filesArray.map((file) => ({
-      type: file.type.startsWith('video') ? 'video' : 'image',
-      media: URL.createObjectURL(file),
-      file: file,
-    }));
+    const newMediaFiles = filesArray.map((file) => {
+      const fileSizeInKB = file.size / 1024;
+      const fileSize =
+        fileSizeInKB < 1024
+          ? `${fileSizeInKB.toFixed(2)} KB`
+          : `${(fileSizeInKB / 1024).toFixed(2)} MB`;
+
+      return {
+        type: file.type.startsWith('video') ? 'video' : 'image',
+        media: URL.createObjectURL(file),
+        file: file,
+        size: fileSize,
+      };
+    });
 
     if (mediaFiles.length + newMediaFiles.length > MAX_FILES_TO_UPLOAD) {
       toast.error(`You can only upload up to ${MAX_FILES_TO_UPLOAD} files.`);
@@ -159,9 +169,14 @@ export default function MediaSection({
 
       {mediaFiles.length > 0 && (
         <>
-          <h4 className="text-sm font-medium my-4">
+          <h4 className="text-sm font-medium mt-4">
             Uploaded Media ({mediaFiles.length})
           </h4>
+
+          <p className="text-gray-700 text-sm mb-4">
+            Please ensure that each file is under {MAX_FILE_SIZE_MB}MB to
+            guarantee successful uploads.
+          </p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             {mediaFiles.map((file, index) => {
@@ -177,7 +192,9 @@ export default function MediaSection({
                   <p className="text-sm text-gray-600 text-center break-all">
                     {fileName}
                   </p>
-
+                  {file.size && (
+                    <p className="text-xs text-gray-500">{file.size}</p>
+                  )}
                   <button
                     type="button"
                     className="cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity absolute -top-2.5 -right-2.5 bg-destructive rounded-full p-1 text-white hover:brightness-90"
