@@ -1,17 +1,29 @@
 import { ImageIcon, Upload, X } from 'lucide-react';
 import { useRef, useState } from 'react';
 import { UseFormSetValue, UseFormWatch } from 'react-hook-form';
-import { CardFormType } from '../../../components/cards/form/card-form.schema';
+import { CardFormType } from '@/components/cards/form/card-form.schema';
 import { toast } from 'sonner';
+import DeleteDialog from '@/components/delete-dialog';
+import { httpRequest } from '@/utils/http.utils';
+import { useAuthStore } from '@/stores/auth';
 
 interface MediaSectionProps {
   watch: UseFormWatch<CardFormType>;
   setValue: UseFormSetValue<CardFormType>;
+  cardId?: string;
 }
 
-export default function MediaSection({ watch, setValue }: MediaSectionProps) {
+export default function MediaSection({
+  watch,
+  setValue,
+  cardId,
+}: MediaSectionProps) {
+  const { token } = useAuthStore();
+
   const fileUploadRef = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [deleteIndex, setDeleteIndex] = useState<number | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const mediaFiles = watch('mediaFiles') || [];
   const MAX_FILES_TO_UPLOAD = 10;
@@ -47,9 +59,38 @@ export default function MediaSection({ watch, setValue }: MediaSectionProps) {
   };
 
   const handleDeleteFile = (index: number) => {
-    const updatedFiles = mediaFiles.filter((_, i) => i !== index);
-    setValue('mediaFiles', updatedFiles);
-    toast.success('File removed successfully.');
+    const file = mediaFiles[index];
+    if (file.file === null) {
+      setDeleteIndex(index);
+    } else {
+      const updatedFiles = mediaFiles.filter((_, i) => i !== index);
+      setValue('mediaFiles', updatedFiles);
+      toast.success('File removed successfully.');
+    }
+  };
+
+  const confirmDeleteFile = async () => {
+    if (deleteIndex === null) return;
+
+    try {
+      setIsDeleting(true);
+
+      await httpRequest(`/cards/${cardId}/file`, {
+        method: 'DELETE',
+        token,
+        body: { fileUrl: mediaFiles[deleteIndex].media },
+      });
+
+      const updatedFiles = mediaFiles.filter((_, i) => i !== deleteIndex);
+      setValue('mediaFiles', updatedFiles);
+
+      toast.success('File removed successfully.');
+    } catch (error) {
+      toast.error('Failed to delete the file. Please try again.');
+    } finally {
+      setDeleteIndex(null);
+      setIsDeleting(false);
+    }
   };
 
   const handleDragOver = (e: React.DragEvent<HTMLButtonElement>) => {
@@ -135,6 +176,17 @@ export default function MediaSection({ watch, setValue }: MediaSectionProps) {
           </div>
         </>
       )}
+
+      <DeleteDialog
+        isOpen={deleteIndex !== null}
+        onOpenChange={(isOpen) => {
+          if (!isOpen) setDeleteIndex(null);
+        }}
+        onDelete={confirmDeleteFile}
+        isDeleting={isDeleting}
+        title="Delete Media?"
+        description="Are you sure you want to delete this media? This action cannot be undone."
+      />
     </section>
   );
 }

@@ -166,7 +166,11 @@ export default function EditCardPage() {
 
               <CategorySelect control={control} />
 
-              <MediaSection watch={watch} setValue={setValue} />
+              <MediaSection
+                watch={watch}
+                setValue={setValue}
+                cardId={cardId as string}
+              />
 
               <VisualStyleSection
                 selectedGradient={watch('selectedGradient') || ''}
