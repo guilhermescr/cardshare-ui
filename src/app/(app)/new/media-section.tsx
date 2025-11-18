@@ -35,6 +35,7 @@ export default function MediaSection({ watch, setValue }: MediaSectionProps) {
     const newMediaFiles = filesArray.map((file) => ({
       type: file.type.startsWith('video') ? 'video' : 'image',
       media: URL.createObjectURL(file),
+      file: file,
     }));
 
     if (mediaFiles.length + newMediaFiles.length > MAX_FILES_TO_UPLOAD) {

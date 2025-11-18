@@ -8,7 +8,6 @@ import {
   CardFormType,
   cardFormSchema,
 } from '@/components/cards/form/card-form.schema';
-import { Button } from '@/components/ui/button';
 import MediaSection from '@/app/(app)/new/media-section';
 import PublishingOptions from '@/app/(app)/new/publishing-options';
 import TagsSection from '@/app/(app)/new/tags-section';
@@ -29,7 +28,7 @@ export default function EditCardPage() {
   const { cardId } = useParams();
   const { token } = useAuthStore();
 
-  const { cardDetails, setCardDetails, loading, error } = useCardDetails(
+  const { cardDetails, loading, error } = useCardDetails(
     cardId as string,
     token
   );
@@ -51,6 +50,7 @@ export default function EditCardPage() {
     });
 
   const [showCardPreview, setShowCardPreview] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
   const cardPreviewData = {
     title: watch('title'),
@@ -70,6 +70,7 @@ export default function EditCardPage() {
         mediaFiles: cardDetails.mediaUrls.map((url) => ({
           type: url.endsWith('.mp4') ? 'video' : 'image',
           media: url,
+          file: null,
         })),
         selectedGradient: cardDetails.gradient,
         tags: cardDetails.tags || [],
@@ -86,6 +87,8 @@ export default function EditCardPage() {
       return;
     }
 
+    setIsSaving(true);
+
     const formData = new FormData();
     formData.append('title', data.title);
     formData.append('description', data.description);
@@ -99,12 +102,18 @@ export default function EditCardPage() {
       formData.append(`tags[${index}]`, tag);
     });
 
-    data.mediaFiles?.forEach((file) => {
-      formData.append('files', file);
-    });
+    if (data.mediaFiles && data.mediaFiles.length > 0) {
+      const newMedia = data.mediaFiles.filter((file) => file.file !== null);
+
+      newMedia.forEach((file) => {
+        formData.append('files', file.file);
+      });
+    }
 
     try {
-      await httpRequest(`/cards/${cardId}`, {
+      const base = process.env.NEXT_PUBLIC_API_URL!;
+      const url = new URL(`/cards/${cardId}`, base);
+      const response = await fetch(url.toString(), {
         method: 'PUT',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -112,11 +121,17 @@ export default function EditCardPage() {
         body: formData,
       });
 
+      if (!response.ok) {
+        throw new Error('Failed to update card');
+      }
+
       toast.success('Card updated successfully!');
       router.push(`/dashboard/${cardId}`);
     } catch (error) {
       console.error('Error updating card:', error);
       toast.error('Failed to update card.');
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -134,7 +149,7 @@ export default function EditCardPage() {
         title="Edit Card"
         backLink={`/dashboard/${cardId}`}
         onSubmit={handleSubmit(onSubmit)}
-        isSaving={false}
+        isSaving={isSaving}
         onPreviewToggle={() => setShowCardPreview(!showCardPreview)}
         isPreviewing={showCardPreview}
       />

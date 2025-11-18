@@ -113,6 +113,7 @@ export default function CardDetailsPage() {
                   mediaFiles={cardDetails.mediaUrls.map((url) => ({
                     type: url.endsWith('.mp4') ? 'video' : 'image',
                     media: url,
+                    file: null,
                   }))}
                 />
               </Suspense>

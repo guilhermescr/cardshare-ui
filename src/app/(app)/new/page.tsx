@@ -1,17 +1,7 @@
 'use client';
 
-import { useForm, Controller } from 'react-hook-form';
-import GradientText from '@/components/gradient-text';
-import { Button } from '@/components/ui/button';
-import {
-  ChevronDown,
-  Eye,
-  Loader2,
-  MoveLeft,
-  Save,
-  Sparkles,
-} from 'lucide-react';
-import Link from 'next/link';
+import { useForm } from 'react-hook-form';
+import { Sparkles } from 'lucide-react';
 import VisibilitySettings from './visibility-settings';
 import TagsSection from './tags-section';
 import VisualStyleSection from './visual-style-section';
@@ -26,7 +16,6 @@ import { useAuthStore } from '@/stores/auth';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import ErrorMessage from '@/components/error-message';
 import { GeneratedCardResponse } from '@/types/card.dto';
 import { httpRequest } from '@/utils/http.utils';
 import TitleInput from '@/components/cards/form/title-input';
@@ -130,7 +119,7 @@ export default function CreateCardPage() {
     });
 
     data.mediaFiles?.forEach((file) => {
-      formData.append('files', file);
+      formData.append('files', file.file);
     });
 
     try {
@@ -143,6 +132,13 @@ export default function CreateCardPage() {
         },
         body: formData,
       });
+
+      if (response.status === 503) {
+        toast.error(
+          'AI service is currently unavailable. Please try again later.'
+        );
+        return;
+      }
 
       if (!response.ok) {
         throw new Error('Failed to create card');

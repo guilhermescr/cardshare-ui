@@ -5,6 +5,7 @@ import { ArrowLeft, ArrowRight } from 'lucide-react';
 interface MediaItem {
   type?: 'image' | 'video';
   media: string;
+  file?: File | null;
 }
 
 interface CarouselProps {
