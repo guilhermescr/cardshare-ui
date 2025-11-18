@@ -54,6 +54,12 @@ export default function NotificationItem({
     isLoading && 'cursor-not-allowed opacity-70'
   );
 
+  const formatNotificationDate = (dateString: string) => {
+    const formattedDate = formatDateTime(dateString);
+    const formattedTime = formattedDate.time ? ` at ${formattedDate.time}` : '';
+    return `${formattedDate.date}${formattedTime}`;
+  };
+
   return (
     <div
       className={containerClass}
@@ -95,7 +101,9 @@ export default function NotificationItem({
       </div>
 
       <div className="text-xs text-gray-500 whitespace-nowrap mb-auto">
-        {isLoading ? 'Loading...' : formatDateTime(notification.createdAt).date}
+        {isLoading
+          ? 'Loading...'
+          : formatNotificationDate(notification.createdAt)}
       </div>
     </div>
   );
