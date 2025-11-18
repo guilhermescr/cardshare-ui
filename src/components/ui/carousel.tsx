@@ -10,19 +10,23 @@ interface MediaItem {
 
 interface CarouselProps {
   mediaFiles: MediaItem[];
+  currentIndex?: number;
 }
 
-export default function Carousel({ mediaFiles }: CarouselProps) {
-  const [currentIndex, setCurrentIndex] = useState(0);
+export default function Carousel({
+  mediaFiles,
+  currentIndex = 0,
+}: CarouselProps) {
+  const [activeIndex, setActiveIndex] = useState(currentIndex);
 
   const handlePrevious = () => {
-    setCurrentIndex((prevIndex) =>
+    setActiveIndex((prevIndex) =>
       prevIndex === 0 ? mediaFiles.length - 1 : prevIndex - 1
     );
   };
 
   const handleNext = () => {
-    setCurrentIndex((prevIndex) =>
+    setActiveIndex((prevIndex) =>
       prevIndex === mediaFiles.length - 1 ? 0 : prevIndex + 1
     );
   };
@@ -31,20 +35,20 @@ export default function Carousel({ mediaFiles }: CarouselProps) {
     <section className="relative w-full">
       <div className="relative w-full pt-[56.25%]">
         <div className="absolute top-0 left-0 w-full h-full bg-[#444] rounded-lg overflow-hidden">
-          {mediaFiles[currentIndex].type === 'video' ? (
+          {mediaFiles[activeIndex].type === 'video' ? (
             <video
-              src={mediaFiles[currentIndex].media}
+              src={mediaFiles[activeIndex].media}
               controls
               className="w-full h-full object-cover"
             />
           ) : (
             <Image
-              src={mediaFiles[currentIndex].media}
-              alt={`Media ${currentIndex + 1}`}
+              src={mediaFiles[activeIndex].media}
+              alt={`Media ${activeIndex + 1}`}
               fill
               className="object-contain"
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              priority={currentIndex === 0}
+              priority={activeIndex === 0}
             />
           )}
         </div>

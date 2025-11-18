@@ -6,6 +6,13 @@ import { toast } from 'sonner';
 import DeleteDialog from '@/components/delete-dialog';
 import { httpRequest } from '@/utils/http.utils';
 import { useAuthStore } from '@/stores/auth';
+import Carousel from '@/components/ui/carousel';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 
 interface MediaSectionProps {
   watch: UseFormWatch<CardFormType>;
@@ -24,6 +31,8 @@ export default function MediaSection({
   const [isDragging, setIsDragging] = useState(false);
   const [deleteIndex, setDeleteIndex] = useState<number | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const [currentMediaIndex, setCurrentMediaIndex] = useState(0);
 
   const mediaFiles = watch('mediaFiles') || [];
   const MAX_FILES_TO_UPLOAD = 10;
@@ -102,6 +111,11 @@ export default function MediaSection({
     setIsDragging(false);
   };
 
+  const openPreview = (index: number) => {
+    setCurrentMediaIndex(index);
+    setIsPreviewOpen(true);
+  };
+
   return (
     <section>
       <h3 className="text-sm font-medium">Media (Optional)</h3>
@@ -156,7 +170,8 @@ export default function MediaSection({
               return (
                 <div
                   key={index}
-                  className="group relative flex flex-col gap-1.5 items-center justify-center border-2 border-gray-200 bg-gray-50 rounded-md p-4"
+                  className="group relative flex flex-col gap-1.5 items-center justify-center border-2 border-gray-200 bg-gray-50 rounded-md p-4 cursor-pointer"
+                  onClick={() => openPreview(index)}
                 >
                   <ImageIcon className="text-gray-400" size={30} />
                   <p className="text-sm text-gray-600 text-center break-all">
@@ -166,7 +181,10 @@ export default function MediaSection({
                   <button
                     type="button"
                     className="cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity absolute -top-2.5 -right-2.5 bg-destructive rounded-full p-1 text-white hover:brightness-90"
-                    onClick={() => handleDeleteFile(index)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDeleteFile(index);
+                    }}
                   >
                     <X className="w-4 h-4" />
                   </button>
@@ -187,6 +205,15 @@ export default function MediaSection({
         title="Delete Media?"
         description="Are you sure you want to delete this media? This action cannot be undone."
       />
+
+      <Dialog open={isPreviewOpen} onOpenChange={setIsPreviewOpen}>
+        <DialogContent className="max-w-4xl">
+          <DialogHeader>
+            <DialogTitle>Media Preview</DialogTitle>
+          </DialogHeader>
+          <Carousel mediaFiles={mediaFiles} currentIndex={currentMediaIndex} />
+        </DialogContent>
+      </Dialog>
     </section>
   );
 }
