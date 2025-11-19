@@ -42,8 +42,6 @@ export default function SearchDialog({
   const [isSearching, setIsSearching] = useState(false);
 
   const handleSearch = async () => {
-    console.log(`Searching for "${searchText}" in ${activeTab}`);
-
     if (searchText.trim() === '') {
       setCardResults(null);
       setPeopleResults(null);

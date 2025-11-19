@@ -69,6 +69,7 @@ export default function LoginForm() {
 
       router.push(APP_ROUTES.DASHBOARD);
 
+      // Feature Idea: Admin
       // toast.success('Welcome back!', {
       //   description: "You've successfully logged in as admin.",
       // });

@@ -9,6 +9,7 @@ import RegisterForm from './register/register.form';
 import { AuthHeader } from './auth-header';
 import { AuthFeatureCard } from './auth-feature-card';
 
+// Feature Idea: Role-based login
 // interface AuthPageProps {
 //   onLogin: (role?: 'user' | 'admin') => void;
 // }

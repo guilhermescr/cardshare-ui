@@ -27,7 +27,7 @@ export default function SettingsTab() {
   const onSubmit = (data: FormValues) => {
     setIsLoading(true);
     console.log('Form Data:', data);
-    // Simulate API call
+    // Here could be done an API call to save the settings
     setTimeout(() => {
       setIsLoading(false);
     }, 2000);
