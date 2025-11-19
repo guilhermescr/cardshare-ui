@@ -32,7 +32,8 @@ export default function ProfilePage() {
 
   const { userData: foundUser, loading } = useUserData(
     username ? (username as string) : null,
-    token
+    token,
+    'profile'
   );
 
   const [isFollowing, setIsFollowing] = useState(false);
