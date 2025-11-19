@@ -13,9 +13,11 @@ const socket = io(process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3033', {
 });
 
 socket.on('connect', () => {
-  const userId = localStorage.getItem('userId');
-  if (userId) {
-    socket.emit('join', userId);
+  if (typeof window !== 'undefined') {
+    const userId = localStorage.getItem('userId');
+    if (userId) {
+      socket.emit('join', userId);
+    }
   }
 });
 
