@@ -34,11 +34,6 @@ export interface CardDto {
   updatedAt: string;
 }
 
-export interface CardsResponse {
-  items: CardDto[];
-  nextCursor?: string;
-}
-
 export interface CardDetailsDto extends CardDto {
   comments: CommentDto[];
 }

@@ -5,7 +5,7 @@ import { Grid, List, Loader2 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import CardFilters from './card-filters';
 import CardItem from '@/components/cards/card-item';
-import { CardDto, CardsResponse } from '@/types/card.dto';
+import { CardDto } from '@/types/card.dto';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useAuthStore } from '@/stores/auth';
 import CardSkeleton from '@/components/cards/card-skeleton';
@@ -16,6 +16,7 @@ import {
   fetchMyCards,
 } from '@/api/card-queries';
 import EmptyCardsMessage from '@/components/cards/empty-cards-message';
+import { PaginatedResponseDto } from '@/types/paginated-response.dto';
 
 export default function CardGallery() {
   const { token } = useAuthStore();
@@ -32,7 +33,7 @@ export default function CardGallery() {
   const loaderRef = useRef<HTMLDivElement | null>(null);
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
-    useInfiniteQuery<CardsResponse>({
+    useInfiniteQuery<PaginatedResponseDto<CardDto>>({
       queryKey: ['cards', activeCategory, activeFilter, token],
       queryFn: async ({ pageParam }) => {
         const params: CardQueryParams = {

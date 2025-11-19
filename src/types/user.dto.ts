@@ -13,6 +13,13 @@ export interface UserDto {
   cards: CardDto[];
 }
 
+export interface SummarizedUserDto {
+  id: string;
+  fullName: string;
+  username: string;
+  profilePicture: string;
+}
+
 export interface UserResponseDto {
   user: UserDto;
 }

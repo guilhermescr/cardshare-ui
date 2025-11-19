@@ -4,7 +4,10 @@ import { NotificationDto } from '@/types/notification.dto';
 import { useNotification } from '@/contexts/notification.context';
 import { NotificationTitle } from '@/enums/notification.enum';
 import { NotificationType } from '@/enums/notification.enum';
-import { formatDateTime } from '@/utils/date-handlers.utils';
+import {
+  formatDateTime,
+  formatNotificationDate,
+} from '@/utils/date-handlers.utils';
 import ProfilePicture from '@/components/ui/profile-picture';
 import { useRouter } from 'next/navigation';
 import { twMerge } from 'tailwind-merge';
@@ -53,12 +56,6 @@ export default function NotificationItem({
       : 'bg-blue-50 border-blue-200 cursor-pointer',
     isLoading && 'cursor-not-allowed opacity-70'
   );
-
-  const formatNotificationDate = (dateString: string) => {
-    const formattedDate = formatDateTime(dateString);
-    const formattedTime = formattedDate.time ? ` at ${formattedDate.time}` : '';
-    return `${formattedDate.date}${formattedTime}`;
-  };
 
   return (
     <div

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { httpRequest } from '@/utils/http.utils';
-import { CardsResponse, RelatedCard } from '@/types/card.dto';
+import { CardDto, RelatedCard } from '@/types/card.dto';
+import { PaginatedResponseDto } from '@/types/paginated-response.dto';
 
 export function useRelatedCards(cardId: string, token: string | null) {
   const [relatedCards, setRelatedCards] = useState<RelatedCard[]>([]);
@@ -11,7 +12,7 @@ export function useRelatedCards(cardId: string, token: string | null) {
     const fetchRelatedCards = async () => {
       try {
         setLoading(true);
-        const data = await httpRequest<CardsResponse>(
+        const data = await httpRequest<PaginatedResponseDto<CardDto>>(
           `/cards/${cardId}/related`,
           {
             method: 'GET',

@@ -39,6 +39,14 @@ export function formatDateTime(dateString: string | Date): {
   };
 }
 
+export function formatNotificationDate(dateString: string) {
+  if (!dateString) return '';
+
+  const formattedDate = formatDateTime(dateString);
+  const formattedTime = formattedDate.time ? ` at ${formattedDate.time}` : '';
+  return `${formattedDate.date}${formattedTime}`;
+}
+
 export function formatDateToLongString(dateString: string | Date): string {
   if (!dateString) return '';
 

@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect, useMemo } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Bell, Home, Menu, Plus, Search } from 'lucide-react';
@@ -9,10 +10,10 @@ import Logo from './logo';
 import GradientText from './gradient-text';
 import { Badge } from './ui/badge';
 import ProfileDropdown from './ui/profile-dropdown';
-import { useState, useEffect, useMemo } from 'react';
 import Sidebar from './sidebar';
 import { useAuthStore } from '@/stores/auth';
 import { useNotification } from '@/contexts/notification.context';
+import SearchDialog from './search/search-dialog';
 
 export type SidebarView = 'dashboard' | 'new' | 'notifications' | 'profile';
 
@@ -24,6 +25,7 @@ export default function Header() {
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [currentView, setCurrentView] = useState<SidebarView>('dashboard');
+  const [searchDialogOpen, setSearchDialogOpen] = useState(false);
   const notificationCount = notifications.filter((n) => !n.read).length;
 
   const viewToRoute: Record<SidebarView, string> = useMemo(
@@ -84,10 +86,12 @@ export default function Header() {
 
             <input
               type="search"
-              className="w-full border rounded-md py-2 pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-gray-300"
+              className="cursor-pointer w-full border rounded-md py-2 pl-10 pr-4 text-sm hover:outline-none hover:ring-2 hover:ring-gray-300"
               placeholder="Search cards..."
               id="search-cards"
               name="search-cards"
+              onFocus={() => setSearchDialogOpen(true)}
+              readOnly
             />
           </div>
 
@@ -151,6 +155,11 @@ export default function Header() {
           </Button>
         </header>
       </Wrapper>
+
+      <SearchDialog
+        isOpen={searchDialogOpen}
+        onOpenChange={setSearchDialogOpen}
+      />
     </div>
   );
 }
