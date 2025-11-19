@@ -10,12 +10,14 @@ type FavoriteButtonProps = {
   token: string | null;
   card: CardDetailsDto | null;
   setCard: (card: CardDetailsDto) => void;
+  favoritesCount?: number;
 };
 
 export default function FavoriteButton({
   token,
   card,
   setCard,
+  favoritesCount = 0,
 }: FavoriteButtonProps) {
   const [loading, setLoading] = useState(false);
 
@@ -55,11 +57,13 @@ export default function FavoriteButton({
         </>
       ) : card.isFavorited ? (
         <>
-          <Bookmark className="mr-2 fill-current" /> Saved
+          <Bookmark className="mr-2 fill-current" /> Saved{' '}
+          {favoritesCount > 0 && `(${favoritesCount})`}
         </>
       ) : (
         <>
-          <Bookmark className="mr-2" /> Save
+          <Bookmark className="mr-2" /> Save{' '}
+          {favoritesCount > 0 && `(${favoritesCount})`}
         </>
       )}
     </Button>

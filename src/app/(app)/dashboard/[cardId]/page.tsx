@@ -175,6 +175,7 @@ export default function CardDetailsPage() {
                   token={token}
                   card={cardDetails}
                   setCard={setCardDetails}
+                  favoritesCount={cardDetails?.favorites?.length}
                 />
               </div>
             </div>
