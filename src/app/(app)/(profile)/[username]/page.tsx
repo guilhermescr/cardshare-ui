@@ -103,7 +103,7 @@ export default function ProfilePage() {
             />
 
             <h2 className="text-2xl text-gray-900 font-semibold">
-              {foundUser?.fullName}
+              {foundUser?.fullName || 'Loading...'}
             </h2>
             <p className="flex gap-1 items-center text-gray-600 mt-2 mb-5">
               <MapPin size={20} /> San Francisco, CA

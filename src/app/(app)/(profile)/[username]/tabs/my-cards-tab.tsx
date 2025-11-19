@@ -23,9 +23,13 @@ export default function MyCardsTab({
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useInfiniteQuery({
-      queryKey: ['cards', token],
+      queryKey: ['cards', token, user],
       queryFn: async ({ pageParam = '' }) => {
-        return fetchAllCards({ pageParam, token, userId: user?.id });
+        if (user) {
+          return fetchAllCards({ pageParam, token, userId: user?.id });
+        } else {
+          return { items: [], nextCursor: undefined };
+        }
       },
       getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
       initialPageParam: '',
@@ -75,9 +79,10 @@ export default function MyCardsTab({
         </h2>
         <p className="text-sm text-gray-500">
           {isOwnProfile
-            ? 'Manage your published'
-            : `${user?.username}'s public`}{' '}
-          cards
+            ? 'Manage your published cards'
+            : user?.username
+              ? `${user.username}'s public cards`
+              : 'Loading...'}
         </p>
       </div>
 
@@ -97,7 +102,9 @@ export default function MyCardsTab({
           <div className="text-center text-gray-500">
             {isOwnProfile
               ? "You haven't published any cards yet."
-              : `${user?.username} hasn't published any cards yet.`}
+              : user?.username
+                ? `${user.username} hasn't published any cards yet.`
+                : 'Loading...'}
           </div>
         )
       )}
