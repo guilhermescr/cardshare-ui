@@ -198,7 +198,10 @@ export default function CommentSection({
                           {renderCommentDateTime(comment.createdAt)}
                         </div>
 
-                        <p className="text-gray-700 text-sm whitespace-pre-wrap break-all">
+                        <p
+                          className="text-gray-700 text-sm whitespace-pre-wrap break-all"
+                          style={{ wordBreak: 'break-word', hyphens: 'auto' }}
+                        >
                           {comment.content}
                         </p>
                       </div>
