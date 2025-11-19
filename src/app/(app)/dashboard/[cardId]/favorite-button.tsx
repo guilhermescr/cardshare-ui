@@ -1,15 +1,15 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { CardDetailsDto } from '@/types/card.dto';
+import { CardDto } from '@/types/card.dto';
 import { httpRequest } from '@/utils/http.utils';
 import { Bookmark, Loader2 } from 'lucide-react';
 import { useState } from 'react';
 
 type FavoriteButtonProps = {
   token: string | null;
-  card: CardDetailsDto | null;
-  setCard: (card: CardDetailsDto) => void;
+  card: CardDto | null;
+  setCard: (card: CardDto) => void;
   favoritesCount?: number;
 };
 
@@ -29,7 +29,7 @@ export default function FavoriteButton({
     try {
       setLoading(true);
 
-      const updatedCard = await httpRequest<CardDetailsDto>(
+      const updatedCard = await httpRequest<CardDto>(
         `/cards/${card.id}/favorite`,
         {
           method: 'POST',

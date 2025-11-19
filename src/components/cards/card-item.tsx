@@ -1,4 +1,5 @@
 import {
+  Bookmark,
   Ellipsis,
   Eye,
   Heart,
@@ -7,7 +8,7 @@ import {
   User,
 } from 'lucide-react';
 import { Button } from '../ui/button';
-import { CardDetailsDto, CardDto } from '@/types/card.dto';
+import { CardDto } from '@/types/card.dto';
 import { capitalizeFirstLetter } from '@/utils/string.utils';
 import {
   DropdownMenu,
@@ -128,13 +129,10 @@ export default function CardItem({
     try {
       setIsLiking(true);
 
-      const updatedCard = await httpRequest<CardDetailsDto>(
-        `/cards/${card.id}/like`,
-        {
-          method: 'POST',
-          token,
-        }
-      );
+      const updatedCard = await httpRequest<CardDto>(`/cards/${card.id}/like`, {
+        method: 'POST',
+        token,
+      });
 
       if (onLikeToggle) {
         onLikeToggle(updatedCard);
@@ -214,11 +212,11 @@ export default function CardItem({
       <div className="flex gap-4 items-center justify-between text-xs mt-auto mb-6">
         <div className="flex items-center gap-4 text-gray-600">
           <span className="flex items-center gap-1">
-            <Eye size={16} /> 156
+            <MessageCircle size={16} /> {card.comments.length}
           </span>
 
           <span className="flex items-center gap-1">
-            <MessageCircle size={16} /> 8
+            <Bookmark size={17} /> {card.favorites.length}
           </span>
         </div>
 

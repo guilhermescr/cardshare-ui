@@ -1,15 +1,15 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { CardDetailsDto } from '@/types/card.dto';
+import { CardDto } from '@/types/card.dto';
 import { httpRequest } from '@/utils/http.utils';
 import { Heart, Loader2 } from 'lucide-react';
 import { useState } from 'react';
 
 type LikeButtonProps = {
   token: string | null;
-  card: CardDetailsDto | null;
-  setCard: (card: CardDetailsDto) => void;
+  card: CardDto | null;
+  setCard: (card: CardDto) => void;
 };
 
 export default function LikeButton({ token, card, setCard }: LikeButtonProps) {
@@ -23,13 +23,10 @@ export default function LikeButton({ token, card, setCard }: LikeButtonProps) {
     try {
       setLoading(true);
 
-      const updatedCard = await httpRequest<CardDetailsDto>(
-        `/cards/${card.id}/like`,
-        {
-          method: 'POST',
-          token,
-        }
-      );
+      const updatedCard = await httpRequest<CardDto>(`/cards/${card.id}/like`, {
+        method: 'POST',
+        token,
+      });
       setCard(updatedCard);
     } catch (error) {
       console.error('Error toggling like status:', error);

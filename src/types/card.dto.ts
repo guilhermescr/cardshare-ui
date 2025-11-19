@@ -25,6 +25,7 @@ export interface CardDto {
   isFavorited: boolean;
   likes: string[];
   favorites: string[];
+  comments: CommentDto[];
   tags: string[];
   category: string;
   gradient: CardGradient;
@@ -32,10 +33,6 @@ export interface CardDto {
   allowDownloads: boolean;
   createdAt: string;
   updatedAt: string;
-}
-
-export interface CardDetailsDto extends CardDto {
-  comments: CommentDto[];
 }
 
 export interface GeneratedCardResponse {
