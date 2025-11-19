@@ -181,7 +181,7 @@ export default function ProfilePicture({
     return (
       <div
         className={twMerge(
-          'flex items-center justify-center rounded-full bg-[#E7E7E7] relative',
+          'flex items-center justify-center rounded-full bg-[#E7E7E7] relative flex-shrink-0',
           className
         )}
         style={{
@@ -208,7 +208,7 @@ export default function ProfilePicture({
   return (
     <div
       className={twMerge(
-        'rounded-full bg-gray-200 shadow-lg relative',
+        'rounded-full bg-gray-200 shadow-lg relative flex-shrink-0',
         className,
         onClick && 'cursor-pointer'
       )}
