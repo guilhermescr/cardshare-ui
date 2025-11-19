@@ -15,7 +15,6 @@ import VisibilitySettings from '@/app/(app)/new/visibility-settings';
 import VisualStyleSection from '@/app/(app)/new/visual-style-section';
 import { useAuthStore } from '@/stores/auth';
 import { useCardDetails } from '@/hooks/use-card-details';
-import { httpRequest } from '@/utils/http.utils';
 import { useEffect, useState } from 'react';
 import TitleInput from '@/components/cards/form/title-input';
 import DescriptionInput from '@/components/cards/form/description-input';
@@ -26,11 +25,14 @@ import CardPreview from '@/components/cards/form/card-preview';
 export default function EditCardPage() {
   const router = useRouter();
   const { cardId } = useParams();
-  const { token } = useAuthStore();
+  const { user, token } = useAuthStore();
 
+  const isEdit = true;
   const { cardDetails, loading, error } = useCardDetails(
     cardId as string,
-    token
+    token,
+    user?.id,
+    isEdit
   );
 
   const { control, handleSubmit, watch, setValue, reset } =
