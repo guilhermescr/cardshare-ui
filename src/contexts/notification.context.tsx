@@ -6,6 +6,7 @@ import React, {
   useEffect,
   useContext,
   useCallback,
+  useMemo,
 } from 'react';
 import socket from '../utils/socket';
 import { NotificationDto } from '@/types/notification.dto';
@@ -37,6 +38,13 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({
     null
   );
 
+  const notificationSound = useMemo(() => {
+    if (typeof window !== 'undefined' && typeof Audio !== 'undefined') {
+      return new Audio('/sounds/notification-sound.mp3');
+    }
+    return null;
+  }, []);
+
   const getNotifications = useCallback(async () => {
     if (!token) return;
 
@@ -57,9 +65,18 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }, [token]);
 
-  const addNotification = (notification: NotificationDto) => {
-    setNotifications((prev) => [notification, ...prev]);
-  };
+  const addNotification = useCallback(
+    (notification: NotificationDto) => {
+      setNotifications((prev) => [notification, ...prev]);
+
+      if (notificationSound) {
+        notificationSound.play().catch((error) => {
+          console.error('Failed to play notification sound:', error);
+        });
+      }
+    },
+    [notificationSound]
+  );
 
   const markAsRead = async (id: string) => {
     try {
@@ -128,7 +145,7 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({
       socket.off('remove-notification');
       socket.off('disconnect');
     };
-  }, [getNotifications]);
+  }, [getNotifications, addNotification]);
 
   return (
     <NotificationContext.Provider

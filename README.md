@@ -63,6 +63,9 @@ cardshare/
 
 ---
 
+Sound Effects Credits:
+https://elevenlabs.io/sound-effects/notification
+
 ## 📜 License
 
 MIT © 2025 — Guilherme Rocha
