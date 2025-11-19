@@ -74,7 +74,7 @@ export default function NotificationsPage() {
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 ml-auto">
           {notifications.some((n) => !n.read) && (
             <Button
               variant="outline"
