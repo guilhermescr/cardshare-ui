@@ -18,6 +18,12 @@ export interface SummarizedUserDto {
   fullName: string;
   username: string;
   profilePicture: string;
+  followers: number;
+  following: number;
+  cards: number;
+  likes: number;
+  favorites: number;
+  comments: number;
 }
 
 export interface UserResponseDto {

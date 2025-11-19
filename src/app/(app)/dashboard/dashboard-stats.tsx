@@ -10,25 +10,25 @@ export default function DashboardStats() {
   const stats = [
     {
       title: 'Total Cards',
-      value: user?.cards?.length || 0,
+      value: user?.cards || 0,
       icon: <Grid />,
       gradientClass: 'bg-gradient-to-r from-blue-600 to-purple-600',
     },
     {
       title: 'Total Followers',
-      value: user?.followers?.length || 0,
+      value: user?.followers || 0,
       icon: <UserPlus />,
       gradientClass: 'bg-gradient-to-br from-green-500 to-teal-500',
     },
     {
       title: 'Total Likes',
-      value: 0,
+      value: user?.likes || 0,
       icon: <Heart />,
       gradientClass: 'bg-gradient-to-r from-pink-600 to-red-400',
     },
     {
       title: 'Comments',
-      value: 0,
+      value: user?.comments || 0,
       icon: <MessageCircle />,
       gradientClass: 'bg-gradient-to-br from-orange-500 to-yellow-500',
     },

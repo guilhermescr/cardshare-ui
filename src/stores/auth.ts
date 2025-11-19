@@ -1,10 +1,10 @@
+import { SummarizedUserDto } from '@/types/user.dto';
 import { create } from 'zustand';
-import type { UserDto } from '@/types/user.dto';
 
 type AuthState = {
   token: string | null;
-  user: UserDto | null;
-  setAuth: (token: string | null, user: UserDto | null) => void;
+  user: SummarizedUserDto | null;
+  setAuth: (token: string | null, user: SummarizedUserDto | null) => void;
   logout: () => void;
 };
 

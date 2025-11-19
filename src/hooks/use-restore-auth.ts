@@ -44,7 +44,7 @@ export function useRestoreAuth() {
         const isExpired = !payload?.exp || payload.exp * 1000 <= Date.now();
         if (isExpired) throw new Error('Token expired.');
 
-        const response = await fetch(`${API_URL}/users/me`, {
+        const response = await fetch(`${API_URL}/users/me/summarized`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
