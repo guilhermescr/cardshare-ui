@@ -7,6 +7,7 @@ export type CardQueryParams = {
   token: string | null;
   sortBy?: 'latest' | 'most-liked';
   searchText?: string;
+  userId?: string;
 };
 
 export function fetchAllCards({
@@ -14,11 +15,13 @@ export function fetchAllCards({
   token,
   sortBy = 'latest',
   searchText,
+  userId,
 }: CardQueryParams) {
   const params: Record<string, string> = {
     ...(pageParam ? { cursor: pageParam } : {}),
     sortBy,
     ...(searchText ? { search: searchText } : {}),
+    ...(userId ? { userId } : {}),
   };
 
   return httpRequest<PaginatedResponseDto<CardDto>>('/cards', {
