@@ -1,5 +1,6 @@
 import { CardGradient, getGradientValueById } from '@/constants/card-gradients';
 import { Sparkles } from 'lucide-react';
+import { twMerge } from 'tailwind-merge';
 
 interface GradientCardImageProps {
   gradient: CardGradient;
@@ -7,6 +8,7 @@ interface GradientCardImageProps {
   selected?: boolean;
   selectable?: boolean;
   onClick?: () => void;
+  className?: string;
 }
 
 enum ImageIconSize {
@@ -29,14 +31,20 @@ export default function GradientCardImage({
   selected = false,
   selectable = false,
   onClick,
+  className,
 }: GradientCardImageProps) {
   return (
     <div
-      className={`bg-gradient-to-br flex items-center justify-center ${getGradientValueById(gradient)} w-full ${ImageContainerSize[size]} px-8 rounded-lg ${
-        selected ? 'ring-2 ring-offset-2 ring-blue-500 scale-102' : ''
-      } ${
-        selectable ? 'cursor-pointer hover:scale-105 transition-transform' : ''
-      }`}
+      className={twMerge(
+        'bg-gradient-to-br flex items-center justify-center',
+        getGradientValueById(gradient),
+        'w-full',
+        ImageContainerSize[size],
+        'px-8 rounded-lg',
+        selected && 'ring-2 ring-offset-2 ring-blue-500 scale-102',
+        selectable && 'cursor-pointer hover:scale-105 transition-transform',
+        className
+      )}
       onClick={onClick}
     >
       <Sparkles className="text-white/80" size={ImageIconSize[size]} />
