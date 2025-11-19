@@ -30,7 +30,10 @@ export default function ProfilePage() {
   const { user, token } = useAuthStore();
   const isOwnProfile = user?.username === username;
 
-  const foundUser = useUserData(username ? (username as string) : null, token);
+  const { userData: foundUser, loading } = useUserData(
+    username ? (username as string) : null,
+    token
+  );
 
   const [isFollowing, setIsFollowing] = useState(false);
   const [isFollowLoading, setIsFollowLoading] = useState(false);
@@ -78,6 +81,21 @@ export default function ProfilePage() {
       setIsFollowing(foundUser.isFollowing || false);
     }
   }, [foundUser]);
+
+  if (loading) {
+    return (
+      <div className="text-center py-10">
+        <Loader2 className="animate-spin inline-block w-6 h-6 mr-2" />
+        Loading...
+      </div>
+    );
+  }
+
+  if (!foundUser) {
+    return (
+      <div className="text-center py-10 text-gray-500">User not found.</div>
+    );
+  }
 
   return (
     <>

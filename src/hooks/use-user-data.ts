@@ -4,18 +4,27 @@ import { httpRequest } from '@/utils/http.utils';
 
 export function useUserData(username: string | null, token: string | null) {
   const [userData, setUserData] = useState<UserDto | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!username || !token || userData) return;
 
+    setLoading(true);
     (async () => {
-      const response = await httpRequest<UserResponseDto>(
-        `/users/username/${username}`,
-        { token }
-      );
-      setUserData(response.user);
+      try {
+        const response = await httpRequest<UserResponseDto>(
+          `/users/username/${username}`,
+          { token }
+        );
+        setUserData(response.user);
+      } catch (error) {
+        console.error('Failed to fetch user data:', error);
+        setUserData(null);
+      } finally {
+        setLoading(false);
+      }
     })();
   }, [username, token, userData]);
 
-  return userData;
+  return { userData, loading };
 }
