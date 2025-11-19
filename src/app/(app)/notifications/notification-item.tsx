@@ -84,7 +84,7 @@ export default function NotificationItem({
             </p>
           </div>
 
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-gray-600 line-clamp-2">
             {notification.sender?.username && (
               <Link
                 href={`/${notification.sender?.username}`}
