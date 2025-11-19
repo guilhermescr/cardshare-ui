@@ -47,13 +47,18 @@ export default function CardFormHeader({
         </div>
       </div>
 
-      <div className="flex items-center gap-2 ml-auto">
-        <Button variant="outline" onClick={onPreviewToggle}>
+      <div className="flex flex-col md:flex-row items-center gap-2 ml-auto w-full md:w-auto">
+        <Button
+          className="w-full md:w-auto"
+          variant="outline"
+          onClick={onPreviewToggle}
+        >
           <Eye className="mr-2" /> {isPreviewing ? 'Close Preview' : 'Preview'}
         </Button>
 
         {showGenerateButton && (
           <Button
+            className="w-full md:w-auto"
             variant="outline"
             onClick={onGenerate}
             disabled={isGenerating}
@@ -93,6 +98,7 @@ export default function CardFormHeader({
         )}
 
         <Button
+          className="w-full md:w-auto"
           variant="gradient"
           gradientColor="blue"
           onClick={() => {
