@@ -50,7 +50,7 @@ export default function NotificationItem({
   const isLoading = notificationToRead === notification.id;
 
   const containerClass = twMerge(
-    'p-4 border rounded-md flex items-center gap-4 hover:brightness-99',
+    'p-4 border rounded-md flex flex-col md:flex-row md:items-center gap-4 hover:brightness-99',
     notification.read
       ? 'bg-white'
       : 'bg-blue-50 border-blue-200 cursor-pointer',
@@ -66,38 +66,42 @@ export default function NotificationItem({
         }
       }}
     >
-      {notification.sender.profilePicture && (
-        <ProfilePicture
-          url={notification.sender.profilePicture}
-          size="small"
-          onClick={() => router.push(`/${notification.sender.username}`)}
-        />
-      )}
+      <div className="flex gap-4 items-center">
+        {notification.sender.profilePicture && (
+          <ProfilePicture
+            url={notification.sender.profilePicture}
+            size="small"
+            onClick={() => router.push(`/${notification.sender.username}`)}
+          />
+        )}
 
-      <div className="flex-grow">
-        <div className="flex items-center gap-2">
-          <span>{notificationIcons[notification.type]}</span>
+        <div className="flex-grow">
+          <div className="flex items-center gap-2">
+            <span>{notificationIcons[notification.type]}</span>
 
-          <p className="font-medium">{NotificationTitle[notification.type]}</p>
+            <p className="font-medium">
+              {NotificationTitle[notification.type]}
+            </p>
+          </div>
+
+          <p className="text-sm text-gray-600">
+            {notification.sender?.username && (
+              <Link
+                href={`/${notification.sender?.username}`}
+                className="font-medium hover:underline"
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
+              >
+                {notification.sender?.username}
+              </Link>
+            )}{' '}
+            {notification.message}
+          </p>
         </div>
-
-        <p className="text-sm text-gray-600">
-          {notification.sender?.username && (
-            <Link
-              href={`/${notification.sender?.username}`}
-              className="font-medium hover:underline"
-              onClick={(e) => {
-                e.stopPropagation();
-              }}
-            >
-              {notification.sender?.username}
-            </Link>
-          )}{' '}
-          {notification.message}
-        </p>
       </div>
 
-      <div className="text-xs text-gray-500 whitespace-nowrap mb-auto">
+      <div className="text-xs text-gray-500 whitespace-nowrap ml-auto md:mb-auto">
         {isLoading
           ? 'Loading...'
           : formatNotificationDate(notification.createdAt)}
