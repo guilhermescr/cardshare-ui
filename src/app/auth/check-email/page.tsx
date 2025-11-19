@@ -1,5 +1,6 @@
 'use client';
 
+import { Suspense } from 'react';
 import { AnimatedBackground } from '@/components/animated-background';
 import { AuthHeader } from '../auth-header';
 import { CheckCircle, Clock, Mail, Shield, Zap, Sparkles } from 'lucide-react';
@@ -7,7 +8,7 @@ import { CheckEmailActionButton } from './check-email-action-button';
 import { AuthFeatureCard } from '../auth-feature-card';
 import { useSearchParams } from 'next/navigation';
 
-export default function CheckEmailPage() {
+function CheckEmailContent() {
   const searchParams = useSearchParams();
   const email = searchParams.get('email');
 
@@ -120,7 +121,6 @@ export default function CheckEmailPage() {
               </ul>
             </div>
 
-            {/* TO-DO: Code Resend Email Endpoint! */}
             <CheckEmailActionButton variant="resend" />
             <CheckEmailActionButton variant="back" />
           </section>
@@ -142,5 +142,13 @@ export default function CheckEmailPage() {
         </section>
       </div>
     </AnimatedBackground>
+  );
+}
+
+export default function CheckEmailPage() {
+  return (
+    <Suspense fallback={<p>Loading...</p>}>
+      <CheckEmailContent />
+    </Suspense>
   );
 }
