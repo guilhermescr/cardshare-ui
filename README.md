@@ -105,6 +105,22 @@ CardShare is built with cutting-edge technologies to deliver a fast, secure, and
 
 ![Notifications](public/readme/notifications.png)
 
+### Card Details
+
+![Card Details](public/readme/card-details.png)
+
+### Crop and Save Profile Picture
+
+![Crop and Save Profile Picture](public/readme/crop-and-save-profile-picture.png)
+
+### Profile Page
+
+![Profile Page](public/readme/profile-page.png)
+
+### Search Cards & Users
+
+![Search Page](public/readme/search-page.png)
+
 ---
 
 ## Links
